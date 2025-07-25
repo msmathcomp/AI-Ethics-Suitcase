@@ -130,7 +130,7 @@ export default function IntroLevel() {
   const handleJoyrideCallback = (data: CallBackProps) => {
     const { status } = data;
     if (status === "finished" || status === "skipped") {
-      navigate("/AI-Ethics-Suitcase/level/0");
+      navigate("/level/0");
     }
   };
 

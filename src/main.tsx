@@ -9,8 +9,8 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/AI-Ethics-Suitcase" element={<App />} />
-        <Route path="/AI-Ethics-Suitcase/level/:level" element={<Level />} />
+        <Route path="/" element={<App />} />
+        <Route path="/level/:level" element={<Level />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

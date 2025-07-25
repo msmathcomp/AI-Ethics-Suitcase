@@ -24,7 +24,7 @@ export default function Home() {
       <h2 className="text-2xl text-stone-600">
         Interactive application for exploring linear classification
       </h2>
-      <Link to="/AI-Ethics-Suitcase/level/-1">
+      <Link to="/level/-1">
           <button className="cursor-pointer rounded border-1 p-1">
             Get Started
           </button>

@@ -242,7 +242,7 @@ export default function Level1() {
   const handleJoyrideCallback = (data: CallBackProps) => {
     const { status } = data;
     if (status === "finished" || status === "skipped") {
-      navigate("/AI-Ethics-Suitcase/level/2");
+      navigate("/level/2");
     }
   };
 

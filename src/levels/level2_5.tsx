@@ -96,7 +96,7 @@ export default function Level2_5({ level }: { level: number }) {
                 <button
                   className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
                   onClick={() =>
-                    navigate(`/AI-Ethics-Suitcase/level/${level + 1}`)
+                    navigate(`/level/${level + 1}`)
                   }
                 >
                   Next Level
