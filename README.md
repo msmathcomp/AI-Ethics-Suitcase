@@ -22,6 +22,7 @@ Make sure that **node** and **npm** (or [**pnpm**](https://pnpm.io/)) is install
 _Instead of using pnpm, you can also use npm. However pnpm is preferred since it is much faster and efficient._
 
 ```
+pnpm i
 pnpm run dev
 ```
 
