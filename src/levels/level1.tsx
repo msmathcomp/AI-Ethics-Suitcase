@@ -1,13 +1,9 @@
-import nlFlag from "../../assets/nl.svg";
-import ukFlag from "../../assets/uk.svg";
-import { useEffect, useRef, useState } from "react";
-import { Legend } from "../components/UI/Legend";
-import { ClassificationResults } from "../components/UI/ClassificationResults";
-import type {
-  ClassificationCounts,
-  Point,
-  AreaPolygons
-} from "../types";
+import { LevelProgressBar } from "~/components/UI/LevelProgressBar";
+import Nav from "~/components/layout/Nav";
+import { useEffect, useRef, useState, useMemo } from "react";
+import { Legend } from "~/components/UI/Legend";
+import { ClassificationResults } from "~/components/UI/ClassificationResults";
+import type { ClassificationCounts, Point, AreaPolygons } from "~/types";
 import { useNavigate } from "react-router";
 import {
   CartesianGrid,
@@ -17,15 +13,11 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { getAreaPolygons } from "../utils/geometry";
-import { ClassificationAreas } from "../components/Chart/ClassificationAreas";
+import { getAreaPolygons } from "~/utils/geometry";
+import { ClassificationAreas } from "~/components/chart/ClassificationAreas";
 import Joyride, { type CallBackProps, type Step } from "react-joyride";
 import { Frown, Smile } from "lucide-react";
-
-interface ResultsData {
-  accuracy: string | null;
-  counts: ClassificationCounts;
-}
+import { useIntlayer } from "react-intlayer";
 
 const CustomDotLevel1 = ({
   cx,
@@ -34,7 +26,7 @@ const CustomDotLevel1 = ({
 }: {
   cx?: number;
   cy?: number;
-  payload?: { type: "a" | "b"; id: string };
+  payload?: { type: "Pass" | "Fail"; id: "FP" | "TN" | "TP" | "FN" };
 }) => {
   if (!cx || !cy || !payload) return null;
 
@@ -54,7 +46,7 @@ const CustomDotLevel1 = ({
       break;
   }
 
-  if (payload?.type === "a") {
+  if (payload?.type === "Pass") {
     return (
       <g id={payload.id}>
         <circle
@@ -94,87 +86,30 @@ const CustomDotLevel1 = ({
   }
 };
 
-const instructions = ["How to measure the accuracy of a linear classifier?"];
-
 const data = [
-  { study_time: 100, screen_time: 300, type: "b", id: "FP" },
-  { study_time: 350, screen_time: 300, type: "b", id: "TN" },
-  { study_time: 100, screen_time: 150, type: "a", id: "TP" },
-  { study_time: 350, screen_time: 150, type: "a", id: "FN" },
-];
-
-const steps: Step[] = [
-  {
-    target: "#instruction",
-    content:
-      "We will now explain the terms used to measure the accuracy of a linear classifier.",
-    disableBeacon: true,
-  },
-  {
-    target: "#classification-results",
-    content:
-      "The classification results show the counts of true positives, true negatives, false positives, and false negatives.",
-    disableBeacon: true,
-  },
-  {
-    target: ".recharts-wrapper",
-    content:
-      "This chart shows the data points of 4 students. Our linear classifier divides it into 2 parts, the left being classified as Pass and the right being classified as Fail",
-    disableBeacon: true,
-    placement: "left",
-  },
-  {
-    target: "#FP",
-    content:
-      "This student failed however our classifier classified them as Pass. This is a False Positive.",
-    disableBeacon: true,
-    placement: "top",
-  },
-  {
-    target: "#TN",
-    content:
-      "This student failed and our classifier classified them as Fail. This is a True Negative.",
-    disableBeacon: true,
-    placement: "top",
-  },
-  {
-    target: "#TP",
-    content:
-      "This student passed and our classifier classified them as Pass. This is a True Positive.",
-    disableBeacon: true,
-    placement: "bottom",
-  },
-  {
-    target: "#FN",
-    content:
-      "This student passed however our classifier classified them as Fail. This is a False Negative.",
-    disableBeacon: true,
-  },
-  {
-    target: "#classification-results",
-    content:
-      "The accuracy of the classifier is calculate using the formula: Accuracy = (TP + TN) / (TP + TN + FP + FN).",
-    disableBeacon: true,
-    placement: "bottom",
-  },
+  { study_time: 100, screen_time: 300, type: "Fail", id: "FP" },
+  { study_time: 350, screen_time: 300, type: "Fail", id: "TN" },
+  { study_time: 100, screen_time: 150, type: "Pass", id: "TP" },
+  { study_time: 350, screen_time: 150, type: "Pass", id: "FN" },
 ];
 
 export default function Level1() {
   const navigate = useNavigate();
   const level = 1;
+  const { level1: content, chart, common } = useIntlayer("app");
 
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const [stage, setStage] = useState(0);
-  const results: ResultsData = {
-    accuracy: "50",
-    counts: {
+  const results: ClassificationCounts = useMemo(
+    () => ({
       TP: 1,
       TN: 1,
       FP: 1,
       FN: 1,
-    },
-  };
+    }),
+    []
+  );
   const [areaPolygons, setAreaPolygons] = useState<AreaPolygons | null>(null);
   const [run, setRun] = useState(false);
 
@@ -246,77 +181,83 @@ export default function Level1() {
     }
   };
 
+  const steps: Step[] = [
+    {
+      target: "#instruction",
+      content: content.tour[0],
+      disableBeacon: true,
+    },
+    {
+      target: "#classification-results",
+      content: content.tour[1],
+      disableBeacon: true,
+    },
+    {
+      target: ".recharts-wrapper",
+      content: content.tour[2],
+      disableBeacon: true,
+      placement: "left",
+    },
+    {
+      target: "#FP",
+      content: content.tour[3],
+      disableBeacon: true,
+      placement: "top",
+    },
+    {
+      target: "#TN",
+      content: content.tour[4],
+      disableBeacon: true,
+      placement: "top",
+    },
+    {
+      target: "#TP",
+      content: content.tour[5],
+      disableBeacon: true,
+      placement: "bottom",
+    },
+    { target: "#FN", content: content.tour[6], disableBeacon: true },
+    {
+      target: "#classification-results",
+      content: content.tour[7],
+      disableBeacon: true,
+      placement: "bottom",
+    },
+  ];
+
   return (
     <main className="h-screen w-screen flex flex-col items-center p-4">
-      <nav className="w-full h-14 flex items-center px-2 justify-between border-b-1">
-        <h1 className="text-2xl">AI Ethics Suitcase</h1>
-        <div className="flex items-center">
-          <button className="flex items-center cursor-pointer">
-            <img src={ukFlag} alt="English" className="h-6" />
-            <span className="ml-1">English</span>
-          </button>
-          <hr className="inline-block h-6 w-px bg-black m-2" />
-          <button className="flex items-center cursor-pointer">
-            <img src={nlFlag} alt="Nederlands" className="h-6" />
-            <span className="ml-1">Nederlands</span>
-          </button>
-        </div>
-      </nav>
+      <Nav />
       <Joyride
         steps={steps}
         run={run}
         continuous
         showProgress
         callback={handleJoyrideCallback}
+        disableOverlay={false}
         styles={{
           options: {
             arrowColor: "#e3ffeb",
             backgroundColor: "#e3ffeb",
             primaryColor: "#000",
             textColor: "#004a14",
-            zIndex: 10000,
           },
           spotlight: {
             backgroundColor: "rgba(255, 255, 255, 0.1)",
             border: "solid 2px black",
-            zIndex: 100000,
+            pointerEvents: "none",
           },
           overlay: {
             backgroundColor: "rgba(200, 200, 200, 0.1)",
-            zIndex: 999,
+            pointerEvents: "none",
           },
         }}
       />
       <div className="flex w-full flex-1">
         <div className="h-full w-[30%] flex flex-col p-4 border-r-1">
-          <div id="level-progress-bar" className="mb-10">
-            <h3 className="text-xl">Level {level}</h3>
-            <div className="flex gap-2">
-              {[...Array(10)].map((_, index) => {
-                let backgroundColor = "gray";
-                if (index < level + 1) {
-                  backgroundColor = "green";
-                } else if (index === level + 1) {
-                  backgroundColor = "blue";
-                }
-                return (
-                  <div
-                    key={index}
-                    className="rounded-full w-5 h-5"
-                    style={{
-                      backgroundColor: backgroundColor,
-                    }}
-                  />
-                );
-              })}
-            </div>
-          </div>
+          <LevelProgressBar level={level} showNextLevelButton={run} />
           <Legend />
-
-          <ClassificationResults
-            classificationCounts={results.counts}
-            accuracy={results.accuracy}
-          />
+          <ClassificationResults classificationCounts={results} />
         </div>
         <div className="flex-1 h-full flex flex-col items-center">
           <div
@@ -324,7 +265,7 @@ export default function Level1() {
             id="instruction"
           >
             <h2 className="text-xl font-medium mb-2 break-words flex-1">
-              {instructions[Math.min(stage, instructions.length - 1)]}
+              {content.instructions[0]}
             </h2>
             <div className="w-24 h-full">
               {stage === 3 && (
@@ -332,7 +273,7 @@ export default function Level1() {
                   className="bg-blue-500 text-white px-4 py-2 rounded my-auto"
                   onClick={() => setStage(4)}
                 >
-                  Next
+                  {common.buttons.next}
                 </button>
               )}
             </div>
@@ -349,7 +290,7 @@ export default function Level1() {
                   type="number"
                   domain={[0, 500]}
                   label={{
-                    value: "Study Time (min)",
+                    value: chart.axisLabels.x.value,
                     position: "insideBottom",
                     offset: -10,
                   }}
@@ -359,7 +300,7 @@ export default function Level1() {
                   type="number"
                   domain={[0, 500]}
                   label={{
-                    value: "Screen Time (min)",
+                    value: chart.axisLabels.y.value,
                     angle: -90,
                     position: "insideLeft",
                     style: { textAnchor: "middle" },
@@ -371,7 +312,7 @@ export default function Level1() {
                   data={data}
                   fill="#8884d8"
                   shape={<CustomDotLevel1 />}
-                  name="Data Points"
+                  name={chart.seriesNames.dataPoints.value}
                 />
                 <Line
                   dataKey="screen_time"
@@ -384,21 +325,20 @@ export default function Level1() {
                   strokeDasharray="8 4"
                   dot={false}
                   connectNulls={true}
-                  name="Separator Line"
+                  name={chart.seriesNames.separatorLine.value}
                   animationDuration={0}
                 />
               </ComposedChart>
             </div>
-
             <div
-              className="w-full h-full z-10 absolute top-0 left-0 bg-transparent"
+              className="w-full h-full absolute top-0 left-0 bg-transparent"
               ref={overlayRef}
             >
               {areaPolygons && (
                 <ClassificationAreas
                   areaPolygons={areaPolygons}
                   areaColorsAssigned={true}
-                  area1IsRed={true}
+                  originIsPass={true}
                   onAreaSelection={() => {}}
                 />
               )}

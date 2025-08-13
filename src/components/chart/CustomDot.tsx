@@ -1,10 +1,10 @@
 import { Smile, Frown } from "lucide-react";
-import type { CustomDotProps, ClickCoordinates } from "../../types";
-import { getPointClassification } from "../../utils/classification";
+import type { CustomDotProps, ClickCoordinates } from "~/types";
+import { getPointClassification } from "~/utils/classification";
 
 interface Props extends CustomDotProps {
   lineCoords: ClickCoordinates[];
-  area1IsRed: boolean | null;
+  originIsPass: boolean | null;
   areaColorsAssigned: boolean;
   stage: number;
 }
@@ -14,7 +14,7 @@ export const CustomDot = ({
   cy,
   payload,
   lineCoords,
-  area1IsRed,
+  originIsPass,
   areaColorsAssigned,
   stage,
 }: Props) => {
@@ -23,7 +23,7 @@ export const CustomDot = ({
   const classificationResult = getPointClassification(
     payload,
     lineCoords,
-    area1IsRed,
+    originIsPass,
     areaColorsAssigned
   );
 
@@ -45,7 +45,7 @@ export const CustomDot = ({
     }
   }
 
-  if (payload.type === "a") {
+  if (payload.type === "Pass") {
     return (
       <g>
         <circle

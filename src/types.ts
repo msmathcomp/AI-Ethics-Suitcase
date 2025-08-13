@@ -1,19 +1,25 @@
 export interface DataPoint {
   study_time: number;
   screen_time: number;
-  type: "a" | "b";
+  type: "Pass" | "Fail";
 }
 
 export type Point = { x: number; y: number };
 
-export type ClickCoordinates = { 
-  graph: Point; 
-  overlay: Point; 
+export type ClickCoordinates = {
+  graph: Point;
+  overlay: Point;
 };
 
 export type AreaPolygons = {
-  area1: Point[];
-  area2: Point[];
+  area1: {
+    graph: Point[];
+    overlay: Point[];
+  }
+  area2: {
+    graph: Point[];
+    overlay: Point[];
+  }
 };
 
 export type ClassificationResult = "TP" | "TN" | "FP" | "FN";
@@ -33,4 +39,11 @@ export interface CustomDotProps {
 
 export interface ClassificationVisualizerProps {
   data: DataPoint[];
+}
+
+export interface LevelJsonShape {
+  data: DataPoint[];
+  best: { x: number; y: number }[];
+  originIsPass: boolean;
+  testData?: DataPoint[];
 }

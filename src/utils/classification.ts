@@ -1,26 +1,22 @@
-import type { DataPoint, ClickCoordinates, ClassificationResult, ClassificationCounts } from '../types';
+import type { DataPoint, ClickCoordinates, ClassificationResult, ClassificationCounts } from '~/types';
+import { sameSide } from './geometry';
 
 export const getPointClassification = (
   point: DataPoint,
   lineCoords: ClickCoordinates[],
-  area1IsRed: boolean | null,
+  originIsPass: boolean | null,
   areaColorsAssigned: boolean
 ): ClassificationResult | null => {
-  if (!areaColorsAssigned || lineCoords.length !== 2 || area1IsRed === null) {
+  if (!areaColorsAssigned || lineCoords.length !== 2 || originIsPass === null) {
     return null;
   }
 
-  const [p1, p2] = lineCoords.map((coord) => coord.graph);
+  const pointIsOnOriginSide = sameSide({ x: point.study_time, y: point.screen_time }, { x: 0, y: 0 }, lineCoords);
 
-  const isLeftOfLine =
-    (p2.x - p1.x) * (point.screen_time - p1.y) -
-      (p2.y - p1.y) * (point.study_time - p1.x) >
-    0;
+  // If point is on same side as origin, use originIsPass to determine classification
+  const classifiedAsPass = pointIsOnOriginSide ? originIsPass : !originIsPass;
 
-  const isInRedArea = area1IsRed ? isLeftOfLine : !isLeftOfLine;
-
-  const actuallyPass = point.type === "a";
-  const classifiedAsPass = isInRedArea;
+  const actuallyPass = point.type === "Pass";
 
   if (actuallyPass && classifiedAsPass) return "TP";
   if (!actuallyPass && !classifiedAsPass) return "TN";
@@ -32,7 +28,7 @@ export const getPointClassification = (
 export const getClassificationCounts = (
   data: DataPoint[],
   lineCoords: ClickCoordinates[],
-  area1IsRed: boolean | null,
+  originIsPass: boolean | null,
   areaColorsAssigned: boolean
 ): ClassificationCounts => {
   const counts = { TP: 0, TN: 0, FP: 0, FN: 0 };
@@ -41,7 +37,7 @@ export const getClassificationCounts = (
     const classification = getPointClassification(
       point,
       lineCoords,
-      area1IsRed,
+      originIsPass,
       areaColorsAssigned
     );
     if (classification) {

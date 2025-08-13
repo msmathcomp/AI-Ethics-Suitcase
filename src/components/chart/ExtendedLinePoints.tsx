@@ -1,13 +1,20 @@
 import { Move } from "lucide-react";
-import type { ClickCoordinates } from '../../types';
+import type { ClickCoordinates } from "~/types";
 
 interface Props {
   extendedLinePoints: ClickCoordinates[];
   lineCoords: ClickCoordinates[];
-  onExtendedPointMouseDown: (event: React.MouseEvent<HTMLDivElement>, pointIndex: number) => void;
+  onExtendedPointMouseDown: (
+    event: React.MouseEvent<HTMLDivElement>,
+    pointIndex: number
+  ) => void;
 }
 
-export const ExtendedLinePoints = ({ extendedLinePoints, lineCoords, onExtendedPointMouseDown }: Props) => {
+export const ExtendedLinePoints = ({
+  extendedLinePoints,
+  lineCoords,
+  onExtendedPointMouseDown,
+}: Props) => {
   if (extendedLinePoints.length !== 2 || lineCoords.length !== 2) {
     return null;
   }

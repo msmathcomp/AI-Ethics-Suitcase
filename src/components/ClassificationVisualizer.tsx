@@ -5,42 +5,73 @@ import type {
   Point,
   DataPoint,
   ClassificationCounts,
-} from "../types";
-import { getClassificationCounts } from "../utils/classification";
+} from "~/types";
+import { getClassificationCounts } from "~/utils/classification";
 import {
   getAreaPolygons,
   getExtendedLinePoints,
   findIntersections,
   findIntersectionsForDrag,
-} from "../utils/geometry";
-import { Chart } from "./Chart/Chart";
-import { ClassificationAreas } from "./Chart/ClassificationAreas";
-import { ExtendedLinePoints } from "./Chart/ExtendedLinePoints";
+} from "~/utils/geometry";
+import { Chart } from "./chart/Chart";
+import { ClassificationAreas } from "./chart/ClassificationAreas";
+import { ExtendedLinePoints } from "./chart/ExtendedLinePoints";
+import Toggle from "./UI/Toggle";
+import { useIntlayer } from "react-intlayer";
 
 interface Props {
   data: DataPoint[];
+  testData?: DataPoint[];
   stage: number;
   setStage: (stage: number) => void;
-  setResults?: (results: {
-    accuracy: string | null;
-    counts: ClassificationCounts;
-  }) => void;
+  setResults: (results: ClassificationCounts) => void;
+  setBestResults?: (results: ClassificationCounts) => void;
+  setUnseenResults?: (results: ClassificationCounts) => void;
+  setUnseenBestResults?: (results: ClassificationCounts) => void;
+  bestClassifier: {
+    line: Point[];
+    originIsPass: boolean;
+  };
 }
 
 export const ClassificationVisualizer = ({
   data,
+  testData,
   stage,
   setStage,
   setResults,
+  setBestResults,
+  setUnseenResults,
+  setUnseenBestResults,
+  bestClassifier,
 }: Props) => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const areaPolygonsRef = useRef<HTMLDivElement>(null);
   const [lineCoords, setLineCoords] = useState<ClickCoordinates[]>([]);
+  const [bestLineCoords, setBestLineCoords] = useState<ClickCoordinates[]>([]);
 
   const [clickCoords, setClickCoords] = useState<ClickCoordinates[]>([]);
   const [areaPolygons, setAreaPolygons] = useState<AreaPolygons>({
-    area1: [],
-    area2: [],
+    area1: {
+      graph: [],
+      overlay: [],
+    },
+    area2: {
+      graph: [],
+      overlay: [],
+    },
+  });
+
+  const [bestAreaPolygons, setBestAreaPolygons] = useState<AreaPolygons>({
+    area1: {
+      graph: [],
+      overlay: [],
+    },
+    area2: {
+      graph: [],
+      overlay: [],
+    },
   });
 
   const [extendedLinePoints, setExtendedLinePoints] = useState<
@@ -48,21 +79,38 @@ export const ClassificationVisualizer = ({
   >([]);
 
   const [areaColorsAssigned, setAreaColorsAssigned] = useState(false);
-  const [area1IsRed, setArea1IsRed] = useState<boolean | null>(null);
+  // const [area1IsRed, setArea1IsRed] = useState<boolean | null>(null);
+  const [showBestLine, setShowBestLine] = useState(true);
+  const [showUnseenData, setShowUnseenData] = useState(false);
 
   const [isDragging, setIsDragging] = useState(false);
   const [dragPointIndex, setDragPointIndex] = useState<number | null>(null);
   const [dragOffset, setDragOffset] = useState<Point>({ x: 0, y: 0 });
   const [dragJustEnded, setDragJustEnded] = useState(false);
+  const [originIsPass, setOriginIsPass] = useState<boolean | null>(null);
+
+  const { classificationVisualizer: content } = useIntlayer("app");
 
   const classificationCounts = useMemo(() => {
     return getClassificationCounts(
       data,
       lineCoords,
-      area1IsRed,
+      originIsPass,
       areaColorsAssigned
     );
-  }, [data, lineCoords, area1IsRed, areaColorsAssigned]);
+  }, [data, lineCoords, originIsPass, areaColorsAssigned]);
+
+  const unseenClassificationCounts = useMemo(() => {
+    if (!testData) {
+      return { TP: 0, TN: 0, FP: 0, FN: 0 };
+    }
+    return getClassificationCounts(
+      testData,
+      lineCoords,
+      originIsPass ?? null,
+      areaColorsAssigned
+    );
+  }, [testData, lineCoords, originIsPass, areaColorsAssigned]);
 
   // const accuracy = useMemo(() => {
   //   return areaColorsAssigned
@@ -98,8 +146,9 @@ export const ClassificationVisualizer = ({
     return { x: overlayX, y: overlayY };
   }, []);
 
+  // TODO: FIX this
   const handleOverlayClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (isDragging || dragJustEnded) {
+    if (isDragging || dragJustEnded || stage >= 5) {
       return;
     }
 
@@ -126,7 +175,7 @@ export const ClassificationVisualizer = ({
 
     if (clickCoords.length == 2 || clickCoords.length == 0) {
       setAreaColorsAssigned(false);
-      setArea1IsRed(null);
+      setOriginIsPass(null);
 
       setClickCoords([
         {
@@ -261,13 +310,15 @@ export const ClassificationVisualizer = ({
 
   const handleAreaSelection = (
     event: React.MouseEvent<SVGPolygonElement>,
-    isArea1: boolean
+    originIsPass: boolean
   ) => {
     event.stopPropagation();
 
     if (areaColorsAssigned) return;
 
-    setArea1IsRed(isArea1);
+    // Since area1 is always pass and area2 is always fail,
+    // we set area1IsRed to true (pass areas are red)
+    setOriginIsPass(originIsPass);
     setAreaColorsAssigned(true);
   };
 
@@ -278,9 +329,7 @@ export const ClassificationVisualizer = ({
       const intersections = findIntersections(p1, p2);
 
       if (intersections.length < 2) {
-        alert(
-          "The line does not properly intersect the graph boundaries. Please retry."
-        );
+        alert(content.alerts.invalidIntersection);
         setLineCoords([]);
       } else {
         setLineCoords([
@@ -301,12 +350,28 @@ export const ClassificationVisualizer = ({
 
   useEffect(() => {
     if (lineCoords.length < 2) {
-      setAreaPolygons({ area1: [], area2: [] });
+      setAreaPolygons({
+        area1: { graph: [], overlay: [] },
+        area2: { graph: [], overlay: [] },
+      });
       return;
     }
     const polygons = getAreaPolygons(lineCoords, graphToOverlayCoords);
     setAreaPolygons(polygons);
-  }, [lineCoords, graphToOverlayCoords]);
+    console.log("Getting polygons", polygons);
+  }, [lineCoords, graphToOverlayCoords, originIsPass]);
+
+  useEffect(() => {
+    if (bestLineCoords.length < 2) {
+      setBestAreaPolygons({
+        area1: { graph: [], overlay: [] },
+        area2: { graph: [], overlay: [] },
+      });
+      return;
+    }
+    const polygons = getAreaPolygons(bestLineCoords, graphToOverlayCoords);
+    setBestAreaPolygons(polygons);
+  }, [bestLineCoords, graphToOverlayCoords, originIsPass]);
 
   useEffect(() => {
     if (lineCoords.length === 2) {
@@ -328,28 +393,113 @@ export const ClassificationVisualizer = ({
   }, [clickCoords, stage, setStage, areaColorsAssigned]);
 
   useEffect(() => {
-    const accuracy = areaColorsAssigned
-      ? (
-          ((classificationCounts.TP + classificationCounts.TN) / data.length) *
-          100
-        ).toFixed(1)
-      : null;
-
-    if (stage == 4 && setResults && areaColorsAssigned && accuracy !== null) {
-      setResults({
-        accuracy: accuracy,
-        counts: classificationCounts,
-      });
+    if (stage >= 4 && areaColorsAssigned) {
+      setResults(classificationCounts);
     }
-  }, [stage, areaColorsAssigned, classificationCounts]);
+  }, [stage, areaColorsAssigned, classificationCounts, setResults]);
 
-  const chart = (
+  // Handle unseen data results
+  useEffect(() => {
+    if (stage >= 6 && setUnseenResults && areaColorsAssigned && testData) {
+      setUnseenResults(unseenClassificationCounts);
+    }
+  }, [
+    stage,
+    areaColorsAssigned,
+    unseenClassificationCounts,
+    setUnseenResults,
+    testData,
+  ]);
+
+  // Create best classifier line when entering stage 5
+  useEffect(() => {
+    if (stage >= 5 && bestLineCoords.length < 2) {
+      const bestLineCoords2 = [
+        {
+          graph: bestClassifier.line[0],
+          overlay: graphToOverlayCoords(bestClassifier.line[0]),
+        },
+        {
+          graph: bestClassifier.line[1],
+          overlay: graphToOverlayCoords(bestClassifier.line[1]),
+        },
+      ];
+
+      setBestLineCoords(bestLineCoords2);
+
+      // Calculate best classifier results
+      const bestClassificationCounts = getClassificationCounts(
+        data,
+        bestLineCoords2,
+        bestClassifier.originIsPass,
+        true
+      );
+
+      if (setBestResults) {
+        setBestResults(bestClassificationCounts);
+      }
+
+      // Calculate best classifier results on unseen data
+      if (testData && setUnseenBestResults) {
+        const bestUnseenClassificationCounts = getClassificationCounts(
+          testData,
+          bestLineCoords2,
+          bestClassifier.originIsPass,
+          true
+        );
+
+        setUnseenBestResults(bestUnseenClassificationCounts);
+      }
+
+      console.log("Best classifier created");
+    }
+  }, [
+    stage,
+    bestLineCoords,
+    bestClassifier,
+    data,
+    graphToOverlayCoords,
+    originIsPass,
+    setBestResults,
+    setUnseenBestResults,
+    testData,
+  ]);
+
+  useEffect(() => {
+    const overlayElement = overlayRef.current;
+    const areaPolygonsElement = areaPolygonsRef.current;
+
+    if (
+      overlayElement &&
+      areaPolygonsElement &&
+      clickCoords.length == 2 &&
+      !areaColorsAssigned
+    ) {
+      overlayElement.style.zIndex = "9";
+      areaPolygonsElement.style.zIndex = "9";
+    }
+  }, [clickCoords, areaColorsAssigned]);
+
+  useEffect(() => {
+    const areaPolygonsElement = areaPolygonsRef.current;
+    const overlayElement = overlayRef.current;
+    if (areaPolygonsElement && overlayElement && areaColorsAssigned) {
+      areaPolygonsElement.style.zIndex = "-50";
+      overlayElement.style.zIndex = "10";
+    }
+  }, [areaColorsAssigned]);
+
+  return (
     <>
       <Chart
-        data={data}
-        lineCoords={lineCoords}
-        area1IsRed={area1IsRed}
-        areaColorsAssigned={areaColorsAssigned}
+        data={stage === 6 && showUnseenData && testData ? testData : data}
+        lineCoords={stage >= 5 && showBestLine ? bestLineCoords : lineCoords}
+        originIsPass={
+          stage >= 5 && showBestLine
+            ? bestClassifier.originIsPass
+            : originIsPass
+        }
+        areaColorsAssigned={areaColorsAssigned || (stage >= 5 && showBestLine)}
         stage={stage}
         chartContainerRef={chartContainerRef}
       />
@@ -375,25 +525,79 @@ export const ClassificationVisualizer = ({
           />
         )}
 
+        {(stage === 5 || stage === 6) && (
+          <Toggle
+            leftOption={content.toggles.yourClassifier}
+            rightOption={content.toggles.bestClassifier}
+            value={showBestLine}
+            onChange={setShowBestLine}
+            className="absolute top-4 left-4"
+          />
+        )}
+
+        {stage === 6 && (
+          <Toggle
+            leftOption={content.toggles.trainingData}
+            rightOption={content.toggles.testData}
+            value={showUnseenData}
+            onChange={setShowUnseenData}
+            className="absolute top-17 left-4"
+          />
+        )}
+
+        <ExtendedLinePoints
+          extendedLinePoints={
+            stage >= 5 && showBestLine ? [] : extendedLinePoints
+          }
+          lineCoords={stage >= 5 && showBestLine ? bestLineCoords : lineCoords}
+          onExtendedPointMouseDown={
+            stage < 5 || !showBestLine ? handleExtendedPointMouseDown : () => {}
+          }
+        />
+      </div>
+
+      <div
+        className="w-full h-full z-9 absolute top-0 left-0 cursor-crosshair bg-transparent"
+        ref={areaPolygonsRef}
+      >
         {lineCoords.length === 2 &&
-          areaPolygons.area1.length > 0 &&
-          areaPolygons.area2.length > 0 && (
+          areaPolygons.area1.overlay.length > 0 &&
+          areaPolygons.area2.overlay.length > 0 &&
+          stage < 5 && (
             <ClassificationAreas
               areaPolygons={areaPolygons}
+              originIsPass={originIsPass}
               areaColorsAssigned={areaColorsAssigned}
-              area1IsRed={area1IsRed}
               onAreaSelection={handleAreaSelection}
             />
           )}
 
-        <ExtendedLinePoints
-          extendedLinePoints={extendedLinePoints}
-          lineCoords={lineCoords}
-          onExtendedPointMouseDown={handleExtendedPointMouseDown}
-        />
+        {stage >= 5 &&
+          showBestLine &&
+          bestLineCoords.length === 2 &&
+          bestAreaPolygons.area1.overlay.length > 0 &&
+          bestAreaPolygons.area2.overlay.length > 0 && (
+            <ClassificationAreas
+              areaPolygons={bestAreaPolygons}
+              originIsPass={bestClassifier.originIsPass}
+              areaColorsAssigned={true}
+              onAreaSelection={() => {}} // No area selection for best classifier
+            />
+          )}
+
+        {stage >= 5 &&
+          !showBestLine &&
+          lineCoords.length === 2 &&
+          areaPolygons.area1.overlay.length > 0 &&
+          areaPolygons.area2.overlay.length > 0 && (
+            <ClassificationAreas
+              areaPolygons={areaPolygons}
+              originIsPass={originIsPass}
+              areaColorsAssigned={areaColorsAssigned}
+              onAreaSelection={() => {}} // No area selection in stage 5+
+            />
+          )}
       </div>
     </>
   );
-
-  return chart;
 };

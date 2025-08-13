@@ -14,6 +14,7 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
+    "resolveJsonModule": true,
 
     /* Linting */
     "strict": true,
@@ -21,7 +22,20 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    "baseUrl": "./",
+    "paths": {
+      "~/*": ["src/*"],
+      "@/*": ["./*"],
+    }
   },
-  "include": ["src"]
+  "include": [
+    "src",
+    ".intlayer/**/*.ts",
+    "config.json",
+    "tr/**/*.json",
+    "tr/**/*.ts",
+    "data/**/*.json",
+  ]
 }

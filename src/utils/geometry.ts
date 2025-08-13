@@ -1,36 +1,39 @@
-import type { Point, ClickCoordinates, AreaPolygons } from '../types';
+import type { Point, ClickCoordinates, AreaPolygons } from '~/types';
 
 export const getAreaPolygons = (
   lineCoords: ClickCoordinates[],
-  graphToOverlayCoords: (point: Point) => Point
+  graphToOverlayCoords: (point: Point) => Point,
 ): AreaPolygons => {
-  if (lineCoords.length !== 2) return { area1: [], area2: [] };
-
-  const [p1, p2] = lineCoords.map((coord) => coord.graph);
-
-  const isLeftOfLine = (point: Point): boolean => {
-    return (
-      (p2.x - p1.x) * (point.y - p1.y) - (p2.y - p1.y) * (point.x - p1.x) > 0
-    );
+  if (lineCoords.length !== 2) return {
+    area1: {
+      graph: [],
+      overlay: [],
+    }, area2: { graph: [], overlay: [] }
   };
 
-  const corners = [
-    { x: 0, y: 0 },
+  const [p1, p2] = lineCoords.map((coord) => coord.graph);
+  const origin = { x: 0, y: 0 };
+
+  const cornersExceptOrigin = [
     { x: 500, y: 0 },
     { x: 500, y: 500 },
     { x: 0, y: 500 },
   ];
 
-  const createPolygon = (isLeftSide: boolean): Point[] => {
+  const createPolygon = (hasOrigin: boolean): Point[] => {
     const polygon: Point[] = [];
 
     polygon.push(p1, p2);
 
-    corners.forEach((corner) => {
-      if (isLeftOfLine(corner) === isLeftSide) {
+    if (hasOrigin) {
+      polygon.push(origin);
+    }
+
+    for (const corner of cornersExceptOrigin) {
+      if (sameSide(corner, origin, lineCoords) === hasOrigin) {
         polygon.push(corner);
       }
-    });
+    }
 
     const centroidX = polygon.reduce((sum, p) => sum + p.x, 0) / polygon.length;
     const centroidY = polygon.reduce((sum, p) => sum + p.y, 0) / polygon.length;
@@ -43,22 +46,28 @@ export const getAreaPolygons = (
   };
 
   try {
-    const area1GraphCoords = createPolygon(true);
-    const area2GraphCoords = createPolygon(false);
-    const area1OverlayCoords = area1GraphCoords.map((coord) =>
-      graphToOverlayCoords(coord)
-    );
-    const area2OverlayCoords = area2GraphCoords.map((coord) =>
-      graphToOverlayCoords(coord)
-    );
+    const area1 = createPolygon(true);
+    const area2 = createPolygon(false);
+
+    console.log("Area 1:", area1);
+    console.log("Area 2:", area2);
+
+    const area1OverlayCoords = area1.map((coord) => graphToOverlayCoords(coord));
+    const area2OverlayCoords = area2.map((coord) => graphToOverlayCoords(coord));
 
     return {
-      area1: area1OverlayCoords,
-      area2: area2OverlayCoords,
+      area1: {
+        graph: area1, // area1 is always the pass area
+        overlay: area1OverlayCoords,
+      }, // area1 is always the pass area
+      area2: {
+        graph: area2,
+        overlay: area2OverlayCoords,
+      }, // area2 is always the fail area
     };
   } catch (error) {
     console.error("Error converting coordinates:", error);
-    return { area1: [], area2: [] };
+    return { area1: { graph: [], overlay: [] }, area2: { graph: [], overlay: [] } };
   }
 };
 
@@ -206,3 +215,13 @@ export const findIntersectionsForDrag = (point1: Point, point2: Point): Point[] 
       );
   });
 };
+
+export function sameSide(a: Point, b: Point, line: ClickCoordinates[]): boolean {
+  if (line.length !== 2) return false;
+
+  const [p1, p2] = line.map(coord => coord.graph);
+  const side1 = (p2.x - p1.x) * (a.y - p1.y) - (p2.y - p1.y) * (a.x - p1.x) >= 0;
+  const side2 = (p2.x - p1.x) * (b.y - p1.y) - (p2.y - p1.y) * (b.x - p1.x) >= 0;
+
+  return side1 === side2;
+}

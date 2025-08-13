@@ -1,22 +1,29 @@
+import { useIntlayer } from "react-intlayer";
+
 interface Props {
   clickCoordsLength: number;
   lineCoordsLength: number;
   areaColorsAssigned: boolean;
 }
 
-export const Instructions = ({ clickCoordsLength, lineCoordsLength, areaColorsAssigned }: Props) => {
+export const Instructions = ({
+  clickCoordsLength,
+  lineCoordsLength,
+  areaColorsAssigned,
+}: Props) => {
+  const { instructions: content } = useIntlayer("app");
   const getInstructionText = () => {
     if (clickCoordsLength === 0) {
-      return "Step 1: Click to select first point";
+      return content.step1;
     }
     if (clickCoordsLength === 1) {
-      return "Step 2: Click to select second point and draw line";
+      return content.step2;
     }
     if (lineCoordsLength === 2 && !areaColorsAssigned) {
-      return "Step 3: Drag green circles to rotate line, then click an area to classify as Pass";
+      return content.step3;
     }
     if (areaColorsAssigned) {
-      return "Complete! Blue area classifies as Pass, Orange area classifies as Fail";
+      return content.complete;
     }
     return "";
   };

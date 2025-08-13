@@ -6,13 +6,14 @@ import {
   Scatter,
   Line,
 } from "recharts";
-import type { DataPoint, ClickCoordinates } from "../../types";
+import type { DataPoint, ClickCoordinates } from "~/types";
 import { CustomDot } from "./CustomDot";
+import { useIntlayer } from "react-intlayer";
 
 interface Props {
   data: DataPoint[];
   lineCoords: ClickCoordinates[];
-  area1IsRed: boolean | null;
+  originIsPass: boolean | null;
   areaColorsAssigned: boolean;
   stage: number;
   chartContainerRef: React.RefObject<HTMLDivElement | null>;
@@ -21,11 +22,12 @@ interface Props {
 export const Chart = ({
   data,
   lineCoords,
-  area1IsRed,
+  originIsPass,
   areaColorsAssigned,
   stage,
   chartContainerRef,
 }: Props) => {
+  const { chart } = useIntlayer("app");
   return (
     <div ref={chartContainerRef}>
       <ComposedChart
@@ -38,7 +40,7 @@ export const Chart = ({
           type="number"
           domain={[0, 500]}
           label={{
-            value: "Study Time (min)",
+            value: chart.axisLabels.x.value,
             position: "insideBottom",
             offset: -10,
           }}
@@ -48,7 +50,7 @@ export const Chart = ({
           type="number"
           domain={[0, 500]}
           label={{
-            value: "Screen Time (min)",
+            value: chart.axisLabels.y.value,
             angle: -90,
             position: "insideLeft",
             style: { textAnchor: "middle" },
@@ -63,7 +65,7 @@ export const Chart = ({
           shape={
             <CustomDot
               lineCoords={lineCoords}
-              area1IsRed={area1IsRed}
+              originIsPass={originIsPass}
               areaColorsAssigned={areaColorsAssigned}
               stage={stage}
             />
@@ -80,11 +82,14 @@ export const Chart = ({
             }))}
             stroke="black"
             strokeWidth={3}
-            strokeDasharray="8 4"
+            // strokeDasharray="8 4"
             dot={false}
             connectNulls={true}
             name="Separator Line"
             animationDuration={0}
+            style={{
+              zIndex: 100,
+            }}
           />
         )}
       </ComposedChart>

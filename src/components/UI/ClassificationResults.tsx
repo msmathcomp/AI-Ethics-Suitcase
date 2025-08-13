@@ -1,26 +1,46 @@
-import type { ClassificationCounts } from "../../types";
+import type { ClassificationCounts } from "~/types";
+import { useIntlayer } from "react-intlayer";
 
 interface Props {
   classificationCounts: ClassificationCounts;
-  accuracy: string | null;
+  bestClassificationCounts?: ClassificationCounts;
+  title?: string;
 }
+
+const calculateAccuracy = (counts: ClassificationCounts): string => {
+  const total = counts.TP + counts.TN + counts.FP + counts.FN;
+  if (total === 0) return "0";
+  return (((counts.TP + counts.TN) / total) * 100).toFixed(1);
+};
 
 export const ClassificationResults = ({
   classificationCounts,
-  accuracy,
+  bestClassificationCounts,
+  title,
 }: Props) => {
+  const { classificationResults: content } = useIntlayer("app");
+  const accuracy = calculateAccuracy(classificationCounts);
+  const bestAccuracy = bestClassificationCounts
+    ? calculateAccuracy(bestClassificationCounts)
+    : null;
+  const showComparison = bestClassificationCounts && bestAccuracy;
   return (
     <div
-      className="mt-10 border-1 border-black-300 rounded-lg p-4 shadow-lg"
+      className="mt-5 border-1 border-black-300 rounded-lg p-4 shadow-lg"
       id="classification-results"
     >
       <h3 className="text-lg font-semibold mb-3 text-center">
-        Classification Results
+        {title || content.title} {showComparison && content.compareSuffix}
       </h3>
 
       <div className="mb-3 text-center">
         <div className="text-lg font-bold text-blue-600">
-          Accuracy: {accuracy}%
+          {content.accuracyLabel} {accuracy}%
+          {showComparison && (
+            <span className="font-extrabold text-green-600 ml-2">
+              ({bestAccuracy}%)
+            </span>
+          )}
         </div>
       </div>
 
@@ -29,27 +49,47 @@ export const ClassificationResults = ({
           <div className="flex items-center space-x-2">
             <div className="w-4 h-4 border-1 border-black rounded-full bg-green-500"></div>
             <span className="text-sm">
-              True Positive: {classificationCounts.TP}
+              {content.counts.TP}: {classificationCounts.TP}
+              {showComparison && (
+                <span className="font-extrabold text-green-600 ml-1">
+                  ({bestClassificationCounts.TP})
+                </span>
+              )}
             </span>
           </div>
           <div className="flex items-center space-x-2">
             <div className="w-4 h-4 border-1 border-black bg-green-500"></div>
             <span className="text-sm">
-              True Negative: {classificationCounts.TN}
+              {content.counts.TN}: {classificationCounts.TN}
+              {showComparison && (
+                <span className="font-extrabold text-green-600 ml-1">
+                  ({bestClassificationCounts.TN})
+                </span>
+              )}
             </span>
           </div>
         </div>
         <div className="flex flex-col space-y-2">
           <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 border-1 border-black bg-orange-500"></div>
+            <div className="w-4 h-4 border-1 border-black bg-red-500"></div>
             <span className="text-sm">
-              False Positive: {classificationCounts.FP}
+              {content.counts.FP}: {classificationCounts.FP}
+              {showComparison && (
+                <span className="font-extrabold text-green-600 ml-1">
+                  ({bestClassificationCounts.FP})
+                </span>
+              )}
             </span>
           </div>
           <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 border-1 border-black rounded-full bg-orange-500"></div>
+            <div className="w-4 h-4 border-1 border-black rounded-full bg-red-500"></div>
             <span className="text-sm">
-              False Negative: {classificationCounts.FN}
+              {content.counts.FN}: {classificationCounts.FN}
+              {showComparison && (
+                <span className="font-extrabold text-green-600 ml-1">
+                  ({bestClassificationCounts.FN})
+                </span>
+              )}
             </span>
           </div>
         </div>
