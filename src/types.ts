@@ -47,3 +47,31 @@ export interface LevelJsonShape {
   originIsPass: boolean;
   testData?: DataPoint[];
 }
+
+// class Coordinate {
+//   public graph: Point;
+//   public overlay: Point;
+//   public graphToOverlay: (point: Point) => Point;
+//   public overlayToGraph: (point: Point) => Point;
+
+//   constructor(graph: Point, overlay: Point, graphToOverlay: (point: Point) => Point, overlayToGraph: (point: Point) => Point) {
+//     this.graph = graph;
+//     this.overlay = overlay;
+//     this.graphToOverlay = graphToOverlay;
+//     this.overlayToGraph = overlayToGraph;
+//   }
+
+//   static fromGraph(graph: Point, graphToOverlay: (point: Point) => Point, overlayToGraph: (point: Point) => Point): Coordinate {
+//     const overlay = graphToOverlay(graph);
+//     const coordinate = new Coordinate(graph, overlay, graphToOverlay, overlayToGraph);
+//     coordinate.graphToOverlay = graphToOverlay;
+//     return coordinate;
+//   }
+
+//   static fromOverlay(overlay: Point, graphToOverlay: (point: Point) => Point, overlayToGraph: (point: Point) => Point): Coordinate {
+//     const graph = overlayToGraph(overlay);
+//     const coordinate = new Coordinate(graph, overlay, graphToOverlay, overlayToGraph);
+//     coordinate.overlayToGraph = overlayToGraph;
+//     return coordinate;
+//   }
+// }

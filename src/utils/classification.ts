@@ -4,17 +4,16 @@ import { sameSide } from './geometry';
 export const getPointClassification = (
   point: DataPoint,
   lineCoords: ClickCoordinates[],
-  originIsPass: boolean | null,
+  refCornerIsPass: boolean | null,
   areaColorsAssigned: boolean
 ): ClassificationResult | null => {
-  if (!areaColorsAssigned || lineCoords.length !== 2 || originIsPass === null) {
+  if (!areaColorsAssigned || lineCoords.length !== 2 || refCornerIsPass === null) {
     return null;
   }
 
-  const pointIsOnOriginSide = sameSide({ x: point.study_time, y: point.screen_time }, { x: 0, y: 0 }, lineCoords);
+  const pointIsOnRefCornerSide = sameSide({ x: point.study_time, y: point.screen_time }, { x: 500, y: 0 }, lineCoords);
 
-  // If point is on same side as origin, use originIsPass to determine classification
-  const classifiedAsPass = pointIsOnOriginSide ? originIsPass : !originIsPass;
+  const classifiedAsPass = pointIsOnRefCornerSide ? refCornerIsPass : !refCornerIsPass;
 
   const actuallyPass = point.type === "Pass";
 
@@ -28,7 +27,7 @@ export const getPointClassification = (
 export const getClassificationCounts = (
   data: DataPoint[],
   lineCoords: ClickCoordinates[],
-  originIsPass: boolean | null,
+  refCornerIsPass: boolean | null,
   areaColorsAssigned: boolean
 ): ClassificationCounts => {
   const counts = { TP: 0, TN: 0, FP: 0, FN: 0 };
@@ -37,7 +36,7 @@ export const getClassificationCounts = (
     const classification = getPointClassification(
       point,
       lineCoords,
-      originIsPass,
+      refCornerIsPass,
       areaColorsAssigned
     );
     if (classification) {

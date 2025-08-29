@@ -17,7 +17,12 @@ export interface LevelResult {
 
 interface ClassificationResultsContextValue {
   resultsByLevel: Map<number, LevelResult>;
-  recordLevelResult: (result: LevelResult, overwrite?: boolean) => void;
+  recordLevelResult: (
+    level: number,
+    type: "user" | "best" | "unseen" | "unseenBest",
+    counts: ClassificationCounts,
+    overwrite?: boolean
+  ) => void;
   hasLevelResult: (level: number) => boolean;
   reset: () => void;
 }
@@ -38,14 +43,20 @@ export function ClassificationResultsProvider({
 
   const recordLevelResult = useCallback<
     ClassificationResultsContextValue["recordLevelResult"]
-  >((result, overwrite = false) => {
+  >((level, type, counts, overwrite = false) => {
     setResultsByLevel((prev) => {
-      if (prev.has(result.level) && !overwrite) return prev;
-      const next = new Map(prev);
-      next.set(result.level, {
-        ...result,
-      });
-      return next;
+      const existing = prev.get(level) || {
+        level,
+        user: { TP: 0, TN: 0, FP: 0, FN: 0 },
+      };
+      const updated = {
+        ...existing,
+        [type]: counts,
+      };
+      if (overwrite || !prev.has(level) || !existing[type]) {
+        return new Map(prev).set(level, updated);
+      }
+      return prev;
     });
   }, []);
 

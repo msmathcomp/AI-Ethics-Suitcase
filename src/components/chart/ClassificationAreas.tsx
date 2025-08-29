@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import type { AreaPolygons } from "~/types";
+import { useMemo } from "react";
+import type { AreaPolygons, Point } from "~/types";
 
 interface Props {
   areaPolygons: AreaPolygons;
@@ -19,55 +19,111 @@ export const ClassificationAreas = ({
   originIsPass,
   onAreaSelection,
 }: Props) => {
-  const areaPolygonsRef = useRef<SVGSVGElement>(null);
 
-  useEffect(() => {
-    if (areaColorsAssigned && areaPolygonsRef.current) {
-      areaPolygonsRef.current.style.zIndex = "-50";
-    }
-  }, [areaColorsAssigned]);
+  const labelPositions = useMemo(() => {
+    const area1Graph = areaPolygons.area1.graph;
+    const area2Graph = areaPolygons.area2.graph;
+    if (area1Graph.length === 0 || area2Graph.length === 0) return null;
 
-  // const corners = [
-  //   { x: 0, y: 0 },
-  //   { x: 0, y: 500 },
-  //   { x: 500, y: 500 },
-  //   { x: 500, y: 0 },
-  // ];
+    const sharedLinePoints: Point[] = area1Graph.filter((p1) =>
+      area2Graph.some((p2) => p2.x === p1.x && p2.y === p1.y)
+    );
+    if (sharedLinePoints.length < 2) return null;
+    const [lp1, lp2] = sharedLinePoints;
 
-  // const x = useMemo(() => {
-  //   const labels: (Point & { label: string })[] = [];
-  //   for (const corner of corners) {
-  //     let value: number = -1;
-  //     if (
-  //       (value = areaPolygons.area1.graph.findIndex(
-  //         (p) => p.x === corner.x && p.y === corner.y
-  //       )) !== -1
-  //     ) {
-  //       labels.push({
-  //         x: areaPolygons.area1.overlay[value].x,
-  //         y: areaPolygons.area1.overlay[value].y,
-  //         label: "Pass",
-  //       });
-  //     } else if (
-  //       (value = areaPolygons.area2.graph.findIndex(
-  //         (p) => p.x === corner.x && p.y === corner.y
-  //       )) !== -1
-  //     ) {
-  //       labels.push({
-  //         x: areaPolygons.area2.overlay[value].x,
-  //         y: areaPolygons.area2.overlay[value].y,
-  //         label: "Fail",
-  //       });
-  //     }
-  //   }
-  //   console.log("Labels:", labels, areaPolygons.area1);
-  //   return labels;
-  // }, [areaPolygons]);
+    const corners: Point[] = [
+      { x: 0, y: 0 },
+      { x: 0, y: 500 },
+      { x: 500, y: 500 },
+      { x: 500, y: 0 },
+    ];
+
+    const pointLineDistance = (pt: Point) => {
+      const A = lp2.y - lp1.y;
+      const B = lp1.x - lp2.x;
+      const C = lp2.x * lp1.y - lp2.y * lp1.x;
+      return Math.abs(A * pt.x + B * pt.y + C) / Math.hypot(A, B);
+    };
+
+    const findCornerLabelInfo = (area: {
+      graph: Point[];
+      overlay: Point[];
+    }) => {
+      // corners that are actually part of this area polygon (by construction)
+      const candidates = corners.filter((c) =>
+        area.graph.some((p) => p.x === c.x && p.y === c.y)
+      );
+      if (candidates.length === 0) {
+        // find which 2 points align with the boundary
+        const [p1, p2] = area.graph.filter(
+          (p) => p.x === 0 || p.x === 500 || p.y === 0 || p.y === 500
+        );
+        if (!p1 || !p2) return null;
+
+        const p1Index = area.graph.findIndex(
+          (p) => p.x === p1.x && p.y === p1.y
+        );
+        const p2Index = area.graph.findIndex(
+          (p) => p.x === p2.x && p.y === p2.y
+        );
+        if (p1Index === -1 || p2Index === -1) return null;
+        const o1Overlay = area.overlay[p1Index];
+        const o2Overlay = area.overlay[p2Index];
+
+        const midPointGraph = {
+          x: (p1.x + p2.x) / 2,
+          y: (p1.y + p2.y) / 2,
+        } as Point;
+
+        const dx = midPointGraph.x === 0 ? +5 : -10; // from left -> right, from right -> left
+        const dy = midPointGraph.y === 0 ? -10 : +15; //
+
+        const midPointOverlay = {
+          x: (o1Overlay.x + o2Overlay.x) / 2 + dx,
+          y: (o1Overlay.y + o2Overlay.y) / 2 + dy,
+        } as Point;
+
+        return {
+          overlay: midPointOverlay,
+          graphCorner: midPointGraph,
+        };
+      }
+
+      const furthestGraph = candidates.reduce(
+        (best, cur) =>
+          pointLineDistance(cur) > pointLineDistance(best) ? cur : best,
+        candidates[0]
+      );
+
+      const idx = area.graph.findIndex(
+        (p) => p.x === furthestGraph.x && p.y === furthestGraph.y
+      );
+      if (idx === -1) return null;
+
+      const base = area.overlay[idx];
+      const dx = furthestGraph.x === 0 ? +5 : -10; // from left -> right, from right -> left
+      const dy = furthestGraph.y === 0 ? -10 : +15; // from bottom -> up, from top -> down
+
+      return {
+        overlay: { x: base.x + dx, y: base.y + dy },
+        graphCorner: furthestGraph,
+      } as { overlay: Point; graphCorner: Point };
+    };
+
+    const x = {
+      area1: findCornerLabelInfo(areaPolygons.area1),
+      area2: findCornerLabelInfo(areaPolygons.area2),
+    } as {
+      area1: { overlay: Point; graphCorner: Point } | null;
+      area2: { overlay: Point; graphCorner: Point } | null;
+    };
+
+    return x;
+  }, [areaPolygons]);
 
   return (
     <svg
-      className="absolute top-0 left-0 w-full h-full pointer-events-none z-20"
-      ref={areaPolygonsRef}
+      className="absolute top-0 left-0 w-full h-full pointer-events-none -z-10"
     >
       <defs>
         <pattern
@@ -143,19 +199,40 @@ export const ClassificationAreas = ({
         onClick={(e) => onAreaSelection(e, false)}
       />
 
-      {/* {x.map((label, index) => (
-        <text
-          key={index}
-          x={label.x + 10}
-          y={label.y + 10}
-          fill="black"
-          fontSize="12"
-          fontWeight="bold"
-          z={10}
-        >
-          {label.label}
-        </text>
-      ))} */}
+      {areaColorsAssigned && originIsPass !== null && labelPositions && (
+        <>
+          {labelPositions.area1 && (
+            <text
+              x={labelPositions.area1.overlay.x}
+              y={labelPositions.area1.overlay.y}
+              fill="#111827"
+              fontSize="12"
+              fontWeight="700"
+              textAnchor={
+                labelPositions.area1.graphCorner.x === 0 ? "start" : "end"
+              }
+              style={{ pointerEvents: "none" }}
+            >
+              {originIsPass ? "PASS" : "FAIL"}
+            </text>
+          )}
+          {labelPositions.area2 && (
+            <text
+              x={labelPositions.area2.overlay.x}
+              y={labelPositions.area2.overlay.y}
+              fill="#111827"
+              fontSize="12"
+              fontWeight="700"
+              textAnchor={
+                labelPositions.area2.graphCorner.x === 0 ? "start" : "end"
+              }
+              style={{ pointerEvents: "none" }}
+            >
+              {originIsPass ? "FAIL" : "PASS"}
+            </text>
+          )}
+        </>
+      )}
     </svg>
   );
 };

@@ -1,14 +1,17 @@
-import { LevelProgressBar } from "~/components/UI/LevelProgressBar";
-import Nav from "~/components/layout/Nav";
-import { useEffect, useRef, useState, useMemo } from "react";
-import { Legend } from "~/components/UI/Legend";
+import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { ClassificationResults } from "~/components/UI/ClassificationResults";
-import type { ClassificationCounts, Point, AreaPolygons } from "~/types";
+import {
+  type ClassificationCounts,
+  type Point,
+  type AreaPolygons,
+  type DataPoint,
+} from "~/types";
 import { useNavigate } from "react-router";
 import {
   CartesianGrid,
   ComposedChart,
   Line,
+  ResponsiveContainer,
   Scatter,
   XAxis,
   YAxis,
@@ -18,6 +21,9 @@ import { ClassificationAreas } from "~/components/chart/ClassificationAreas";
 import Joyride, { type CallBackProps, type Step } from "react-joyride";
 import { Frown, Smile } from "lucide-react";
 import { useIntlayer } from "react-intlayer";
+import LevelLayout from "~/components/layout/levelLayout";
+import { getPointClassification } from "~/utils/classification";
+import { cn } from "~/utils/cn";
 
 const CustomDotLevel1 = ({
   cx,
@@ -26,29 +32,39 @@ const CustomDotLevel1 = ({
 }: {
   cx?: number;
   cy?: number;
-  payload?: { type: "Pass" | "Fail"; id: "FP" | "TN" | "TP" | "FN" };
+  payload?: DataPoint;
 }) => {
   if (!cx || !cy || !payload) return null;
 
   let fillColor = "transparent";
   let IconComponent = null;
 
-  switch (payload.id) {
+  const classificationResult = getPointClassification(
+    payload,
+    [
+      { graph: { x: 250, y: 0 }, overlay: { x: 250, y: 0 } },
+      { graph: { x: 250, y: 500 }, overlay: { x: 250, y: 500 } },
+    ],
+    true,
+    true
+  );
+
+  switch (classificationResult) {
     case "TP":
     case "TN":
-      fillColor = "rgb(34 197 94)"; // green-500
+      fillColor = "oklch(0.704 0.14 182.503)"; // teal-500
       IconComponent = Smile;
       break;
     case "FP":
     case "FN":
-      fillColor = "rgb(239 68 68)"; // red-500
+      fillColor = "oklch(70.5% 0.213 47.604)"; // orange-500
       IconComponent = Frown;
       break;
   }
 
-  if (payload?.type === "Pass") {
+  if (payload.type === "Pass") {
     return (
-      <g id={payload.id}>
+      <g id={classificationResult!}>
         <circle
           cx={cx}
           cy={cy}
@@ -66,7 +82,7 @@ const CustomDotLevel1 = ({
     );
   } else {
     return (
-      <g id={payload.id}>
+      <g id={classificationResult!}>
         <rect
           x={cx - 10}
           y={cy - 10}
@@ -86,29 +102,39 @@ const CustomDotLevel1 = ({
   }
 };
 
-const data = [
-  { study_time: 100, screen_time: 300, type: "Fail", id: "FP" },
-  { study_time: 350, screen_time: 300, type: "Fail", id: "TN" },
-  { study_time: 100, screen_time: 150, type: "Pass", id: "TP" },
-  { study_time: 350, screen_time: 150, type: "Pass", id: "FN" },
-];
-
 export default function Level1() {
   const navigate = useNavigate();
-  const level = 1;
-  const { level1: content, chart, common } = useIntlayer("app");
+  const { level1: content, chart: chartContent } = useIntlayer("app");
 
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const graphRef = useRef<HTMLDivElement>(null);
   const [stage, setStage] = useState(0);
+  const [data, setData] = useState<DataPoint[]>([]);
+  const [stepIndex, setStepIndex] = useState(0);
+
   const results: ClassificationCounts = useMemo(
-    () => ({
-      TP: 1,
-      TN: 1,
-      FP: 1,
-      FN: 1,
-    }),
-    []
+    () =>
+      data
+        .map((p) =>
+          getPointClassification(
+            p,
+            [
+              { graph: { x: 250, y: 0 }, overlay: { x: 250, y: 0 } },
+              { graph: { x: 250, y: 500 }, overlay: { x: 250, y: 500 } },
+            ],
+            true,
+            true
+          )
+        )
+        .reduce(
+          (acc, curr) => {
+            acc[curr!] += 1;
+            return acc;
+          },
+          { TP: 0, TN: 0, FP: 0, FN: 0 } as ClassificationCounts
+        ),
+    [data]
   );
   const [areaPolygons, setAreaPolygons] = useState<AreaPolygons | null>(null);
   const [run, setRun] = useState(false);
@@ -174,12 +200,131 @@ export default function Level1() {
     return () => clearTimeout(timeout);
   }, [areaPolygons, chartContainerRef, overlayRef]);
 
-  const handleJoyrideCallback = (data: CallBackProps) => {
-    const { status } = data;
-    if (status === "finished" || status === "skipped") {
-      navigate("/level/2");
+  useEffect(() => {
+    const chartContainer = chartContainerRef.current;
+    const graphElement = graphRef.current;
+    const overlayElement = overlayRef.current;
+    if (!chartContainer || !graphElement || !overlayElement) return;
+
+    const updateGraphPosition = () => {
+      const grid = chartContainer.querySelector(
+        ".recharts-cartesian-grid"
+      ) as SVGElement | null;
+      if (!grid) return;
+
+      const overlayRect = overlayElement.getBoundingClientRect();
+      const rect = grid.getBoundingClientRect();
+      graphElement.style.width = `${rect.width}px`;
+      graphElement.style.height = `${rect.height}px`;
+      graphElement.style.left = `${rect.left - overlayRect.left}px`;
+      graphElement.style.top = `${rect.top - overlayRect.top}px`;
+    };
+
+    // Initial attempt
+    updateGraphPosition();
+
+    // Watch for later appearance
+    const observer = new MutationObserver(() => {
+      updateGraphPosition();
+    });
+
+    observer.observe(chartContainer, {
+      childList: true,
+      subtree: true,
+    });
+
+    return () => observer.disconnect();
+  }, [graphRef, chartContainerRef]);
+
+  useEffect(() => {
+    const classificationResults = data.map((p) =>
+      getPointClassification(
+        p,
+        [
+          { graph: { x: 250, y: 0 }, overlay: { x: 250, y: 0 } },
+          { graph: { x: 250, y: 500 }, overlay: { x: 250, y: 500 } },
+        ],
+        true,
+        true
+      )
+    );
+    if (stage === 0 && classificationResults.includes("TP")) {
+      setStage(1);
+      setStepIndex(3);
+      setTimeout(() => {
+        setRun(true);
+      }, 700);
+    } else if (stage === 1 && classificationResults.includes("TN")) {
+      setStage(2);
+      setTimeout(() => {
+        setRun(true);
+        setStepIndex(4);
+      }, 1000);
+    } else if (stage === 2 && classificationResults.includes("FP")) {
+      setStage(3);
+      setTimeout(() => {
+        setRun(true);
+        setStepIndex(5);
+      }, 1000);
+    } else if (stage === 3 && classificationResults.includes("FN")) {
+      setStage(4);
+      setTimeout(() => {
+        setRun(true);
+        setStepIndex(6);
+      }, 1000);
     }
-  };
+  }, [data, stage]);
+
+  const handleJoyrideCallback = useCallback(
+    (data: CallBackProps) => {
+      const { status, index, action } = data;
+      if (
+        action === "next" &&
+        data.lifecycle === "complete" &&
+        [0, 1, 6, 7].includes(index)
+      ) {
+        setStepIndex((prev) => prev + 1);
+        return;
+      } else if (
+        action === "next" &&
+        data.lifecycle === "complete" &&
+        [2, 3, 4, 5].includes(index)
+      ) {
+        setRun(false);
+        return;
+      }
+
+      if (status === "finished" || status === "skipped") {
+        navigate("/level/2");
+        return;
+      }
+    },
+    [navigate]
+  );
+
+  const handleGraphClick = useCallback(
+    (e: React.PointerEvent) => {
+      const graphRect = graphRef.current?.getBoundingClientRect();
+      if (!graphRect) return;
+
+      const clickX = e.clientX - graphRect.left;
+      const clickY = e.clientY - graphRect.top;
+
+      const normalize_y = graphRect.height / 500;
+      const normalize_x = graphRect.width / 500;
+
+      const dataX = Math.round(clickX / normalize_x);
+      const dataY = Math.round(500 - clickY / normalize_y);
+
+      const type = stage === 0 || stage === 3 ? "Pass" : "Fail";
+
+      setData((prev) => [
+        ...prev,
+        { screen_time: dataY, study_time: dataX, type },
+      ]);
+    },
+    [stage]
+  );
 
   const steps: Step[] = [
     {
@@ -196,10 +341,12 @@ export default function Level1() {
       target: ".recharts-wrapper",
       content: content.tour[2],
       disableBeacon: true,
-      placement: "left",
+      placement: "right",
+      disableScrollParentFix: true,
+      disableScrolling: true,
     },
     {
-      target: "#FP",
+      target: "#TP",
       content: content.tour[3],
       disableBeacon: true,
       placement: "top",
@@ -211,7 +358,7 @@ export default function Level1() {
       placement: "top",
     },
     {
-      target: "#TP",
+      target: "#FP",
       content: content.tour[5],
       disableBeacon: true,
       placement: "bottom",
@@ -225,110 +372,83 @@ export default function Level1() {
     },
   ];
 
+  const instructions = [
+    "Click on the pass region to add a student who has passed",
+    "Now click on the fail region to add a student who has failed",
+    "Now click on the pass region to add a student who has failed",
+    "Finally, click on the fail region to add a student who has passed",
+    "Great! You have classified all types of students. Click next to proceed.",
+  ];
+
   return (
-    <main className="h-screen w-screen flex flex-col items-center p-4">
-      <Nav />
-      <Joyride
-        steps={steps}
-        run={run}
-        continuous
-        showProgress
-        callback={handleJoyrideCallback}
-        disableOverlay={false}
-        styles={{
-          options: {
-            arrowColor: "#e3ffeb",
-            backgroundColor: "#e3ffeb",
-            primaryColor: "#000",
-            textColor: "#004a14",
-          },
-          spotlight: {
-            backgroundColor: "rgba(255, 255, 255, 0.1)",
-            border: "solid 2px black",
-            pointerEvents: "none",
-          },
-          overlay: {
-            backgroundColor: "rgba(200, 200, 200, 0.1)",
-            pointerEvents: "none",
-          },
-        }}
-      />
-      <div className="flex w-full flex-1">
-        <div className="h-full w-[30%] flex flex-col p-4 border-r-1">
-          <LevelProgressBar level={level} showNextLevelButton={run} />
-          <Legend />
-          <ClassificationResults classificationCounts={results} />
-        </div>
-        <div className="flex-1 h-full flex flex-col items-center">
-          <div
-            className="flex p-4 border-b-1 w-full h-[100px] justify-center"
-            id="instruction"
-          >
-            <h2 className="text-xl font-medium mb-2 break-words flex-1">
-              {content.instructions[0]}
-            </h2>
-            <div className="w-24 h-full">
-              {stage === 3 && (
-                <button
-                  className="bg-blue-500 text-white px-4 py-2 rounded my-auto"
-                  onClick={() => setStage(4)}
-                >
-                  {common.buttons.next}
-                </button>
-              )}
-            </div>
-          </div>
-          <div className="h-[600px] w-full flex items-center justify-center relative py-10">
-            <div ref={chartContainerRef}>
-              <ComposedChart
-                height={550}
-                width={700}
-                margin={{ top: 30, right: 30, bottom: 30, left: 90 }}
+    <>
+      <LevelLayout
+        goalElement={"Level 1: How to calcuate the accuracy of a classifier"}
+        classificationVisualizer={
+          <>
+            <div className="ml-10 h-full aspect-square flex items-center justify-center">
+              <ResponsiveContainer
+                height="95%"
+                width="95%"
+                ref={chartContainerRef}
               >
-                <XAxis
-                  dataKey="study_time"
-                  type="number"
-                  domain={[0, 500]}
-                  label={{
-                    value: chart.axisLabels.x.value,
-                    position: "insideBottom",
-                    offset: -10,
+                <ComposedChart
+                  margin={{
+                    top: 15,
+                    right: 15,
+                    bottom: 15,
+                    left: 15,
                   }}
-                />
-                <YAxis
-                  dataKey="screen_time"
-                  type="number"
-                  domain={[0, 500]}
-                  label={{
-                    value: chart.axisLabels.y.value,
-                    angle: -90,
-                    position: "insideLeft",
-                    style: { textAnchor: "middle" },
-                  }}
-                />
-                <CartesianGrid strokeDasharray="3 3" />
-                <Scatter
-                  dataKey="screen_time"
-                  data={data}
-                  fill="#8884d8"
-                  shape={<CustomDotLevel1 />}
-                  name={chart.seriesNames.dataPoints.value}
-                />
-                <Line
-                  dataKey="screen_time"
-                  data={[
-                    { screen_time: 0, study_time: 250 },
-                    { screen_time: 500, study_time: 250 },
-                  ]}
-                  stroke="black"
-                  strokeWidth={3}
-                  strokeDasharray="8 4"
-                  dot={false}
-                  connectNulls={true}
-                  name={chart.seriesNames.separatorLine.value}
-                  animationDuration={0}
-                />
-              </ComposedChart>
+                >
+                  <XAxis
+                    dataKey="study_time"
+                    type="number"
+                    domain={[0, 500]}
+                    height={50}
+                    label={{
+                      value: chartContent.axisLabels.x.value,
+                      position: "insideBottom",
+                    }}
+                    ticks={[0, 100, 200, 300, 400, 500]}
+                  />
+                  <YAxis
+                    dataKey="screen_time"
+                    type="number"
+                    domain={[0, 500]}
+                    width={50}
+                    label={{
+                      value: chartContent.axisLabels.y.value,
+                      angle: -90,
+                      position: "insideLeft",
+                      style: { textAnchor: "middle" },
+                      offset: -4,
+                    }}
+                    ticks={[0, 100, 200, 300, 400, 500]}
+                  />
+                  <CartesianGrid strokeDasharray="3 3" />
+
+                  <Scatter
+                    dataKey="screen_time"
+                    data={data}
+                    fill="#8884d8"
+                    shape={<CustomDotLevel1 />}
+                    name={chartContent.seriesNames.dataPoints.value}
+                  />
+                  <Line
+                    dataKey="screen_time"
+                    data={[
+                      { screen_time: 0, study_time: 250 },
+                      { screen_time: 500, study_time: 250 },
+                    ]}
+                    stroke="black"
+                    strokeWidth={3}
+                    dot={false}
+                    connectNulls={true}
+                    name={chartContent.seriesNames.separatorLine.value}
+                    animationDuration={0}
+                  />
+                </ComposedChart>
+              </ResponsiveContainer>
             </div>
             <div
               className="w-full h-full absolute top-0 left-0 bg-transparent"
@@ -343,9 +463,59 @@ export default function Level1() {
                 />
               )}
             </div>
-          </div>
-        </div>
-      </div>
-    </main>
+            <div
+              className={cn(
+                "absolute z-20",
+                run ? "cursor-default" : "cursor-pointer"
+              )}
+              ref={graphRef}
+              onPointerDown={run ? undefined : handleGraphClick}
+            ></div>
+          </>
+        }
+        instruction={instructions[stage]}
+        classificationResults={
+          <ClassificationResults classificationCounts={results} />
+        }
+        level={1}
+        showNextLevelButton={run}
+        instructionButton={null}
+      />
+
+      <div id="empty"></div>
+
+      <Joyride
+        steps={steps}
+        run={run}
+        stepIndex={stepIndex}
+        continuous={true}
+        showProgress
+        callback={handleJoyrideCallback}
+        disableOverlay={false}
+        styles={{
+          options: {
+            arrowColor: "#e3ffeb",
+            backgroundColor: "#e3ffeb",
+            primaryColor: "#000",
+            textColor: "#004a14",
+          },
+          spotlight: {
+            backgroundColor: "rgba(255, 255, 255, 0.1)",
+            border: "solid 2px black",
+            pointerEvents: "none",
+            padding: "0px",
+          },
+          overlay: {
+            backgroundColor: "rgba(200, 200, 200, 0.1)",
+            pointerEvents: "none",
+          },
+        }}
+        hideCloseButton
+        hideBackButton
+        locale={{
+          last: "Next level",
+        }}
+      />
+    </>
   );
 }

@@ -3,8 +3,8 @@ import { useIntlayer } from "react-intlayer";
 export const Legend = () => {
   const { legend: content } = useIntlayer("app");
   return (
-    <div className="" id="legend">
-      <h3 className="text-xl font-semibold mb-3 text-start">{content.title}</h3>
+    <div id="legend">
+      <h3 className="text-xl font-semibold text-start">{content.title}</h3>
       <div className="flex gap-4">
         <div>
           <h4 className="font-medium mb-2">{content.dataPoints.title}</h4>

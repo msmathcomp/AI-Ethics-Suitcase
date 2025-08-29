@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import type {
   Point,
   DataPoint,
@@ -14,12 +14,11 @@ import {
 import { getAreaPolygons } from "~/utils/geometry_curve";
 import { ClassificationAreas } from "./chart/ClassificationAreas";
 import { getClassificationCounts_Curve } from "~/utils/classification_curve";
-import Toggle from "./UI/Toggle";
 import { CurveChart } from "./chart/ChartCurve";
 
 interface Props {
-  data: DataPoint[];
-  testData?: DataPoint[];
+  seenData: DataPoint[];
+  unseenData?: DataPoint[];
   stage: number;
   setStage: (stage: number) => void;
   setResults: (results: ClassificationCounts) => void;
@@ -27,8 +26,8 @@ interface Props {
 }
 
 export const CurveVisualizer = ({
-  data,
-  testData,
+  seenData,
+  unseenData,
   stage,
   setStage,
   setResults,
@@ -48,7 +47,19 @@ export const CurveVisualizer = ({
   });
   const [area1IsRed, setArea1IsRed] = useState<boolean | null>(null);
   const [areaColorsAssigned, setAreaColorsAssigned] = useState(false);
+  const [showSeenData, setShowSeenData] = useState(true);
   const [showUnseenData, setShowUnseenData] = useState(false);
+
+  const data = useMemo(() => {
+    const data = [];
+    if (showSeenData) {
+      data.push(...seenData);
+    }
+    if (stage === 4 && showUnseenData && unseenData) {
+      data.push(...unseenData);
+    }
+    return data;
+  }, [showSeenData, stage, showUnseenData, unseenData, seenData]);
 
   const overlayToGraphCoords = useCallback((overlayPoint: Point): Point => {
     if (!overlayRef.current || !chartContainerRef.current)
@@ -118,7 +129,7 @@ export const CurveVisualizer = ({
 
   const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     if (isDrawing || !overlayRef.current || stage === 4) return;
-    
+
     reset();
     setIsDrawing(true);
     const overlayRect = overlayRef.current.getBoundingClientRect();
@@ -129,7 +140,6 @@ export const CurveVisualizer = ({
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (overlayCurve.length === 0 || !isDrawing) return;
-    console.log("Mouse move)");
     const overlayRect = overlayRef.current!.getBoundingClientRect();
     const x = event.clientX - overlayRect.left;
     const y = event.clientY - overlayRect.top;
@@ -145,8 +155,6 @@ export const CurveVisualizer = ({
   useEffect(() => {
     if (overlayCurve.length > 1 && isDrawing === false && stage === 1) {
       if (!overlayRef.current || !chartContainerRef.current) return;
-
-      console.log("Drawing done, processing curve...");
 
       const overlayRect = overlayRef.current.getBoundingClientRect();
       const graphElement = chartContainerRef.current.querySelector(
@@ -232,7 +240,6 @@ export const CurveVisualizer = ({
         graphCurve.map((p) => ({ graph: p, overlay: graphToOverlayCoords(p) })),
         graphToOverlayCoords
       );
-      console.log("Area polygons:", polygons);
       setAreaPolygons(polygons);
     }
   }, [stage, graphCurve, graphToOverlayCoords]);
@@ -251,24 +258,24 @@ export const CurveVisualizer = ({
   useEffect(() => {
     if (stage === 3) {
       const counts = getClassificationCounts_Curve(
-        data,
+        seenData,
         areaPolygons,
         area1IsRed
       );
       setResults(counts);
     }
-  }, [stage, data, graphCurve, area1IsRed, areaPolygons, setResults]);
+  }, [stage, seenData, graphCurve, area1IsRed, areaPolygons, setResults]);
 
   useEffect(() => {
-    if (stage === 4 && setUnseenResults && testData) {
+    if (stage === 4 && setUnseenResults && unseenData) {
       const counts = getClassificationCounts_Curve(
-        testData,
+        unseenData,
         areaPolygons,
         area1IsRed
       );
       setUnseenResults(counts);
     }
-  }, [stage, testData, areaPolygons, area1IsRed, setUnseenResults]);
+  }, [stage, unseenData, areaPolygons, area1IsRed, setUnseenResults]);
 
   useEffect(() => {
     const overlayElement = overlayRef.current;
@@ -297,7 +304,7 @@ export const CurveVisualizer = ({
   return (
     <>
       <CurveChart
-        data={stage === 4 && showUnseenData && testData ? testData : data}
+        data={data}
         curveCoords={graphCurve}
         areaPolygons={areaPolygons}
         chartContainerRef={chartContainerRef}
@@ -325,13 +332,24 @@ export const CurveVisualizer = ({
         )}
 
         {stage === 4 && (
-          <Toggle
-            leftOption="Training Data"
-            rightOption="Test Data"
-            value={showUnseenData}
-            onChange={setShowUnseenData}
-            className="absolute top-4 left-4 z-15"
-          />
+          <div className="absolute top-3 left-0 z-20 flex flex-col border rounded p-2 text-sm w-30">
+            <div className="flex items-center justify-between">
+              <label>Seen data</label>
+              <input
+                type="checkbox"
+                checked={showSeenData}
+                onChange={() => setShowSeenData((prev) => !prev)}
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <label>Unseen data</label>
+              <input
+                type="checkbox"
+                checked={showUnseenData}
+                onChange={() => setShowUnseenData((prev) => !prev)}
+              />
+            </div>
+          </div>
         )}
       </div>
 

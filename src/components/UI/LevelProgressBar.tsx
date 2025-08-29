@@ -1,4 +1,4 @@
-import { Meh, Smile } from "lucide-react";
+import { ChevronLeft, ChevronRight, Meh, Smile } from "lucide-react";
 import { useNavigate } from "react-router";
 import { cn } from "~/utils/cn";
 import { useIntlayer } from "react-intlayer";
@@ -28,44 +28,56 @@ export function LevelProgressBar({
   };
 
   return (
-    <div id="level-progress-bar" className="mb-10">
-      <h3 className="text-xl">
-        {content.levelLabel} {level === -1 ? content.introLabel : level}
-      </h3>
-      <div className="flex gap-2 items-center">
-        {[...Array(TOTAL_LEVELS)].map((_, index) => {
-          let backgroundColor = "bg-gray-500";
-          if (index < level + 1) {
-            backgroundColor = "bg-green-500";
-          } else if (index === level + 1) {
-            backgroundColor = "bg-blue-500";
-          }
-          return (
-            <div
-              key={index}
-              className={cn(
-                "rounded-full w-5 h-5 flex items-center justify-center",
-                backgroundColor
-              )}
-            >
-              {index < level + 1 && (
-                <Smile color="white" className="w-4.5 h-4.5" />
-              )}
-              {index === level + 1 && (
-                <Meh color="white" className="w-4.5 h-4.5" />
-              )}
-            </div>
-          );
-        })}
-        {showNextLevelButton && (
+    <div
+      className="flex border-t w-full items-center justify-center py-2 gap-2"
+      id="level-progress-bar"
+    >
+      <button
+        disabled={level === -1}
+        onClick={() => navigate(`/level/${level - 1}`)}
+        className="flex items-center border rounded pr-2 mr-4"
+      >
+        <ChevronLeft size={25} />
+        Previous Level
+      </button>
+      {[...Array(TOTAL_LEVELS)].map((_, index) => {
+        let backgroundColor = "bg-gray-500";
+        if (index < level + 1) {
+          backgroundColor = "bg-teal-500";
+        } else if (index === level + 1) {
+        backgroundColor = "bg-indigo-500";
+        }
+        return (
+          <div
+            key={index}
+            className={cn(
+              "rounded-full w-8 h-8 flex items-center justify-center",
+              backgroundColor
+            )}
+          >
+            {index < level + 1 && <Smile color="white" />}
+            {index === level + 1 && <Meh color="white" />}
+          </div>
+        );
+      })}
+      {/* {showNextLevelButton && (
           <button
             className="bg-blue-500 text-white p-2 rounded ml-auto"
             onClick={handleNextLevel}
           >
             {nextLevelButtonText || content.nextLevelButtonText}
           </button>
+        )} */}
+      <button
+        onClick={handleNextLevel}
+        className={cn(
+          "flex items-center border rounded pl-2 ml-4",
+          showNextLevelButton ? "visible" : "invisible"
         )}
-      </div>
+      >
+        {nextLevelButtonText || content.nextLevelButtonText}
+        <ChevronRight size={25} />
+      </button>
     </div>
   );
 }

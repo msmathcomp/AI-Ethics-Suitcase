@@ -49,3 +49,7 @@ To add a new translation, the following steps are necessary:
 - Translate all the texts in the new locale file. Preserve whitespace.
 - Update the `intlayer.config.ts` file. For e.g. add `Locales.ESPERANTO` to locales array. 
 - Add the import to the `tr/index.ts` file and update the object being exported. For e.g. adding `import eoTranslations from './eo.json'` and adding a new value of `eo: eoTranslations`.
+- To update the intlayer dictionaries you can the following command. Note, it builds the dictionary on running app via `dev` command as well.
+```
+pnpm dlx intlayer build
+```

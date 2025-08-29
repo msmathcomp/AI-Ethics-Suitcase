@@ -2,6 +2,7 @@ import { Move } from "lucide-react";
 import type { ClickCoordinates } from "~/types";
 
 interface Props {
+  ref: React.RefObject<HTMLDivElement | null>;
   extendedLinePoints: ClickCoordinates[];
   lineCoords: ClickCoordinates[];
   onExtendedPointMouseDown: (
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export const ExtendedLinePoints = ({
+  ref,
   extendedLinePoints,
   lineCoords,
   onExtendedPointMouseDown,
@@ -20,7 +22,7 @@ export const ExtendedLinePoints = ({
   }
 
   return (
-    <>
+    <div ref={ref}>
       <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
         <line
           x1={extendedLinePoints[0].overlay.x}
@@ -46,7 +48,7 @@ export const ExtendedLinePoints = ({
       {extendedLinePoints.map((coords, index) => (
         <div
           key={`extended-${index}`}
-          className="absolute bg-black border-2 cursor-move flex items-center justify-center"
+          className="absolute bg-black border-2 cursor-move flex items-center justify-center z-50 touch-none"
           style={{
             top: coords.overlay.y - 12,
             left: coords.overlay.x - 12,
@@ -54,11 +56,11 @@ export const ExtendedLinePoints = ({
             height: 24,
             borderRadius: "50%",
           }}
-          onMouseDown={(e) => onExtendedPointMouseDown(e, index)}
+          onPointerDown={(e) => onExtendedPointMouseDown(e, index)}
         >
           <Move size={14} color="white" />
         </div>
       ))}
-    </>
+    </div>
   );
 };

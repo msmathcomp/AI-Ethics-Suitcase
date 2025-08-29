@@ -33,12 +33,12 @@ export const CustomDot_Curve = ({
     switch (classificationResult) {
       case "TP":
       case "TN":
-        fillColor = "rgb(34 197 94)"; // green-500
+        fillColor = "oklch(0.704 0.14 182.503)"; // teal-500
         IconComponent = Smile;
         break;
       case "FP":
       case "FN":
-        fillColor = "rgb(239 68 68)"; // red-500
+        fillColor = "oklch(70.5% 0.213 47.604)"; // orange-500
         IconComponent = Frown;
         break;
     }

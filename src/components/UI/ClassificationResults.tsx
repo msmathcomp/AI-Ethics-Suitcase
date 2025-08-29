@@ -1,5 +1,6 @@
 import type { ClassificationCounts } from "~/types";
 import { useIntlayer } from "react-intlayer";
+import { Frown, Smile } from "lucide-react";
 
 interface Props {
   classificationCounts: ClassificationCounts;
@@ -47,7 +48,9 @@ export const ClassificationResults = ({
       <div className="flex justify-center gap-6">
         <div className="flex flex-col space-y-2">
           <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 border-1 border-black rounded-full bg-green-500"></div>
+            <div className="w-6 h-6 border-1 border-black rounded-full bg-teal-500 flex items-center justify-center">
+              <Smile size={18} color="white" />
+            </div>
             <span className="text-sm">
               {content.counts.TP}: {classificationCounts.TP}
               {showComparison && (
@@ -58,7 +61,9 @@ export const ClassificationResults = ({
             </span>
           </div>
           <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 border-1 border-black bg-green-500"></div>
+            <div className="w-6 h-6 border-1 border-black bg-teal-500 flex items-center justify-center">
+              <Smile size={18} color="white" />
+            </div>
             <span className="text-sm">
               {content.counts.TN}: {classificationCounts.TN}
               {showComparison && (
@@ -71,7 +76,9 @@ export const ClassificationResults = ({
         </div>
         <div className="flex flex-col space-y-2">
           <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 border-1 border-black bg-red-500"></div>
+            <div className="w-6 h-6 border-1 border-black bg-orange-500 flex items-center justify-center">
+              <Frown size={18} color="white" />
+            </div>
             <span className="text-sm">
               {content.counts.FP}: {classificationCounts.FP}
               {showComparison && (
@@ -82,7 +89,9 @@ export const ClassificationResults = ({
             </span>
           </div>
           <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 border-1 border-black rounded-full bg-red-500"></div>
+            <div className="w-6 h-6 border-1 border-black rounded-full bg-orange-500 flex items-center justify-center">
+              <Frown size={18} color="white" />
+            </div>
             <span className="text-sm">
               {content.counts.FN}: {classificationCounts.FN}
               {showComparison && (

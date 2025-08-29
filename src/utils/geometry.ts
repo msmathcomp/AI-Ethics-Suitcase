@@ -1,36 +1,38 @@
-import type { Point, ClickCoordinates, AreaPolygons } from '~/types';
+import type { Point, ClickCoordinates, AreaPolygons } from "~/types";
 
 export const getAreaPolygons = (
   lineCoords: ClickCoordinates[],
-  graphToOverlayCoords: (point: Point) => Point,
+  graphToOverlayCoords: (point: Point) => Point
 ): AreaPolygons => {
-  if (lineCoords.length !== 2) return {
-    area1: {
-      graph: [],
-      overlay: [],
-    }, area2: { graph: [], overlay: [] }
-  };
+  if (lineCoords.length !== 2)
+    return {
+      area1: {
+        graph: [],
+        overlay: [],
+      },
+      area2: { graph: [], overlay: [] },
+    };
 
   const [p1, p2] = lineCoords.map((coord) => coord.graph);
-  const origin = { x: 0, y: 0 };
+  const refCorner = { x: 500, y: 0 };
 
-  const cornersExceptOrigin = [
-    { x: 500, y: 0 },
+  const cornersExceptRefCorner = [
+    { x: 0, y: 0 },
     { x: 500, y: 500 },
     { x: 0, y: 500 },
   ];
 
-  const createPolygon = (hasOrigin: boolean): Point[] => {
+  const createPolygon = (hasRefCorner: boolean): Point[] => {
     const polygon: Point[] = [];
 
     polygon.push(p1, p2);
 
-    if (hasOrigin) {
-      polygon.push(origin);
+    if (hasRefCorner) {
+      polygon.push(refCorner);
     }
 
-    for (const corner of cornersExceptOrigin) {
-      if (sameSide(corner, origin, lineCoords) === hasOrigin) {
+    for (const corner of cornersExceptRefCorner) {
+      if (sameSide(corner, refCorner, lineCoords) === hasRefCorner) {
         polygon.push(corner);
       }
     }
@@ -49,11 +51,12 @@ export const getAreaPolygons = (
     const area1 = createPolygon(true);
     const area2 = createPolygon(false);
 
-    console.log("Area 1:", area1);
-    console.log("Area 2:", area2);
-
-    const area1OverlayCoords = area1.map((coord) => graphToOverlayCoords(coord));
-    const area2OverlayCoords = area2.map((coord) => graphToOverlayCoords(coord));
+    const area1OverlayCoords = area1.map((coord) =>
+      graphToOverlayCoords(coord)
+    );
+    const area2OverlayCoords = area2.map((coord) =>
+      graphToOverlayCoords(coord)
+    );
 
     return {
       area1: {
@@ -67,7 +70,10 @@ export const getAreaPolygons = (
     };
   } catch (error) {
     console.error("Error converting coordinates:", error);
-    return { area1: { graph: [], overlay: [] }, area2: { graph: [], overlay: [] } };
+    return {
+      area1: { graph: [], overlay: [] },
+      area2: { graph: [], overlay: [] },
+    };
   }
 };
 
@@ -154,22 +160,23 @@ export const findIntersections = (point1: Point, point2: Point): Point[] => {
     }
   }
 
-  const uniqueIntersections = intersections.filter(
-    (intersection, index) => {
-      return !intersections
-        .slice(0, index)
-        .some(
-          (prev) =>
-            Math.abs(prev.x - intersection.x) < 1e-6 &&
-            Math.abs(prev.y - intersection.y) < 1e-6
-        );
-    }
-  );
+  const uniqueIntersections = intersections.filter((intersection, index) => {
+    return !intersections
+      .slice(0, index)
+      .some(
+        (prev) =>
+          Math.abs(prev.x - intersection.x) < 1e-6 &&
+          Math.abs(prev.y - intersection.y) < 1e-6
+      );
+  });
 
   return uniqueIntersections;
 };
 
-export const findIntersectionsForDrag = (point1: Point, point2: Point): Point[] => {
+export const findIntersectionsForDrag = (
+  point1: Point,
+  point2: Point
+): Point[] => {
   const intersections: Point[] = [];
   const dx = point2.x - point1.x;
   const dy = point2.y - point1.y;
@@ -216,12 +223,46 @@ export const findIntersectionsForDrag = (point1: Point, point2: Point): Point[] 
   });
 };
 
-export function sameSide(a: Point, b: Point, line: ClickCoordinates[]): boolean {
+export function sameSide(
+  a: Point,
+  b: Point,
+  line: ClickCoordinates[]
+): boolean {
   if (line.length !== 2) return false;
 
-  const [p1, p2] = line.map(coord => coord.graph);
-  const side1 = (p2.x - p1.x) * (a.y - p1.y) - (p2.y - p1.y) * (a.x - p1.x) >= 0;
-  const side2 = (p2.x - p1.x) * (b.y - p1.y) - (p2.y - p1.y) * (b.x - p1.x) >= 0;
+  const [p1, p2] = line.map((coord) => coord.graph);
+  const side1 =
+    (p2.x - p1.x) * (a.y - p1.y) - (p2.y - p1.y) * (a.x - p1.x) >= 0;
+  const side2 =
+    (p2.x - p1.x) * (b.y - p1.y) - (p2.y - p1.y) * (b.x - p1.x) >= 0;
 
   return side1 === side2;
+}
+
+export function graphToOverlayCoords(
+  overlayRef: React.RefObject<HTMLDivElement | null>,
+  chartContainerRef: React.RefObject<HTMLDivElement | null>,
+  point: Point
+): Point {
+  if (!overlayRef.current || !chartContainerRef.current)
+    throw new Error("Refs not set");
+  const overlayRect = overlayRef.current.getBoundingClientRect();
+  const graphElement = chartContainerRef.current.querySelector(
+    ".recharts-cartesian-grid"
+  ) as SVGElement | null;
+
+  if (!graphElement) {
+    throw new Error("Graph element not found");
+  }
+
+  const graphRect = graphElement.getBoundingClientRect();
+
+  const normalize_y = graphRect.height / 500;
+  const normalize_x = graphRect.width / 500;
+
+  const overlayX = graphRect.left + point.x * normalize_x - overlayRect.left;
+  const overlayY =
+    graphRect.top + (500 - point.y) * normalize_y - overlayRect.top;
+
+  return { x: overlayX, y: overlayY };
 }

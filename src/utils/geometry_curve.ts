@@ -1,7 +1,7 @@
 import type { AreaPolygons, ClickCoordinates, Point } from "~/types";
 
-// // Given three collinear points p, q, r, the function checks if
-// // point q lies on line segment 'pr'
+// Given three collinear points p, q, r, the function checks if
+// point q lies on line segment 'pr'
 function onSegment(p: Point, q: Point, r: Point): boolean {
   if (
     q.x <= Math.max(p.x, r.x) &&
@@ -25,8 +25,8 @@ function orientation(p: Point, q: Point, r: Point): number {
   return val > 0 ? 1 : 2; // Clockwise or Counterclockwise
 }
 
-// // The main function that returns true if line segment 'p1q1'
-// // and 'p2q2' intersect.
+// The main function that returns true if line segment 'p1q1'
+// and 'p2q2' intersect.
 function segmentsIntersect(p1: Point, q1: Point, p2: Point, q2: Point): boolean {
   // Find the four orientations needed for general and special cases
   const o1 = orientation(p1, q1, p2);
@@ -55,22 +55,6 @@ function segmentsIntersect(p1: Point, q1: Point, p2: Point, q2: Point): boolean 
   return false; // Doesn't fall in any of the above cases
 }
 
-// export function checkSelfIntersection(path: Point[]): boolean {
-//   const n = path.length;
-//   if (n < 4) {
-//     return false;
-//   }
-
-//   for (let i = 0; i < n - 1; i++) {
-//     for (let j = i + 2; j < n - 1; j++) {
-//       if (segmentsIntersect(path[i], path[i + 1], path[j], path[j + 1])) {
-//         return true;
-//       }
-//     }
-//   }
-//   return false;
-// }
-
 function distancePointToSegment(p: Point, v: Point, w: Point): number {
   // squared distance
   const l2 = (w.x - v.x) ** 2 + (w.y - v.y) ** 2;
@@ -96,7 +80,7 @@ function segmentsIntersectWithTolerance(
   return minDist > tolerance;
 }
 
-export function checkSelfIntersection(path: Point[], tolerance = 5): boolean {
+export function checkSelfIntersection(path: Point[], tolerance = 0.2): boolean {
   const n = path.length;
   if (n < 4) {
     return false;
@@ -219,9 +203,6 @@ export const getAreaPolygons = (
 
   if (lineCoords.length < 2) return { area1: { graph: [], overlay: [] }, area2: { graph: [], overlay: [] } };
 
-  console.log("Line coordinates:", lineCoords);
-
-
   const [p1, ...others] = lineCoords.map(coord => coord.graph);
   const p2 = others.pop() as Point;
 
@@ -313,7 +294,6 @@ export const getAreaPolygons = (
     const p1Index = polygon.findIndex((p) => p === p1);
     const p2Index = polygon.findIndex((p) => p === p2);
 
-    console.log('Polygon with line: ', p1Index, p2Index, polygon);
 
     if (p1Index === p2Index - 1) {
       polygon = [
@@ -332,8 +312,6 @@ export const getAreaPolygons = (
     } else if (p2Index === 0 && p1Index === polygon.length - 1) {
       polygon = [...others, ...polygon]
     }
-
-    console.log(polygon);
 
     return polygon;
   };

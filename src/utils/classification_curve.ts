@@ -44,7 +44,6 @@ export const getClassificationCounts_Curve = (
 ): ClassificationCounts => {
   const counts = { TP: 0, TN: 0, FP: 0, FN: 0 };
 
-  console.log("Debug", areaPolygons, area1IsRed)
 
   data.forEach((point) => {
     const classification = getPointClassification_Curve(

@@ -13,7 +13,7 @@
   "intro": {
     "headerTitle": "Welcome to the AI Ethics Suitcase!",
     "tour": {
-      "0": "Welcome to the AI Ethics Suitcase! This is the introduction level where you will learn about the basics of AI ethics.",
+      "0": "Welcome to the AI Ethics Suitcase! This is the introduction level where you will learn about the interface and basics of visualization using charts. You may skip this tutorial if you are already familiar with these concepts.",
       "1": "You are currently on Level -1, which is the introduction level. There are 8 more levels.",
       "2": "This is the legend that explains the data points and classification.",
       "3": "This is the chart that visualizes the relationship between Study Time and Screen Time.",
@@ -26,15 +26,15 @@
   "legend": {
     "title": "Legend",
     "dataPoints": {
-      "title": "Data Points:",
-      "pass": "Circle: Pass",
-      "fail": "Square: Fail"
+      "title": "Data Points",
+      "pass": "Pass",
+      "fail": "Fail"
     },
     "classification": {
-      "title": "Classification:",
-      "pass": "Hexagon Area: Classifying as Pass",
-      "fail": "Checkered Area: Classifying as Fail",
-      "line": "Black Line: Classifier"
+      "title": "Classification",
+      "pass": "Classifying as Pass",
+      "fail": "Classifying as Fail",
+      "line": "Classifier line"
     }
   },
   "classificationResults": {
@@ -49,12 +49,6 @@
     },
     "trainingTitle": "Performance on Training Data",
     "unseenTitle": "Performance on Unseen Data"
-  },
-  "instructions": {
-    "step1": "Step 1: Click to select first point",
-    "step2": "Step 2: Click to select second point and draw line",
-    "step3": "Step 3: Drag green circles to rotate line, then click an area to classify as Pass",
-    "complete": "Complete! Blue area classifies as Pass, Orange area classifies as Fail"
   },
   "classificationVisualizer": {
     "toggles": {
@@ -84,11 +78,11 @@
   },
   "level0": {
     "stages": {
-      "0": "Click to select the first point",
-      "1": "Click to select the second point to draw a line",
-      "2": "Drag the black circles to adjust the line, then click an area to classify as Pass",
-      "3": "Adjust your classifier by rotating the line or creating a new one. When satisfied, click 'Next' to continue.",
-      "4": "Complete! You can now see the classification results. In the next level we will introduce the new terms and how to estimate the perforamance of a classifier."
+      "0": "We want to classify a simple dataset of 4 students first by drawing a line that seperates Pass and Fail students. To start, click to select the first point of the line",
+      "1": "Now click the second point to draw the classification line",
+      "2": "Drag the black circles to adjust the line, then click one of the regions to classify as Pass",
+      "3": "Adjust your classifier by rotating the line or creating a new one (by clicking 2 points). When satisfied, click 'Next' to continue.",
+      "4": "Complete! You can now see the classification results. In the next level we will introduce the new terms and how to estimate the performance of a classifier."
     },
     "buttons": {
       "next": "Next"
@@ -101,22 +95,22 @@
     "tour": {
       "0": "We will now explain the terms used to measure the accuracy of a linear classifier.",
       "1": "The classification results show the counts of true positives, true negatives, false positives, and false negatives.",
-      "2": "This chart shows the data points of 4 students. Our linear classifier divides it into 2 parts, the left being classified as Pass and the right being classified as Fail",
-      "3": "This student failed however our classifier classified them as Pass. This is a False Positive.",
+      "2": "A linear classifier divides this chart into 2 parts, the left region being classified as Fail and the right being classified as Pass",
+      "3": "This student passed and our classifier classified them as Pass. This is a True Positive.",
       "4": "This student failed and our classifier classified them as Fail. This is a True Negative.",
-      "5": "This student passed and our classifier classified them as Pass. This is a True Positive.",
+      "5": "This student failed however our classifier classified them as Pass. This is a False Positive.",
       "6": "This student passed however our classifier classified them as Fail. This is a False Negative.",
-      "7": "The accuracy of the classifier is calculate using the formula: Accuracy = (TP + TN) / (TP + TN + FP + FN)."
+      "7": "The accuracy of a classifier is the ratio of correctly classified over total samples."
     }
   },
   "level2_5": {
     "stages": {
-      "0": "Click to select the first point",
-      "1": "Click to select the second point to draw a line",
-      "2": "Drag the black circles to adjust the line, then click an area to classify as Pass",
+      "0": "Click to select the first point of the line",
+      "1": "Now click the second point to draw the classification line",
+      "2": "Drag the black circles to adjust the line, then click one of the regions to classify as Pass",
       "3": "Adjust your classifier by rotating the line or creating a new one. When satisfied, click 'Next' to continue.",
-      "4": "Complete! You can now see the classification results. You can compare your classifier with the best one.",
-      "5": "Compare your classifier with the best solution. Both results are shown side by side."
+      "4": "Complete! You can now see the classification results. You can compare your classifier with the best classifier found by AI.",
+      "5": "Compare your classifier with the best classifier. Both results are shown side by side."
     },
     "buttons": {
       "next": "Next",
@@ -125,16 +119,16 @@
   },
   "level6": {
     "stages": {
-      "0": "Click to select the first point",
-      "1": "Click to select the second point to draw a line",
-      "2": "Drag the black circles to adjust the line, then click an area to classify as Pass",
+      "0": "Click to select the first point of the line",
+      "1": "Now click the second point to draw the classification line",
+      "2": "Drag the black circles to adjust the line, then click one of the regions to classify as Pass",
       "3": "Adjust your classifier by rotating the line or creating a new one. When satisfied, click 'Next' to continue.",
-      "4": "Complete! You can now see the classification results. You can compare your classifier with the best one.",
-      "5": "Compare your classifier with the best solution. Both results are shown side by side.",
-      "6": "Now toggle between seen (training) and unseen (test) data. Notice how performance may differ on unseen data!"
+      "4": "Complete! You can now see the classification results. You can compare your classifier with the best classifier found by AI.",
+      "5": "Compare your classifier with the best classifier. Both results are shown side by side.",
+      "6": "Now toggle between already seen data and the unseen data. Notice how performance may differ on unseen data!"
     },
     "titles": {
-      "trainingPerformance": "Performance on Training Data",
+      "trainingPerformance": "Performance on Seen Data",
       "unseenPerformance": "Performance on Unseen Data"
     },
     "buttons": {
@@ -148,7 +142,7 @@
       "1": "Click an area to classify it as Pass",
       "2": "You may create a new classifier by drawing again. When satisfied, click 'Next' to continue.",
       "3": "Complete! You can now see the classification results.",
-      "4": "Now toggle between seen (training) and unseen (test) data. Notice how performance may differ on unseen data!"
+      "4": "Now toggle between seen and unseen  data. Notice how performance may differ on unseen data!"
     },
     "titles": {
       "unseenPerformance": "Performance on Unseen Data"
@@ -164,7 +158,16 @@
   },
   "finish": {
     "title": "Congratulations on finishing this interaction",
-    "restart": "Restart"
+    "restart": "Restart",
+    "table": {
+      "level": "Level",
+      "yourAccuracy": "Your Accuracy",
+      "bestAccuracy": "Best Accuracy",
+      "unseenAccuracy": "Unseen Accuracy",
+      "NA": "N/A"
+    },
+    "outOf": "out of",
+    "totalScore": "Total Score"
   },
   "common": {
     "buttons": {

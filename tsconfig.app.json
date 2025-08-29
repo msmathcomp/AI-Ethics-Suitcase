@@ -33,7 +33,6 @@
   "include": [
     "src",
     ".intlayer/**/*.ts",
-    "config.json",
     "tr/**/*.json",
     "tr/**/*.ts",
     "data/**/*.json",

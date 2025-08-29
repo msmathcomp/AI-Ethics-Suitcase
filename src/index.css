@@ -15,6 +15,12 @@
   background-position: center;
   background-repeat: no-repeat;
 }
+
 button {
   cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }

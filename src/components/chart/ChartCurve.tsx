@@ -5,9 +5,11 @@ import {
   YAxis,
   Scatter,
   Line,
+  ResponsiveContainer,
 } from "recharts";
 import type { AreaPolygons, DataPoint, Point } from "~/types";
 import { CustomDot_Curve as CustomDot } from "./CustomDot_Curve";
+import { useIntlayer } from "react-intlayer";
 
 interface Props {
   data: DataPoint[];
@@ -28,72 +30,83 @@ export const CurveChart = ({
   isClassified,
   areaColorsAssigned,
 }: Props) => {
+  const { chart } = useIntlayer("app");
+
   return (
-    <div ref={chartContainerRef}>
-      <ComposedChart
-        height={550}
-        width={700}
-        margin={{ top: 30, right: 30, bottom: 30, left: 90 }}
-      >
-        <XAxis
-          dataKey="study_time"
-          type="number"
-          domain={[0, 500]}
-          label={{
-            value: "Study Time (min)",
-            position: "insideBottom",
-            offset: -10,
+    <div className="ml-10 h-full aspect-square flex items-center justify-center">
+      <ResponsiveContainer ref={chartContainerRef} height="95%" width="95%">
+        <ComposedChart
+          margin={{
+            top: 15,
+            right: 15,
+            bottom: 15,
+            left: 15,
           }}
-        />
-        <YAxis
-          dataKey="screen_time"
-          type="number"
-          domain={[0, 500]}
-          label={{
-            value: "Screen Time (min)",
-            angle: -90,
-            position: "insideLeft",
-            style: { textAnchor: "middle" },
-          }}
-        />
-        <CartesianGrid strokeDasharray="3 3" />
-
-        <Scatter
-          dataKey="screen_time"
-          data={data}
-          fill="#8884d8"
-          shape={
-            <CustomDot
-              areaPolygons={areaPolygons}
-              area1IsRed={area1IsRed}
-              isClassified={isClassified}
-              areaColorsAssigned={areaColorsAssigned}
-            />
-          }
-          name="Data Points"
-        />
-
-        {curveCoords.length > 1 && (
-          <Line
-            type="monotone"
-            dataKey="screen_time"
-            data={curveCoords.map((point) => ({
-              study_time: point.x,
-              screen_time: point.y,
-            }))}
-            stroke="black"
-            strokeWidth={3}
-            strokeDasharray="5 5"
-            dot={false}
-            connectNulls={true}
-            name="Separator Curve"
-            animationDuration={0}
-            style={{
-              zIndex: 100,
+        >
+          <XAxis
+            dataKey="study_time"
+            type="number"
+            domain={[0, 500]}
+            height={50}
+            label={{
+              value: chart.axisLabels.x.value,
+              position: "insideBottom",
             }}
+            ticks={[0, 100, 200, 300, 400, 500]}
           />
-        )}
-      </ComposedChart>
+          <YAxis
+            dataKey="screen_time"
+            type="number"
+            domain={[0, 500]}
+            width={50}
+            label={{
+              value: chart.axisLabels.y.value,
+              angle: -90,
+              position: "insideLeft",
+              style: { textAnchor: "middle" },
+              offset: -4,
+            }}
+            ticks={[0, 100, 200, 300, 400, 500]}
+          />
+          <CartesianGrid strokeDasharray="3 3" />
+
+          <Scatter
+            dataKey="screen_time"
+            data={data}
+            fill="#8884d8"
+            shape={
+              <CustomDot
+                areaPolygons={areaPolygons}
+                area1IsRed={area1IsRed}
+                isClassified={isClassified}
+                areaColorsAssigned={areaColorsAssigned}
+              />
+            }
+            name="Data Points"
+            animationDuration={0}
+          />
+
+          {curveCoords.length > 1 && (
+            <Line
+              type="monotone"
+              dataKey="screen_time"
+              data={curveCoords.map((point) => ({
+                study_time: point.x,
+                screen_time: point.y,
+              }))}
+              stroke="black"
+              strokeWidth={3}
+              dot={false}
+              connectNulls={true}
+              name="Separator Curve"
+              animationDuration={0}
+              style={{
+                zIndex: 100,
+              }}
+            />
+          )}
+        </ComposedChart>
+      </ResponsiveContainer>
     </div>
   );
 };

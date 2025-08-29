@@ -1,8 +1,5 @@
-import { LevelProgressBar } from "~/components/UI/LevelProgressBar";
-import Nav from "~/components/layout/Nav";
 import { ClassificationVisualizer } from "~/components/ClassificationVisualizer";
 import { useState, useMemo, useEffect } from "react";
-import { Legend } from "~/components/UI/Legend";
 import { ClassificationResults } from "~/components/UI/ClassificationResults";
 import type { ClassificationCounts, LevelJsonShape, Point } from "~/types";
 import { useClassificationResults } from "~/context/ClassificationResultsContext";
@@ -13,17 +10,9 @@ import level3Json from "@/data/level3.json";
 import level4Json from "@/data/level4.json";
 import level5Json from "@/data/level5.json";
 import { useIntlayer } from "react-intlayer";
+import LevelLayout from "~/components/layout/levelLayout";
 
-// const instructions = [
-//   "Click to select the first point",
-//   "Click to select the second point to draw a line",
-//   "Drag the black circles to adjust the line, then click an area to classify as Pass",
-//   "Adjust your classifier by rotating the line or creating a new one. When satisfied, click 'Next' to continue.",
-//   "Complete! You can now see the classification results. You can compare your classifier with the best one.",
-//   "Compare your classifier with the best solution. Both results are shown side by side.",
-// ];
-
-export default function Level2_5({ level }: { level: number }) {
+export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
   const { level2_5: content } = useIntlayer("app");
   const [stage, setStage] = useState(0);
   const [results, setResults] = useState<ClassificationCounts>({
@@ -38,7 +27,7 @@ export default function Level2_5({ level }: { level: number }) {
     FP: 0,
     FN: 0,
   });
-  const { recordLevelResult } = useClassificationResults();
+  const { recordLevelResult, reset } = useClassificationResults();
 
   const rawJson: LevelJsonShape = useMemo(() => {
     const mapping: Record<number, LevelJsonShape> = {
@@ -51,72 +40,71 @@ export default function Level2_5({ level }: { level: number }) {
   }, [level]);
 
   useEffect(() => {
-    if (stage === 4) {
-      recordLevelResult({ level, user: results, best: bestResults });
+    if (level === 2) reset();
+  }, [level, reset]);
+
+  useEffect(() => {
+    if (stage === 4 && results.TP + results.TN + results.FP + results.FN > 0) {
+      recordLevelResult(level, "user", results);
+    } else if (
+      stage === 5 &&
+      bestResults.TP + bestResults.TN + bestResults.FP + bestResults.FN > 0
+    ) {
+      recordLevelResult(level, "best", bestResults);
     }
   }, [stage, recordLevelResult, level, results, bestResults]);
 
+  const goals = {
+    2: "Level 2: Can you achieve 100% accuracy?",
+    3: "Level 3: Can you still achieve 100% accuracy?",
+    4: "Level 4: Try to achieve maximum possible accuracy!",
+    5: "Level 5: Try to achieve maximum possible accuracy!",
+  };
+
   return (
-    <main className="h-screen w-screen flex flex-col items-center p-4">
-      <Nav />
-      <div className="flex w-full flex-1">
-        <div className="h-full w-[30%] flex flex-col p-4 border-r-1">
-          <LevelProgressBar level={level} showNextLevelButton={stage === 5} />
-          <Legend />
-          {stage >= 4 && (
-            <ClassificationResults
-              classificationCounts={results}
-              bestClassificationCounts={stage === 5 ? bestResults : undefined}
-            />
+    <LevelLayout
+      goalElement={<span>{goals[level!]}</span>}
+      classificationVisualizer={
+        <ClassificationVisualizer
+          key={`visualizer-${level}`}
+          seenData={rawJson.data}
+          stage={stage}
+          setStage={setStage}
+          setResults={setResults}
+          setBestResults={setBestResults}
+          bestClassifier={{
+            line: rawJson.best as Point[],
+            originIsPass: rawJson.originIsPass,
+          }}
+        />
+      }
+      instruction={
+        content.stages[
+          Math.min(stage, 4).toString() as keyof typeof content.stages
+        ].value
+      }
+      instructionButton={
+        <div className="h-8 w-full flex justify-end">
+          {(stage === 3 || stage === 4) && (
+            <button
+              className="bg-blue-500 text-white rounded w-20 h-full"
+              onClick={() => setStage((prev) => prev + 1)}
+            >
+              {stage === 3 ? "Next" : "Compare"}
+            </button>
           )}
         </div>
-        <div className="flex-1 h-full flex flex-col items-center">
-          <div
-            className="flex p-4 border-b-1 w-full h-[100px] justify-center"
-            id="instruction"
-          >
-            <h2 className="text-xl font-medium mb-2 break-words flex-1">
-              {
-                content.stages[
-                  Math.min(stage, 4).toString() as keyof typeof content.stages
-                ].value
-              }
-            </h2>
-            <div className="w-24 h-full">
-              {stage === 3 && (
-                <button
-                  className="bg-blue-500 text-white px-4 py-2 rounded my-auto"
-                  onClick={() => setStage(4)}
-                >
-                  Next
-                </button>
-              )}
-              {stage === 4 && (
-                <button
-                  className="bg-blue-500 text-white px-4 py-2 rounded my-auto"
-                  onClick={() => setStage(5)}
-                >
-                  Compare
-                </button>
-              )}
-            </div>
-          </div>
-          <div className="h-[600px] w-full flex items-center justify-center relative py-10">
-            <ClassificationVisualizer
-              key={`visualizer-${level}`}
-              data={rawJson.data}
-              stage={stage}
-              setStage={setStage}
-              setResults={setResults}
-              setBestResults={setBestResults}
-              bestClassifier={{
-                line: rawJson.best as Point[],
-                originIsPass: rawJson.originIsPass,
-              }}
-            />
-          </div>
-        </div>
-      </div>
-    </main>
+      }
+      classificationResults={
+        stage >= 4 ? (
+          <ClassificationResults
+            classificationCounts={results}
+            bestClassificationCounts={stage === 5 ? bestResults : undefined}
+          />
+        ) : null
+      }
+      level={level}
+      showNextLevelButton={stage === 5}
+    />
   );
 }

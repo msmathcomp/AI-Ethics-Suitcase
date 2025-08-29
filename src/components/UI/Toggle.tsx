@@ -25,7 +25,7 @@ export default function Toggle({
     >
       <button
         className={cn(
-          "flex-1 px-3 py-1 font-medium rounded-md whitespace-nowrap",
+          "flex-1 px-2 py-1 rounded-md whitespace-nowrap",
           !value ? "bg-blue-500 text-white" : "text-black"
         )}
         onClick={() => onChange(false)}
@@ -35,7 +35,7 @@ export default function Toggle({
       </button>
       <button
         className={cn(
-          "flex-1 px-3 py-1 font-medium rounded-md whitespace-nowrap",
+          "flex-1 px-2 py-1 rounded-md whitespace-nowrap",
           value ? "bg-blue-500 text-white" : "text-black"
         )}
         onClick={() => onChange(true)}

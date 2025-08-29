@@ -23,16 +23,12 @@ export default function LevelPage() {
   } else if (level === 1) {
     return <Level1 />;
   } else if ([2, 3, 4, 5].includes(level)) {
-    return <Level2_5 key={level} level={level} />;
+    return <Level2_5 key={level} level={level as 2 | 3 | 4 | 5} />;
   } else if (level === 6) {
     return <Level6 />;
   } else if (level === 7) {
     return <Level7 />;
   }
 
-  return (
-    <div>
-      {String(content.notImplemented).replace("{level}", String(level))}
-    </div>
-  );
+  return <div>{content.invalidLevel}</div>;
 }

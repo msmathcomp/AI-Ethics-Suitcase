@@ -1,11 +1,16 @@
-import { CartesianGrid, ComposedChart, Scatter, XAxis, YAxis } from "recharts";
+import {
+  CartesianGrid,
+  ComposedChart,
+  ResponsiveContainer,
+  Scatter,
+  XAxis,
+  YAxis,
+} from "recharts";
 import Joyride, { type Step, type CallBackProps } from "react-joyride";
-import { LevelProgressBar } from "~/components/UI/LevelProgressBar";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import Nav from "~/components/layout/Nav";
-import { Legend } from "~/components/UI/Legend";
 import { useIntlayer, type IntlayerNode } from "react-intlayer";
+import LevelLayout from "~/components/layout/levelLayout";
 
 const CustomDotIntro = ({
   cx,
@@ -52,19 +57,19 @@ const data = [
   {
     study_time: 100,
     screen_time: 200,
-    type: "b",
+    type: "Fail",
     id: "label-fail",
   },
   {
     study_time: 150,
     screen_time: 300,
-    type: "a",
+    type: "Pass",
     id: "label-pass",
   },
   {
     study_time: 200,
     screen_time: 400,
-    type: "b",
+    type: "Fail",
   },
 ];
 
@@ -90,13 +95,13 @@ const stepsFactory = (introContent: IntroContentShape): Step[] => [
     target: "#legend",
     content: introContent.tour[2],
     disableBeacon: true,
-    placement: "right",
+    placement: "left",
   },
   {
     target: ".recharts-wrapper",
     content: introContent.tour[3],
     disableBeacon: true,
-    placement: "left",
+    placement: "right",
   },
   {
     target: ".recharts-xAxis",
@@ -108,7 +113,7 @@ const stepsFactory = (introContent: IntroContentShape): Step[] => [
     target: ".recharts-yAxis",
     content: introContent.tour[5],
     disableBeacon: true,
-    placement: "left",
+    placement: "right",
   },
   {
     target: "#label-pass",
@@ -136,83 +141,99 @@ export default function IntroLevel() {
   };
 
   return (
-    <main className="h-screen w-screen flex flex-col items-center p-4">
-      <Nav />
-      <div className="flex w-full flex-1">
-        <Joyride
-          steps={steps}
-          run={run}
-          continuous
-          showProgress
-          callback={handleJoyrideCallback}
-          disableOverlay={false}
-          styles={{
-            options: {
-              arrowColor: "#e3ffeb",
-              backgroundColor: "#e3ffeb",
-              primaryColor: "#000",
-              textColor: "#004a14",
-            },
-            spotlight: {
-              backgroundColor: "rgba(255, 255, 255, 0.1)",
-              border: "solid 2px black",
-              pointerEvents: "none",
-            },
-            overlay: {
-              backgroundColor: "rgba(200, 200, 200, 0.1)",
-              pointerEvents: "none",
-            },
-          }}
-        />
-        <div className="h-full w-[30%] flex flex-col p-4 border-r-1">
-          <LevelProgressBar level={-1} showNextLevelButton={false} />
-          <Legend />
-        </div>
-        <div className="flex-1 h-full flex flex-col items-center">
-          <div className="p-4 border-b-1 w-full" id="instruction">
-            <h2 className="text-2xl font-medium mb-2">
-              {introContent.headerTitle}
-            </h2>
-          </div>
-          <div className="flex-1 w-full flex items-center justify-center">
-            <ComposedChart
-              height={550}
-              width={700}
-              margin={{ top: 30, right: 30, bottom: 30, left: 30 }}
-            >
-              <XAxis
-                dataKey="study_time"
-                type="number"
-                domain={[0, 500]}
-                label={{
-                  value: chartContent.axisLabels.x.value,
-                  position: "insideBottom",
-                  offset: -10,
+    <>
+      <LevelLayout
+        goalElement={"Introduction: Getting familiar with visualization using charts"}
+        classificationVisualizer={
+          <div className="ml-10 h-full aspect-square flex items-center justify-center">
+            <ResponsiveContainer height="95%" width="95%">
+              <ComposedChart
+                margin={{
+                  top: 15,
+                  right: 15,
+                  bottom: 15,
+                  left: 15,
                 }}
-              />
-              <YAxis
-                dataKey="screen_time"
-                type="number"
-                domain={[0, 500]}
-                label={{
-                  value: chartContent.axisLabels.y.value,
-                  angle: -90,
-                  position: "insideLeft",
-                  style: { textAnchor: "middle" },
-                }}
-              />
-              <CartesianGrid strokeDasharray="3 3" />
+              >
+                <XAxis
+                  dataKey="study_time"
+                  type="number"
+                  domain={[0, 500]}
+                  height={50}
+                  label={{
+                    value: chartContent.axisLabels.x.value,
+                    position: "insideBottom",
+                  }}
+                  ticks={[0, 100, 200, 300, 400, 500]}
+                />
+                <YAxis
+                  dataKey="screen_time"
+                  type="number"
+                  domain={[0, 500]}
+                  width={50}
+                  label={{
+                    value: chartContent.axisLabels.y.value,
+                    angle: -90,
+                    position: "insideLeft",
+                    style: { textAnchor: "middle" },
+                    offset: -4,
+                  }}
+                  ticks={[0, 100, 200, 300, 400, 500]}
+                />
+                <CartesianGrid strokeDasharray="3 3" />
 
-              <Scatter
-                dataKey="screen_time"
-                data={data}
-                fill="#8884d8"
-                shape={<CustomDotIntro />}
-              />
-            </ComposedChart>
+                <Scatter
+                  dataKey="screen_time"
+                  data={data}
+                  fill="#8884d8"
+                  shape={<CustomDotIntro />}
+                />
+              </ComposedChart>
+            </ResponsiveContainer>
           </div>
-        </div>
-      </div>
-    </main>
+        }
+        instruction={introContent.headerTitle as string}
+        instructionButton={null}
+        classificationResults={null}
+        level={-1}
+        showNextLevelButton={false}
+      />
+      <Joyride
+        steps={steps}
+        run={run}
+        continuous
+        showProgress
+        callback={handleJoyrideCallback}
+        disableOverlay={false}
+        styles={{
+          options: {
+            arrowColor: "#e3ffeb",
+            backgroundColor: "#e3ffeb",
+            primaryColor: "#000",
+            textColor: "#004a14",
+          },
+          spotlight: {
+            backgroundColor: "rgba(255, 255, 255, 0.1)",
+            border: "solid 2px black",
+            pointerEvents: "none",
+          },
+          overlay: {
+            backgroundColor: "rgba(200, 200, 200, 0.1)",
+            pointerEvents: "none",
+          },
+          buttonSkip: {
+            border: "solid 1px",
+            borderRadius: "4px",
+            color: "black",
+          },
+        }}
+        hideCloseButton
+        showSkipButton
+        locale={{
+          skip: "Skip Tutorial",
+          last: "Next Level"
+        }}
+      />
+    </>
   );
 }

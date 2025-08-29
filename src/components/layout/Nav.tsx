@@ -8,13 +8,12 @@ export default function Nav() {
   const { locale, setLocale } = useLocale();
   
   const handleLanguageChange = (newLocale: Locales) => {
-    console.log(`Changing locale to: ${newLocale}`);
     setLocale(newLocale);
   };
 
   return (
-    <nav className="w-full h-14 flex items-center px-2 justify-between border-b z-50">
-      <h1 className="text-2xl">{content.title}</h1>
+    <nav className="w-full h-14 flex items-center justify-between border-b z-50">
+      <h1 className="text-3xl">{content.title}</h1>
       <div className="flex items-center">
         <button
           className={`flex items-center cursor-pointer p-2 rounded transition-colors ${

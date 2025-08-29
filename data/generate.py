@@ -2,10 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 from sklearn.linear_model import LogisticRegression
+from sklearn import svm
 import random
 import sys
 import argparse
 import json
+
+from classify import find_maximum_accuracy_linear_separator, best_linear_classifier
+from classify2 import best_linear_classifier_bruteforce
 
 # ----- Defaults -----
 default_params = {
@@ -67,24 +71,84 @@ def generate_points(
         if i < num_outliers:
             study_time = random.uniform(0, 500)
             screen_time = random.uniform(0, 500)
+            point_type = "Pass" if random.random() < 0.5 else "Fail"
+            points.append((study_time, screen_time, point_type))
+            continue
         else:
             study_time = np.clip(np.random.normal(meanX, stdX), 0, 500)
             screen_time = np.clip(np.random.normal(meanY, stdY), 0, 500)
         score = study_time - screen_time
         pass_prob = sigmoid((score - (pass_threshold - 250)) / 40)
-        point_type = "a" if random.random() < pass_prob else "b"
+        point_type = "Pass" if random.random() < pass_prob else "Fail"
         points.append((study_time, screen_time, point_type))
     return points
+
+def equality(a, b):
+    return abs(a - b) < 1e-6  # Use a small epsilon for floating point comparison
+
+def find_best_fit(points):
+    boundary = []
+    for i in np.arange(0, 501, 10):
+        for j in np.arange(0, 501, 10):
+            if equality(i, 0) or equality(j, 0) or equality(i, 500) or equality(j, 500):
+                boundary.append((i, j))
+
+    best = [0]
+
+    print(len(boundary), "boundary points")
+    
+    for (x1, y1) in boundary:
+        for (x2, y2) in boundary:
+            if equality(x1, x2) or equality(y1, y2):
+                continue
+            
+            for originIsPass in [True, False]:
+                m = (y2 - y1) / (x2 - x1)
+                c = y1 - m * x1
+
+                correct = 0
+
+                for (study_time, screen_time, point_type) in points:
+                    # check if the points is on the same side as the origin
+                    # and check if the point is correctly classified
+                    sameSideOrigin = (m * 0 + c) * (m * study_time + c) >= 0
+                    if sameSideOrigin == originIsPass:
+                        if point_type == "Pass": correct += 1
+                    else :
+                        if point_type == "Fail": correct += 1
+
+                accuracy = correct / len(points)
+                if accuracy > best[0]:
+                    best = [accuracy, (x1, y1), (x2, y2), originIsPass, m, c]
+    return best
+
 
 
 def fit_classifier(points):
     X = np.array([[p[0], p[1]] for p in points])
-    y = np.array([1 if p[2] == "a" else 0 for p in points])
-    clf = LogisticRegression()
+    y = np.array([1 if p[2] == "Pass" else 0 for p in points])
+    # clf = LogisticRegression(solver="liblinear", max_iter=10000)
+    clf = svm.SVC(kernel='linear', C=1.0)
     clf.fit(X, y)
     acc = clf.score(X, y)
     return clf, acc
+    # print(points)
+    # res = find_maximum_accuracy_linear_separator(points)
+    # return res
+    
 
+def fit_classifier_2(points):
+    X = np.array([[p[0], p[1]] for p in points])
+    y = np.array([1 if p[2] == "Pass" else 0 for p in points])
+
+    clf = best_linear_classifier(X, y)
+    return clf
+
+def fit_classifier_3(points):
+    X = np.array([[p[0], p[1]] for p in points])
+    y = np.array([1 if p[2] == "Pass" else 0 for p in points])
+    clf = best_linear_classifier_bruteforce(X, y)
+    return clf
 
 def get_boundary_segment(clf):
     # Decision boundary: coef[0]*x + coef[1]*y + intercept = 0
@@ -134,14 +198,7 @@ origin_pass = bool(classify_origin(clf))
 
 # Prepare save object
 save_obj = {
-    "data": [
-        {
-            "study_time": p[0],
-            "screen_time": p[1],
-            "type": "Pass" if p[2] == "a" else "Fail",
-        }
-        for p in points
-    ],
+    "data": [{"study_time": p[0], "screen_time": p[1], "type": p[2]} for p in points],
     "best": [{"x": x, "y": y} for (x, y) in boundary_segment],
     "originIsPass": origin_pass,
 }
@@ -150,7 +207,7 @@ if test_points:
         {
             "study_time": p[0],
             "screen_time": p[1],
-            "type": "Pass" if p[2] == "a" else "Fail",
+            "type": p[2],
         }
         for p in test_points
     ]
@@ -169,13 +226,18 @@ plt.subplots_adjust(left=0.1, bottom=0.35)
 scatter = ax.scatter(
     [p[0] for p in points],
     [p[1] for p in points],
-    c=["green" if p[2] == "a" else "red" for p in points],
+    c=["green" if p[2] == "Pass" else "red" for p in points],
 )
 x_vals = np.linspace(0, 500, 100)
 y_vals = np.linspace(0, 500, 100)
 XX, YY = np.meshgrid(x_vals, y_vals)
 Z = clf.predict(np.c_[XX.ravel(), YY.ravel()]).reshape(XX.shape)
 ax.contour(XX, YY, Z, levels=[0.5], linewidths=2, colors="blue")
+# best = find_best_fit(points)
+# # show the line y = best[4] * x + best[5]
+# x_line = np.array([0, 500])
+# y_line = best[4] * x_line + best[5]
+# ax.plot(x_line, y_line, color="blue", linewidth=2)
 ax.set_xlim(0, 500)
 ax.set_ylim(0, 500)
 ax.set_title(f"Sample Size: {args.samples} | Accuracy: {acc:.2f}")
@@ -183,12 +245,13 @@ ax.set_title(f"Sample Size: {args.samples} | Accuracy: {acc:.2f}")
 # Sliders
 axcolor = "lightgoldenrodyellow"
 slider_axes = {
-    "meanX": plt.axes([0.1, 0.25, 0.65, 0.03], facecolor=axcolor),
-    "stdX": plt.axes([0.1, 0.2, 0.65, 0.03], facecolor=axcolor),
-    "meanY": plt.axes([0.1, 0.15, 0.65, 0.03], facecolor=axcolor),
-    "stdY": plt.axes([0.1, 0.1, 0.65, 0.03], facecolor=axcolor),
-    "outlier_ratio": plt.axes([0.1, 0.05, 0.65, 0.03], facecolor=axcolor),
-    "pass_threshold": plt.axes([0.1, 0.0, 0.65, 0.03], facecolor=axcolor),
+    "meanX": plt.axes([0.1, 0.3, 0.65, 0.03], facecolor=axcolor),
+    "stdX": plt.axes([0.1, 0.25, 0.65, 0.03], facecolor=axcolor),
+    "meanY": plt.axes([0.1, 0.20, 0.65, 0.03], facecolor=axcolor),
+    "stdY": plt.axes([0.1, 0.15, 0.65, 0.03], facecolor=axcolor),
+    "outlier_ratio": plt.axes([0.1, 0.1, 0.65, 0.03], facecolor=axcolor),
+    "pass_threshold": plt.axes([0.1, 0.05, 0.65, 0.03], facecolor=axcolor),
+    "seed": plt.axes([0.1, 0, 0.65, 0.03], facecolor=axcolor),
 }
 sliders = {
     "meanX": Slider(
@@ -213,6 +276,13 @@ sliders = {
         500,
         valinit=params["pass_threshold"],
     ),
+    "seed": Slider(
+        slider_axes["seed"],
+        "Seed",
+        0,
+        100,
+        valinit=params["seed"],
+    ),
 }
 
 
@@ -224,22 +294,32 @@ def update(val):
         "stdY": sliders["stdY"].val,
         "outlier_ratio": sliders["outlier_ratio"].val,
         "pass_threshold": sliders["pass_threshold"].val,
-        "seed": params["seed"],
+        "seed": int(sliders["seed"].val),
     }
     new_points = generate_points(args.samples, **new_params)
-    new_clf, new_acc = fit_classifier(new_points)
+    if not any(p[2] == "Pass" for p in new_points) or not any(
+        p[2] == "Fail" for p in new_points
+    ):
+        return
+    new_clf, acc = fit_classifier(new_points)
     ax.clear()
     ax.set_xlim(0, 500)
     ax.set_ylim(0, 500)
     ax.scatter(
         [p[0] for p in new_points],
         [p[1] for p in new_points],
-        c=["green" if p[2] == "a" else "red" for p in new_points],
+        c=["green" if p[2] == "Pass" else "red" for p in new_points],
     )
     XX, YY = np.meshgrid(x_vals, y_vals)
     Z = new_clf.predict(np.c_[XX.ravel(), YY.ravel()]).reshape(XX.shape)
     ax.contour(XX, YY, Z, levels=[0.5], linewidths=2, colors="blue")
-    ax.set_title(f"Sample Size: {args.samples} | Accuracy: {new_acc:.2f}")
+
+    # best = find_best_fit(new_points)
+    # x_line = np.array([0, 500])
+    # y_line = best[4] * x_line + best[5]
+    # ax.plot(x_line, y_line, color="blue", linewidth=2)
+
+    ax.set_title(f"Sample Size: {args.samples} | Accuracy: {acc:.2f}")
     fig.canvas.draw_idle()
 
 
@@ -256,10 +336,10 @@ def on_close(event):
         "stdY": sliders["stdY"].val,
         "outlier_ratio": sliders["outlier_ratio"].val,
         "pass_threshold": sliders["pass_threshold"].val,
-        "seed": params["seed"],
+        "seed": int(sliders["seed"].val),
     }
     final_points = generate_points(args.samples, **final_params)
-    final_clf, _ = fit_classifier(final_points)
+    final_clf, acc = fit_classifier(final_points)
     final_segment = get_boundary_segment(final_clf)
     final_origin = bool(classify_origin(final_clf))
     final_obj = {
@@ -267,29 +347,26 @@ def on_close(event):
             {
                 "study_time": p[0],
                 "screen_time": p[1],
-                "type": "Pass" if p[2] == "a" else "Fail",
+                "type": p[2],
             }
             for p in final_points
         ],
         "best": [{"x": x, "y": y} for (x, y) in final_segment],
         "originIsPass": final_origin,
+        "params": final_params,
     }
     if args.testSamples > 0:
         test_params = final_params.copy()
         test_params["seed"] = final_params["seed"] + 1
         test_points = generate_points(args.testSamples, **test_params)
         final_obj["testData"] = [
-            {
-                "study_time": p[0],
-                "screen_time": p[1],
-                "type": "Pass" if p[2] == "a" else "Fail",
-            }
-            for p in test_points
+            {"study_time": p[0], "screen_time": p[1], "type": p[2]} for p in test_points
         ]
     if args.saveFile:
         with open(args.saveFile, "w") as f:
             json.dump(final_obj, f, indent=2)
     print(json.dumps(final_obj, indent=2))
+    print(acc)
     sys.exit(0)
 
 

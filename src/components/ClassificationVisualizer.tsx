@@ -18,10 +18,11 @@ import { ClassificationAreas } from "./chart/ClassificationAreas";
 import { ExtendedLinePoints } from "./chart/ExtendedLinePoints";
 import Toggle from "./UI/Toggle";
 import { useIntlayer } from "react-intlayer";
+import { cn } from "~/utils/cn";
 
 interface Props {
-  data: DataPoint[];
-  testData?: DataPoint[];
+  seenData: DataPoint[];
+  unseenData?: DataPoint[];
   stage: number;
   setStage: (stage: number) => void;
   setResults: (results: ClassificationCounts) => void;
@@ -35,8 +36,8 @@ interface Props {
 }
 
 export const ClassificationVisualizer = ({
-  data,
-  testData,
+  seenData: seenData,
+  unseenData: unseenData,
   stage,
   setStage,
   setResults,
@@ -48,6 +49,7 @@ export const ClassificationVisualizer = ({
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const areaPolygonsRef = useRef<HTMLDivElement>(null);
+  const extendedLinePointsRef = useRef<HTMLDivElement>(null);
   const [lineCoords, setLineCoords] = useState<ClickCoordinates[]>([]);
   const [bestLineCoords, setBestLineCoords] = useState<ClickCoordinates[]>([]);
 
@@ -79,8 +81,8 @@ export const ClassificationVisualizer = ({
   >([]);
 
   const [areaColorsAssigned, setAreaColorsAssigned] = useState(false);
-  // const [area1IsRed, setArea1IsRed] = useState<boolean | null>(null);
   const [showBestLine, setShowBestLine] = useState(true);
+  const [showSeenData, setShowSeenData] = useState(true);
   const [showUnseenData, setShowUnseenData] = useState(false);
 
   const [isDragging, setIsDragging] = useState(false);
@@ -89,37 +91,41 @@ export const ClassificationVisualizer = ({
   const [dragJustEnded, setDragJustEnded] = useState(false);
   const [originIsPass, setOriginIsPass] = useState<boolean | null>(null);
 
+  const data = useMemo(() => {
+    const data = [];
+    if (showSeenData) {
+      data.push(...seenData);
+    }
+    if (stage === 6 && showUnseenData && unseenData) {
+      data.push(...unseenData);
+    }
+    return data;
+  }, [showSeenData, stage, showUnseenData, unseenData, seenData]);
+
+  // Intlayer content
+
   const { classificationVisualizer: content } = useIntlayer("app");
 
   const classificationCounts = useMemo(() => {
     return getClassificationCounts(
-      data,
+      seenData,
       lineCoords,
       originIsPass,
       areaColorsAssigned
     );
-  }, [data, lineCoords, originIsPass, areaColorsAssigned]);
+  }, [seenData, lineCoords, originIsPass, areaColorsAssigned]);
 
   const unseenClassificationCounts = useMemo(() => {
-    if (!testData) {
+    if (!unseenData) {
       return { TP: 0, TN: 0, FP: 0, FN: 0 };
     }
     return getClassificationCounts(
-      testData,
+      unseenData,
       lineCoords,
       originIsPass ?? null,
       areaColorsAssigned
     );
-  }, [testData, lineCoords, originIsPass, areaColorsAssigned]);
-
-  // const accuracy = useMemo(() => {
-  //   return areaColorsAssigned
-  //     ? (
-  //         ((classificationCounts.TP + classificationCounts.TN) / data.length) *
-  //         100
-  //       ).toFixed(1)
-  //     : null;
-  // }, [areaColorsAssigned, classificationCounts, data.length]);
+  }, [unseenData, lineCoords, originIsPass, areaColorsAssigned]);
 
   const graphToOverlayCoords = useCallback((graphCoords: Point): Point => {
     if (!overlayRef.current || !chartContainerRef.current)
@@ -346,6 +352,7 @@ export const ClassificationVisualizer = ({
     } else {
       setLineCoords([]);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clickCoords, graphToOverlayCoords]);
 
   useEffect(() => {
@@ -358,7 +365,6 @@ export const ClassificationVisualizer = ({
     }
     const polygons = getAreaPolygons(lineCoords, graphToOverlayCoords);
     setAreaPolygons(polygons);
-    console.log("Getting polygons", polygons);
   }, [lineCoords, graphToOverlayCoords, originIsPass]);
 
   useEffect(() => {
@@ -400,7 +406,7 @@ export const ClassificationVisualizer = ({
 
   // Handle unseen data results
   useEffect(() => {
-    if (stage >= 6 && setUnseenResults && areaColorsAssigned && testData) {
+    if (stage >= 6 && setUnseenResults && areaColorsAssigned && unseenData) {
       setUnseenResults(unseenClassificationCounts);
     }
   }, [
@@ -408,7 +414,7 @@ export const ClassificationVisualizer = ({
     areaColorsAssigned,
     unseenClassificationCounts,
     setUnseenResults,
-    testData,
+    unseenData,
   ]);
 
   // Create best classifier line when entering stage 5
@@ -429,7 +435,7 @@ export const ClassificationVisualizer = ({
 
       // Calculate best classifier results
       const bestClassificationCounts = getClassificationCounts(
-        data,
+        seenData,
         bestLineCoords2,
         bestClassifier.originIsPass,
         true
@@ -440,9 +446,9 @@ export const ClassificationVisualizer = ({
       }
 
       // Calculate best classifier results on unseen data
-      if (testData && setUnseenBestResults) {
+      if (unseenData && setUnseenBestResults) {
         const bestUnseenClassificationCounts = getClassificationCounts(
-          testData,
+          unseenData,
           bestLineCoords2,
           bestClassifier.originIsPass,
           true
@@ -450,24 +456,33 @@ export const ClassificationVisualizer = ({
 
         setUnseenBestResults(bestUnseenClassificationCounts);
       }
-
-      console.log("Best classifier created");
     }
   }, [
     stage,
     bestLineCoords,
     bestClassifier,
-    data,
+    seenData,
     graphToOverlayCoords,
     originIsPass,
     setBestResults,
     setUnseenBestResults,
-    testData,
+    unseenData,
   ]);
 
   useEffect(() => {
     const overlayElement = overlayRef.current;
     const areaPolygonsElement = areaPolygonsRef.current;
+
+    if (!chartContainerRef.current || !overlayElement || !areaPolygonsElement)
+      return;
+
+    const graphElement = chartContainerRef.current.querySelector(
+      ".recharts-cartesian-grid"
+    ) as SVGElement | null;
+
+    if (!graphElement) {
+      return;
+    }
 
     if (
       overlayElement &&
@@ -475,24 +490,17 @@ export const ClassificationVisualizer = ({
       clickCoords.length == 2 &&
       !areaColorsAssigned
     ) {
-      overlayElement.style.zIndex = "9";
-      areaPolygonsElement.style.zIndex = "9";
-    }
-  }, [clickCoords, areaColorsAssigned]);
-
-  useEffect(() => {
-    const areaPolygonsElement = areaPolygonsRef.current;
-    const overlayElement = overlayRef.current;
-    if (areaPolygonsElement && overlayElement && areaColorsAssigned) {
+      areaPolygonsElement.style.zIndex = "20";
+    } else if (areaColorsAssigned && areaPolygonsElement && overlayElement) {
       areaPolygonsElement.style.zIndex = "-50";
       overlayElement.style.zIndex = "10";
     }
-  }, [areaColorsAssigned]);
+  }, [clickCoords, areaColorsAssigned]);
 
   return (
     <>
       <Chart
-        data={stage === 6 && showUnseenData && testData ? testData : data}
+        data={data}
         lineCoords={stage >= 5 && showBestLine ? bestLineCoords : lineCoords}
         originIsPass={
           stage >= 5 && showBestLine
@@ -505,47 +513,79 @@ export const ClassificationVisualizer = ({
       />
 
       <div
-        className="w-full h-full z-10 absolute top-0 left-0 cursor-crosshair bg-transparent"
+        className="w-full h-full absolute top-0 left-0 cursor-crosshair bg-transparent z-10"
         ref={overlayRef}
         onClick={handleOverlayClick}
-        onMouseMove={handleOverlayMouseMove}
-        onMouseUp={handleOverlayMouseUp}
-        onMouseLeave={handleOverlayMouseUp}
+        onPointerMove={handleOverlayMouseMove}
+        onPointerUp={handleOverlayMouseUp}
       >
-        {clickCoords.length === 1 && (
-          <div
-            className="absolute bg-blue-500"
-            style={{
-              top: clickCoords[0].overlay.y - 6,
-              left: clickCoords[0].overlay.x - 6,
-              width: 12,
-              height: 12,
-              borderRadius: "50%",
-            }}
+        {areaColorsAssigned && (
+          <ExtendedLinePoints
+            ref={extendedLinePointsRef}
+            extendedLinePoints={
+              stage >= 5 && showBestLine ? [] : extendedLinePoints
+            }
+            lineCoords={
+              stage >= 5 && showBestLine ? bestLineCoords : lineCoords
+            }
+            onExtendedPointMouseDown={
+              stage < 5 || !showBestLine
+                ? handleExtendedPointMouseDown
+                : () => {}
+            }
           />
         )}
+      </div>
 
-        {(stage === 5 || stage === 6) && (
-          <Toggle
-            leftOption={content.toggles.yourClassifier}
-            rightOption={content.toggles.bestClassifier}
-            value={showBestLine}
-            onChange={setShowBestLine}
-            className="absolute top-4 left-4"
-          />
-        )}
+      {clickCoords.length === 1 && (
+        <div
+          className={cn("absolute bg-blue-500 w-3 h-3 rounded-full")}
+          style={{
+            top: clickCoords[0].overlay.y - 6,
+            left: clickCoords[0].overlay.x - 6,
+          }}
+        />
+      )}
 
-        {stage === 6 && (
-          <Toggle
-            leftOption={content.toggles.trainingData}
-            rightOption={content.toggles.testData}
-            value={showUnseenData}
-            onChange={setShowUnseenData}
-            className="absolute top-17 left-4"
-          />
-        )}
+      {(stage === 5 || stage === 6) && (
+        <Toggle
+          leftOption={content.toggles.yourClassifier}
+          rightOption={content.toggles.bestClassifier}
+          value={showBestLine}
+          onChange={setShowBestLine}
+          className="absolute top-3 left-0 z-20"
+        />
+      )}
 
+      {stage === 6 && (
+        <div className="absolute top-15 left-0 z-20 flex flex-col border rounded p-2 text-sm w-30">
+          <div className="flex items-center justify-between">
+            <label>Seen data</label>
+            <input
+              type="checkbox"
+              checked={showSeenData}
+              onChange={() => setShowSeenData((prev) => !prev)}
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <label>Unseen data</label>
+            <input
+              type="checkbox"
+              checked={showUnseenData}
+              onChange={() => setShowUnseenData((prev) => !prev)}
+            />
+          </div>
+        </div>
+      )}
+
+      <div
+        className="absolute inset-0"
+        ref={areaPolygonsRef}
+        onPointerMove={handleOverlayMouseMove}
+        onPointerUp={handleOverlayMouseUp}
+      >
         <ExtendedLinePoints
+          ref={extendedLinePointsRef}
           extendedLinePoints={
             stage >= 5 && showBestLine ? [] : extendedLinePoints
           }
@@ -554,12 +594,6 @@ export const ClassificationVisualizer = ({
             stage < 5 || !showBestLine ? handleExtendedPointMouseDown : () => {}
           }
         />
-      </div>
-
-      <div
-        className="w-full h-full z-9 absolute top-0 left-0 cursor-crosshair bg-transparent"
-        ref={areaPolygonsRef}
-      >
         {lineCoords.length === 2 &&
           areaPolygons.area1.overlay.length > 0 &&
           areaPolygons.area2.overlay.length > 0 &&
@@ -581,7 +615,7 @@ export const ClassificationVisualizer = ({
               areaPolygons={bestAreaPolygons}
               originIsPass={bestClassifier.originIsPass}
               areaColorsAssigned={true}
-              onAreaSelection={() => {}} // No area selection for best classifier
+              onAreaSelection={() => {}}
             />
           )}
 

@@ -1,11 +1,9 @@
-import { LevelProgressBar } from "~/components/UI/LevelProgressBar";
-import Nav from "~/components/layout/Nav";
 import { ClassificationVisualizer } from "~/components/ClassificationVisualizer";
 import { useState } from "react";
-import { Legend } from "~/components/UI/Legend";
 import { ClassificationResults } from "~/components/UI/ClassificationResults";
 import type { DataPoint, ClassificationCounts } from "~/types";
 import { useIntlayer } from "react-intlayer";
+import LevelLayout from "~/components/layout/levelLayout";
 
 const data: DataPoint[] = [
   { study_time: 100, screen_time: 300, type: "Fail" },
@@ -23,53 +21,43 @@ export default function Level0() {
     FP: 0,
     FN: 0,
   });
-  const { level0: content, common } = useIntlayer("app");
+  const { level0: content } = useIntlayer("app");
 
   return (
-    <main className="h-screen w-screen flex flex-col items-center p-4">
-      <Nav />
-      <div className="flex w-full flex-1">
-        <div className="h-full w-[30%] flex flex-col p-4 border-r-1">
-          <LevelProgressBar level={level} showNextLevelButton={stage === 4} />
-          <Legend />
-          {stage === 4 && (
-            <ClassificationResults classificationCounts={results} />
-          )}
-        </div>
-        <div className="flex-1 h-full flex flex-col items-center">
-          <div
-            className="flex p-4 border-b-1 w-full h-[100px] justify-center"
-            id="instruction"
+    <LevelLayout
+      goalElement={"Level 0: Create your first classifier!"}
+      classificationVisualizer={
+        <ClassificationVisualizer
+          key={`visualizer-${level}`}
+          seenData={data}
+          stage={stage}
+          setStage={setStage}
+          setResults={setResults}
+          bestClassifier={{ line: [], originIsPass: true }} // irrelevant for this level
+        />
+      }
+      instruction={
+        content.stages[
+          Math.min(stage, 4).toString() as keyof typeof content.stages
+        ].value
+      }
+      instructionButton={
+        stage === 3 && (
+          <button
+            className="bg-blue-500 text-white rounded w-20 h-full"
+            onClick={() => setStage(4)}
           >
-            <h2 className="text-xl font-medium mb-2 break-words flex-1">
-              {
-                content.stages[
-                  Math.min(stage, 4).toString() as keyof typeof content.stages
-                ].value
-              }
-            </h2>
-            <div className="w-24 h-full">
-              {stage === 3 && (
-                <button
-                  className="bg-blue-500 text-white px-4 py-2 rounded my-auto"
-                  onClick={() => setStage(4)}
-                >
-                  {content.buttons.next?.value || common.buttons.next.value}
-                </button>
-              )}
-            </div>
-          </div>
-          <div className="h-[600px] w-full flex items-center justify-center relative py-10">
-            <ClassificationVisualizer
-              data={data}
-              stage={stage}
-              setStage={setStage}
-              setResults={setResults}
-              bestClassifier={{ line: [], originIsPass: true }} // irrelevant for this level
-            />
-          </div>
-        </div>
-      </div>
-    </main>
+            {content.buttons.next.value}
+          </button>
+        )
+      }
+      classificationResults={
+        stage === 4 ? (
+          <ClassificationResults classificationCounts={results} />
+        ) : null
+      }
+      level={level}
+      showNextLevelButton={stage === 4}
+    />
   );
 }

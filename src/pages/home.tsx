@@ -18,6 +18,12 @@ export default function Home() {
     <main className="min-h-screen flex flex-col items-center justify-center gap-4">
       <h1 className="text-4xl">{content.title}</h1>
       <h2 className="text-2xl text-stone-600">{content.subtitle}</h2>
+      <p className="max-w-xl text-center">
+        Interactive game consisting of 9 levels around ethical AI concepts.
+        Progress through different levels by buidling simple linear classifiers
+        to classify students who pass or fail an exam based on their study and
+        screen time hours.
+      </p>
       <Link to={`/level/${config.startLevel}`}>
         <button className="cursor-pointer rounded border-1 p-1">
           {content.getStarted}
