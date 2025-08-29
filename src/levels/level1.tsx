@@ -259,19 +259,19 @@ export default function Level1() {
       setTimeout(() => {
         setRun(true);
         setStepIndex(4);
-      }, 1000);
+      }, 700);
     } else if (stage === 2 && classificationResults.includes("FP")) {
       setStage(3);
       setTimeout(() => {
         setRun(true);
         setStepIndex(5);
-      }, 1000);
+      }, 700);
     } else if (stage === 3 && classificationResults.includes("FN")) {
       setStage(4);
       setTimeout(() => {
         setRun(true);
         setStepIndex(6);
-      }, 1000);
+      }, 700);
     }
   }, [data, stage]);
 
