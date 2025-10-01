@@ -41,6 +41,13 @@ To preview the built version, you can run
 pnpm run preview
 ```
 
+## (Optional) Running using docker
+You can also run the app using docker
+```
+docker build . -t ai-ethics
+docker -p 4173:4173 -t ai-ethics:latest
+```
+
 
 ## Internationalization
 
