@@ -21,11 +21,11 @@ export default function Level0() {
     FP: 0,
     FN: 0,
   });
-  const { level0: content } = useIntlayer("app");
+  const { level0: content, common: commonContent } = useIntlayer("app");
 
   return (
     <LevelLayout
-      goalElement={"Level 0: Create your first classifier!"}
+      goalElement={content.goal.value}
       classificationVisualizer={
         <ClassificationVisualizer
           key={`visualizer-${level}`}
@@ -41,16 +41,8 @@ export default function Level0() {
           Math.min(stage, 4).toString() as keyof typeof content.stages
         ].value
       }
-      instructionButton={
-        stage === 3 && (
-          <button
-            className="bg-blue-500 text-white rounded w-20 h-full"
-            onClick={() => setStage(4)}
-          >
-            {content.buttons.next.value}
-          </button>
-        )
-      }
+      instructionButton={stage === 3 ? commonContent.buttons.next.value : null}
+      instructionButtonCallback={() => setStage(4)}
       classificationResults={
         stage === 4 ? (
           <ClassificationResults classificationCounts={results} />

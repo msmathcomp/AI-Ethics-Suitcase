@@ -19,24 +19,27 @@ export default function Toggle({
   return (
     <div
       className={cn(
-        "relative flex rounded-md border bg-white text-sm overflow-hidden p-1",
+        "relative flex flex-col rounded border bg-white overflow-hidden p-1 justify-center gap-2",
         className
       )}
     >
       <button
         className={cn(
-          "flex-1 px-2 py-1 rounded-md whitespace-nowrap",
-          !value ? "bg-blue-500 text-white" : "text-black"
+          "px-1 py-1 rounded whitespace-nowrap",
+          !value ? "bg-blue-500 text-white" : "text-black",
+          value ? "border" : ""
         )}
         onClick={() => onChange(false)}
         type="button"
       >
         {leftOption}
       </button>
+      <hr className="h-[1px] w-full bg-black" />
       <button
         className={cn(
-          "flex-1 px-2 py-1 rounded-md whitespace-nowrap",
-          value ? "bg-blue-500 text-white" : "text-black"
+          "px-1 py-1 rounded whitespace-nowrap",
+          value ? "bg-blue-500 text-white" : "text-black",
+          value ? "" : "border"
         )}
         onClick={() => onChange(true)}
         type="button"

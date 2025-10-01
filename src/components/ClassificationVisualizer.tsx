@@ -352,7 +352,7 @@ export const ClassificationVisualizer = ({
     } else {
       setLineCoords([]);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clickCoords, graphToOverlayCoords]);
 
   useEffect(() => {
@@ -547,36 +547,48 @@ export const ClassificationVisualizer = ({
         />
       )}
 
-      {(stage === 5 || stage === 6) && (
+      <div className="flex flex-col absolute top-3 left-0 z-20 gap-2 text-xs w-24 xl:text-sm xl:w-32">
+        {areaColorsAssigned && (
+          <button
+            className="border rounded px-2 py-1"
+            onClick={() =>
+              setOriginIsPass((prev) => (prev !== null ? !prev : null))
+            }
+            disabled={[5, 6].includes(stage) && showBestLine}
+          >
+            {content.flipButton}
+          </button>
+        )}
         <Toggle
           leftOption={content.toggles.yourClassifier}
           rightOption={content.toggles.bestClassifier}
           value={showBestLine}
           onChange={setShowBestLine}
-          className="absolute top-3 left-0 z-20"
+          className={cn([5, 6].includes(stage) ? "visible" : "invisible")}
         />
-      )}
-
-      {stage === 6 && (
-        <div className="absolute top-15 left-0 z-20 flex flex-col border rounded p-2 text-sm w-30">
-          <div className="flex items-center justify-between">
-            <label>Seen data</label>
-            <input
-              type="checkbox"
-              checked={showSeenData}
-              onChange={() => setShowSeenData((prev) => !prev)}
-            />
+        {stage === 6 && (
+          <div className="border rounded p-1 space-y-2">
+            <div className="flex items-center justify-between">
+              <label>{content.seenData}</label>
+              <input
+                type="checkbox"
+                checked={showSeenData}
+                onChange={() => setShowSeenData((prev) => !prev)}
+                className="accent-blue-500"
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <label>{content.unseenData}</label>
+              <input
+                type="checkbox"
+                checked={showUnseenData}
+                onChange={() => setShowUnseenData((prev) => !prev)}
+                className="accent-blue-500"
+              />
+            </div>
           </div>
-          <div className="flex items-center justify-between">
-            <label>Unseen data</label>
-            <input
-              type="checkbox"
-              checked={showUnseenData}
-              onChange={() => setShowUnseenData((prev) => !prev)}
-            />
-          </div>
-        </div>
-      )}
+        )}
+      </div>
 
       <div
         className="absolute inset-0"

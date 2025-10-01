@@ -13,7 +13,7 @@ import { useIntlayer } from "react-intlayer";
 import LevelLayout from "~/components/layout/levelLayout";
 
 export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
-  const { level2_5: content } = useIntlayer("app");
+  const { level2_5: content, common: commonContent } = useIntlayer("app");
   const [stage, setStage] = useState(0);
   const [results, setResults] = useState<ClassificationCounts>({
     TP: 0,
@@ -54,16 +54,11 @@ export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
     }
   }, [stage, recordLevelResult, level, results, bestResults]);
 
-  const goals = {
-    2: "Level 2: Can you achieve 100% accuracy?",
-    3: "Level 3: Can you still achieve 100% accuracy?",
-    4: "Level 4: Try to achieve maximum possible accuracy!",
-    5: "Level 5: Try to achieve maximum possible accuracy!",
-  };
-
   return (
     <LevelLayout
-      goalElement={<span>{goals[level!]}</span>}
+      goalElement={
+        content.goals[level.toString() as keyof typeof content.goals].value
+      }
       classificationVisualizer={
         <ClassificationVisualizer
           key={`visualizer-${level}`}
@@ -79,21 +74,19 @@ export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
         />
       }
       instruction={
-        content.stages[
-          Math.min(stage, 4).toString() as keyof typeof content.stages
-        ].value
+        content.stages[stage.toString() as keyof typeof content.stages].value
       }
       instructionButton={
-        <div className="h-8 w-full flex justify-end">
-          {(stage === 3 || stage === 4) && (
-            <button
-              className="bg-blue-500 text-white rounded w-20 h-full"
-              onClick={() => setStage((prev) => prev + 1)}
-            >
-              {stage === 3 ? "Next" : "Compare"}
-            </button>
-          )}
-        </div>
+        stage === 3
+          ? commonContent.buttons.next.value
+          : stage === 4
+          ? commonContent.buttons.compare.value
+          : null
+      }
+      instructionButtonCallback={
+        stage === 3 || stage === 4
+          ? () => setStage((prev) => prev + 1)
+          : undefined
       }
       classificationResults={
         stage >= 4 ? (

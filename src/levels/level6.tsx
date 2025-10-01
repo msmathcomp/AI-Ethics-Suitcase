@@ -9,7 +9,11 @@ import LevelLayout from "~/components/layout/levelLayout";
 
 export default function Level6() {
   const level = 6;
-  const { level6: content } = useIntlayer("app");
+  const {
+    level6: content,
+    common: commonContent,
+    classificationResults: classifcationResultsContent,
+  } = useIntlayer("app");
   const [stage, setStage] = useState(0);
 
   const [results, setResults] = useState<ClassificationCounts>({
@@ -75,7 +79,7 @@ export default function Level6() {
 
   return (
     <LevelLayout
-      goalElement={"Level 6: Test your classifier on unseen data!"}
+      goalElement={content.goal.value}
       classificationVisualizer={
         <ClassificationVisualizer
           key={`visualizer-${level}`}
@@ -97,45 +101,33 @@ export default function Level6() {
         content.stages[stage.toString() as keyof typeof content.stages].value
       }
       instructionButton={
-        <div className="h-8 w-full flex justify-end">
-          {stage === 3 && (
-            <button
-              className="bg-blue-500 text-white px-4 py-2 rounded my-auto"
-              onClick={() => setStage(4)}
-            >
-              Next
-            </button>
-          )}
-          {stage === 4 && (
-            <button
-              className="bg-blue-500 text-white px-4 py-2 rounded my-auto"
-              onClick={() => setStage(5)}
-            >
-              Compare
-            </button>
-          )}
-          {stage === 5 && (
-            <button
-              className="bg-blue-500 text-white px-4 py-2 rounded my-auto"
-              onClick={() => setStage(6)}
-            >
-              Next
-            </button>
-          )}
-        </div>
+        [3, 5].includes(stage)
+          ? commonContent.buttons.next.value
+          : stage === 4
+          ? commonContent.buttons.compare.value
+          : null
       }
+      instructionButtonCallback={() => {
+        if (stage === 3) setStage(4);
+        else if (stage === 4) setStage(5);
+        else if (stage === 5) setStage(6);
+      }}
       classificationResults={
         <>
           {stage >= 4 && (
             <ClassificationResults
-              title={stage === 6 ? "Performance on Training Data" : undefined}
+              title={
+                stage === 6
+                  ? content.titles.trainingPerformance.value
+                  : classifcationResultsContent.title.value
+              }
               classificationCounts={results}
               bestClassificationCounts={stage >= 5 ? bestResults : undefined}
             />
           )}
           {stage === 6 && (
             <ClassificationResults
-              title="Performance on Unseen Data"
+              title={content.titles.unseenPerformance.value}
               classificationCounts={unseenResults}
               bestClassificationCounts={unseenBestResults}
             />

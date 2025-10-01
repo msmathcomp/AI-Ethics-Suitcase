@@ -104,7 +104,11 @@ const CustomDotLevel1 = ({
 
 export default function Level1() {
   const navigate = useNavigate();
-  const { level1: content, chart: chartContent } = useIntlayer("app");
+  const {
+    level1: content,
+    chart: chartContent,
+    tour: tourContent,
+  } = useIntlayer("app");
 
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -373,17 +377,17 @@ export default function Level1() {
   ];
 
   const instructions = [
-    "Click on the pass region to add a student who has passed",
-    "Now click on the fail region to add a student who has failed",
-    "Now click on the pass region to add a student who has failed",
-    "Finally, click on the fail region to add a student who has passed",
-    "Great! You have classified all types of students. Click next to proceed.",
+    content.instructions["1"].value,
+    content.instructions["2"].value,
+    content.instructions["3"].value,
+    content.instructions["4"].value,
+    content.instructions["5"].value,
   ];
 
   return (
     <>
       <LevelLayout
-        goalElement={"Level 1: How to calcuate the accuracy of a classifier"}
+        goalElement={content.goal.value}
         classificationVisualizer={
           <>
             <div className="ml-10 h-full aspect-square flex items-center justify-center">
@@ -478,7 +482,7 @@ export default function Level1() {
           <ClassificationResults classificationCounts={results} />
         }
         level={1}
-        showNextLevelButton={run}
+        showNextLevelButton={false}
         instructionButton={null}
       />
 
@@ -492,28 +496,51 @@ export default function Level1() {
         showProgress
         callback={handleJoyrideCallback}
         disableOverlay={false}
+        spotlightClicks={true}
         styles={{
           options: {
             arrowColor: "#e3ffeb",
             backgroundColor: "#e3ffeb",
             primaryColor: "#000",
-            textColor: "#004a14",
+            textColor: "black",
+          },
+          tooltip: {
+            padding: 5,
+            maxWidth: "300px"
+          },
+          tooltipContainer: {
+            padding: 0,
+            fontSize: "15px",
           },
           spotlight: {
             backgroundColor: "rgba(255, 255, 255, 0.1)",
             border: "solid 2px black",
             pointerEvents: "none",
-            padding: "0px",
+            cursor: "default",
           },
           overlay: {
             backgroundColor: "rgba(200, 200, 200, 0.1)",
             pointerEvents: "none",
           },
+          buttonSkip: {
+            border: "solid 1px",
+            borderRadius: "4px",
+            color: "black",
+            fontSize: "14px"
+          },
+          buttonNext: {
+            backgroundColor: "oklch(62.3% 0.214 259.815)", // bg-blue-500
+            color: "white",
+            fontSize: "14px"
+          },
+          buttonBack: {
+            fontSize: "14px"
+          }
         }}
         hideCloseButton
         hideBackButton
         locale={{
-          last: "Next level",
+          last: tourContent.nextLevel.value,
         }}
       />
     </>

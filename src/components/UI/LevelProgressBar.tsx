@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight, Meh, Smile } from "lucide-react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { cn } from "~/utils/cn";
 import { useIntlayer } from "react-intlayer";
 
@@ -38,14 +38,29 @@ export function LevelProgressBar({
         className="flex items-center border rounded pr-2 mr-4"
       >
         <ChevronLeft size={25} />
-        Previous Level
+        {content.previousLevel}
       </button>
       {[...Array(TOTAL_LEVELS)].map((_, index) => {
         let backgroundColor = "bg-gray-500";
-        if (index < level + 1) {
+        if (index <= level) {
           backgroundColor = "bg-teal-500";
         } else if (index === level + 1) {
-        backgroundColor = "bg-indigo-500";
+          backgroundColor = "bg-indigo-500";
+        }
+        if (index <= level) {
+          return (
+            <Link to={`/level/${index - 1}`}>
+              <div
+                key={index}
+                className={cn(
+                  "rounded-full w-8 h-8 flex items-center justify-center",
+                  backgroundColor
+                )}
+              >
+                {<Smile color="white" />}
+              </div>
+            </Link>
+          );
         }
         return (
           <div
@@ -55,25 +70,19 @@ export function LevelProgressBar({
               backgroundColor
             )}
           >
-            {index < level + 1 && <Smile color="white" />}
             {index === level + 1 && <Meh color="white" />}
           </div>
         );
       })}
-      {/* {showNextLevelButton && (
-          <button
-            className="bg-blue-500 text-white p-2 rounded ml-auto"
-            onClick={handleNextLevel}
-          >
-            {nextLevelButtonText || content.nextLevelButtonText}
-          </button>
-        )} */}
       <button
+        id="next-level-button"
         onClick={handleNextLevel}
+        disabled={!showNextLevelButton}
         className={cn(
-          "flex items-center border rounded pl-2 ml-4",
-          showNextLevelButton ? "visible" : "invisible"
-        )}
+          "flex items-center ml-2 bg-blue-500 text-white rounded px-2 border-blue-500 border",
+          // showNextLevelButton ? "visible" : "invisible"
+        )
+      }
       >
         {nextLevelButtonText || content.nextLevelButtonText}
         <ChevronRight size={25} />

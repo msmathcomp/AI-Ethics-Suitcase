@@ -9,7 +9,11 @@ import LevelLayout from "~/components/layout/levelLayout";
 
 export default function Level7() {
   const level = 7;
-  const { level7: content } = useIntlayer("app");
+  const {
+    level7: content,
+    common: commonContent,
+    classificationResults: classifcationResultsContent,
+  } = useIntlayer("app");
 
   const [stage, setStage] = useState(0);
 
@@ -50,7 +54,7 @@ export default function Level7() {
 
   return (
     <LevelLayout
-      goalElement={<span>Level 7: Classifying using a curve!</span>}
+      goalElement={content.goal.value}
       classificationVisualizer={
         <CurveVisualizer
           key={`visualizer-${level}`}
@@ -66,28 +70,20 @@ export default function Level7() {
         content.stages[stage.toString() as keyof typeof content.stages].value
       }
       instructionButton={
-        <div className="h-8 w-full flex justify-end">
-          {[2, 3].includes(stage) && (
-            <button
-              className="bg-blue-500 text-white rounded w-20 h-full"
-              onClick={() => setStage((prev) => prev + 1)}
-            >
-              Next
-            </button>
-          )}
-        </div>
+        [2, 3].includes(stage) ? commonContent.buttons.next.value : null
       }
+      instructionButtonCallback={() => setStage((prev) => prev + 1)}
       classificationResults={
         <>
           {stage >= 3 && (
             <ClassificationResults
-              title={"Classification Results"}
+              title={classifcationResultsContent.title.value}
               classificationCounts={results}
             />
           )}
           {stage === 4 && (
             <ClassificationResults
-              title="Performance on Unseen Data"
+              title={content.titles.unseenPerformance.value}
               classificationCounts={unseenResults}
             />
           )}

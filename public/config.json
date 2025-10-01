@@ -1,4 +1,5 @@
 {
   "defaultLanguage": "en",
-  "startLevel": -1
+  "startLevel": -1,
+  "showHomePage": true
 }

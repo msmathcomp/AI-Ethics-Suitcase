@@ -17,7 +17,7 @@ interface Props {
   originIsPass: boolean | null;
   areaColorsAssigned: boolean;
   stage: number;
-  chartContainerRef: React.RefObject<HTMLDivElement | null>;
+  chartContainerRef: React.LegacyRef<HTMLDivElement>;
 }
 
 export const Chart = ({
@@ -66,9 +66,7 @@ export const Chart = ({
             }}
             ticks={[0, 100, 200, 300, 400, 500]}
           />
-          <CartesianGrid
-            strokeDasharray="3 3"
-          />
+          <CartesianGrid strokeDasharray="3 3" />
           <Scatter
             dataKey="screen_time"
             data={data}

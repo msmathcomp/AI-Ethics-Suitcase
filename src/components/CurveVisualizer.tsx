@@ -15,6 +15,7 @@ import { getAreaPolygons } from "~/utils/geometry_curve";
 import { ClassificationAreas } from "./chart/ClassificationAreas";
 import { getClassificationCounts_Curve } from "~/utils/classification_curve";
 import { CurveChart } from "./chart/ChartCurve";
+import { useIntlayer } from "react-intlayer";
 
 interface Props {
   seenData: DataPoint[];
@@ -49,6 +50,9 @@ export const CurveVisualizer = ({
   const [areaColorsAssigned, setAreaColorsAssigned] = useState(false);
   const [showSeenData, setShowSeenData] = useState(true);
   const [showUnseenData, setShowUnseenData] = useState(false);
+
+  const { classificationVisualizer: content } = useIntlayer("app");
+  
 
   const data = useMemo(() => {
     const data = [];
@@ -331,26 +335,40 @@ export const CurveVisualizer = ({
           </svg>
         )}
 
-        {stage === 4 && (
-          <div className="absolute top-3 left-0 z-20 flex flex-col border rounded p-2 text-sm w-30">
-            <div className="flex items-center justify-between">
-              <label>Seen data</label>
-              <input
-                type="checkbox"
-                checked={showSeenData}
-                onChange={() => setShowSeenData((prev) => !prev)}
-              />
+        <div className="flex flex-col absolute top-3 left-0 z-20 gap-2 text-xs w-24 xl:text-sm xl:w-32">
+          {areaColorsAssigned && (
+            <button
+              className="border rounded px-2 py-1"
+              onClick={() =>
+                setArea1IsRed((prev) => (prev !== null ? !prev : null))
+              }
+            >
+              {content.flipButton}
+            </button>
+          )}
+          {stage === 4 && (
+            <div className="border rounded p-1 space-y-2">
+              <div className="flex items-center justify-between">
+                <label>{content.seenData}</label>
+                <input
+                  type="checkbox"
+                  checked={showSeenData}
+                  onChange={() => setShowSeenData((prev) => !prev)}
+                  className="accent-blue-500"
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <label>{content.unseenData}</label>
+                <input
+                  type="checkbox"
+                  checked={showUnseenData}
+                  onChange={() => setShowUnseenData((prev) => !prev)}
+                  className="accent-blue-500"
+                />
+              </div>
             </div>
-            <div className="flex items-center justify-between">
-              <label>Unseen data</label>
-              <input
-                type="checkbox"
-                checked={showUnseenData}
-                onChange={() => setShowUnseenData((prev) => !prev)}
-              />
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       <div

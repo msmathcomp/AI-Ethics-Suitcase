@@ -2,7 +2,7 @@ import { Move } from "lucide-react";
 import type { ClickCoordinates } from "~/types";
 
 interface Props {
-  ref: React.RefObject<HTMLDivElement | null>;
+  ref: React.LegacyRef<HTMLDivElement>;
   extendedLinePoints: ClickCoordinates[];
   lineCoords: ClickCoordinates[];
   onExtendedPointMouseDown: (

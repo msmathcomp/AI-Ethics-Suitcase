@@ -27,80 +27,72 @@ export const ClassificationResults = ({
   const showComparison = bestClassificationCounts && bestAccuracy;
   return (
     <div
-      className="mt-5 border-1 border-black-300 rounded-lg p-4 shadow-lg"
+      className="mt-5 flex flex-col items-center justify-start border-1 border-black-300 rounded-lg p-2 gap-2"
       id="classification-results"
     >
-      <h3 className="text-lg font-semibold mb-3 text-center">
+      <h3 className="text-sm xl:text-base font-semibold text-center">
         {title || content.title} {showComparison && content.compareSuffix}
       </h3>
 
-      <div className="mb-3 text-center">
-        <div className="text-lg font-bold text-blue-600">
+      <div className="text-center">
+        <div className="text-base xl:text-lg font-bold text-blue-600">
           {content.accuracyLabel} {accuracy}%
           {showComparison && (
-            <span className="font-extrabold text-green-600 ml-2">
+            <span className="font-extrabold text-green-600 ml-1">
               ({bestAccuracy}%)
             </span>
           )}
         </div>
       </div>
 
-      <div className="flex justify-center gap-6">
-        <div className="flex flex-col space-y-2">
-          <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 border-1 border-black rounded-full bg-teal-500 flex items-center justify-center">
-              <Smile size={18} color="white" />
-            </div>
-            <span className="text-sm">
-              {content.counts.TP}: {classificationCounts.TP}
-              {showComparison && (
-                <span className="font-extrabold text-green-600 ml-1">
-                  ({bestClassificationCounts.TP})
-                </span>
-              )}
-            </span>
+      <div className="grid grid-cols-2 gap-2 text-xs xl:text-sm xl:gap-3">
+        <div className="flex items-center space-x-1">
+          <div className="w-5 h-5 xl:w-6 xl:h-6 border-1 border-black rounded-full bg-teal-500 flex items-center justify-center">
+            <Smile color="white" />
           </div>
-          <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 border-1 border-black bg-teal-500 flex items-center justify-center">
-              <Smile size={18} color="white" />
-            </div>
-            <span className="text-sm">
-              {content.counts.TN}: {classificationCounts.TN}
-              {showComparison && (
-                <span className="font-extrabold text-green-600 ml-1">
-                  ({bestClassificationCounts.TN})
-                </span>
-              )}
+          {content.counts.TP}:
+          <span className="font-bold ml-1">{classificationCounts.TP}</span>
+          {showComparison && (
+            <span className="font-extrabold text-green-600">
+              ({bestClassificationCounts.TP})
             </span>
-          </div>
+          )}
         </div>
-        <div className="flex flex-col space-y-2">
-          <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 border-1 border-black bg-orange-500 flex items-center justify-center">
-              <Frown size={18} color="white" />
-            </div>
-            <span className="text-sm">
-              {content.counts.FP}: {classificationCounts.FP}
-              {showComparison && (
-                <span className="font-extrabold text-green-600 ml-1">
-                  ({bestClassificationCounts.FP})
-                </span>
-              )}
-            </span>
+        <div className="flex items-center space-x-1">
+          <div className="w-5 h-5 xl:w-6 xl:h-6 border-1 border-black bg-orange-500 flex items-center justify-center">
+            <Frown color="white" />
           </div>
-          <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 border-1 border-black rounded-full bg-orange-500 flex items-center justify-center">
-              <Frown size={18} color="white" />
-            </div>
-            <span className="text-sm">
-              {content.counts.FN}: {classificationCounts.FN}
-              {showComparison && (
-                <span className="font-extrabold text-green-600 ml-1">
-                  ({bestClassificationCounts.FN})
-                </span>
-              )}
+          {content.counts.FP}:
+          <span className="font-bold ml-1">{classificationCounts.FP}</span>
+          {showComparison && (
+            <span className="font-extrabold text-green-600">
+              ({bestClassificationCounts.FP})
             </span>
+          )}
+        </div>
+        <div className="flex items-center space-x-1">
+          <div className="w-5 h-5 xl:w-6 xl:h-6 border-1 border-black bg-teal-500 flex items-center justify-center">
+            <Smile color="white" />
           </div>
+          {content.counts.TN}:
+          <span className="font-bold ml-1">{classificationCounts.TN}</span>
+          {showComparison && (
+            <span className="font-extrabold text-green-600">
+              ({bestClassificationCounts.TN})
+            </span>
+          )}
+        </div>
+        <div className="flex items-center space-x-1">
+          <div className="w-5 h-5 xl:w-6 xl:h-6 border-1 border-black rounded-full bg-orange-500 flex items-center justify-center">
+            <Frown color="white" />
+          </div>
+          {content.counts.FN}:
+          <span className="font-bold ml-1">{classificationCounts.FN}</span>
+          {showComparison && (
+            <span className="font-extrabold text-green-600">
+              ({bestClassificationCounts.FN})
+            </span>
+          )}
         </div>
       </div>
     </div>

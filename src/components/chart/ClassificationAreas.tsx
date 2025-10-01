@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import type { AreaPolygons, Point } from "~/types";
+import { useIntlayer } from "react-intlayer";
 
 interface Props {
   areaPolygons: AreaPolygons;
@@ -19,6 +20,7 @@ export const ClassificationAreas = ({
   originIsPass,
   onAreaSelection,
 }: Props) => {
+  const { classificationAreas: content } = useIntlayer("app");
 
   const labelPositions = useMemo(() => {
     const area1Graph = areaPolygons.area1.graph;
@@ -122,9 +124,7 @@ export const ClassificationAreas = ({
   }, [areaPolygons]);
 
   return (
-    <svg
-      className="absolute top-0 left-0 w-full h-full pointer-events-none -z-10"
-    >
+    <svg className="absolute top-0 left-0 w-full h-full pointer-events-none -z-10">
       <defs>
         <pattern
           id="pass-area-pattern"
@@ -213,7 +213,7 @@ export const ClassificationAreas = ({
               }
               style={{ pointerEvents: "none" }}
             >
-              {originIsPass ? "PASS" : "FAIL"}
+              {originIsPass ? content.pass : content.fail}
             </text>
           )}
           {labelPositions.area2 && (
@@ -228,7 +228,7 @@ export const ClassificationAreas = ({
               }
               style={{ pointerEvents: "none" }}
             >
-              {originIsPass ? "FAIL" : "PASS"}
+              {originIsPass ? content.fail : content.pass}
             </text>
           )}
         </>

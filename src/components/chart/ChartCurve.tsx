@@ -14,7 +14,7 @@ import { useIntlayer } from "react-intlayer";
 interface Props {
   data: DataPoint[];
   curveCoords: Point[];
-  chartContainerRef: React.RefObject<HTMLDivElement | null>;
+  chartContainerRef: React.LegacyRef<HTMLDivElement>;
   areaPolygons: AreaPolygons;
   area1IsRed: boolean | null;
   isClassified: boolean;

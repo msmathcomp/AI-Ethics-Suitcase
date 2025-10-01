@@ -3,6 +3,7 @@ import { z } from 'zod';
 export const ConfigSchema = z.object({
   defaultLanguage: z.enum(['en', 'nl']),
   startLevel: z.number().min(-1).max(7),
+  showHomePage: z.boolean()
 });
 
 export type Config = z.infer<typeof ConfigSchema>;
@@ -10,7 +11,8 @@ export type Config = z.infer<typeof ConfigSchema>;
 // Default fallback used if fetching config fails
 export const defaultConfig: Config = {
   defaultLanguage: 'en',
-  startLevel: 3,
+  startLevel: -1,
+  showHomePage: true
 };
 
 let cachedConfig: Config | null = null;

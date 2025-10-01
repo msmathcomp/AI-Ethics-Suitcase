@@ -7,7 +7,7 @@ import {
   YAxis,
 } from "recharts";
 import Joyride, { type Step, type CallBackProps } from "react-joyride";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useIntlayer, type IntlayerNode } from "react-intlayer";
 import LevelLayout from "~/components/layout/levelLayout";
@@ -125,25 +125,42 @@ const stepsFactory = (introContent: IntroContentShape): Step[] => [
     content: introContent.tour[7],
     placement: "right",
   },
+  {
+    target: "#next-level-button",
+    content: introContent.tour[8],
+    placement: "top",
+  },
 ];
 
 export default function IntroLevel() {
-  const { intro: introContent, chart: chartContent } = useIntlayer("app");
+  const {
+    intro: introContent,
+    chart: chartContent,
+    tour: tourContent,
+  } = useIntlayer("app");
   const [run, setRun] = useState(false);
   const navigate = useNavigate();
+  const [showNextLevelButton, setShowNextLevelButton] = useState(false);
+
   useEffect(() => setRun(true), []);
   const steps = stepsFactory(introContent);
-  const handleJoyrideCallback = (data: CallBackProps) => {
-    const { status } = data;
-    if (status === "finished" || status === "skipped") {
-      navigate("/level/0");
-    }
-  };
+
+  const handleJoyrideCallback = useCallback(
+    (data: CallBackProps) => {
+      const { status, index } = data;
+      if (status === "skipped") {
+        navigate("/level/0");
+      } else if (index === steps.length - 1) {
+        setShowNextLevelButton(true);
+      }
+    },
+    [navigate]
+  );
 
   return (
     <>
       <LevelLayout
-        goalElement={"Introduction: Getting familiar with visualization using charts"}
+        goalElement={introContent.goal.value}
         classificationVisualizer={
           <div className="ml-10 h-full aspect-square flex items-center justify-center">
             <ResponsiveContainer height="95%" width="95%">
@@ -196,7 +213,7 @@ export default function IntroLevel() {
         instructionButton={null}
         classificationResults={null}
         level={-1}
-        showNextLevelButton={false}
+        showNextLevelButton={showNextLevelButton}
       />
       <Joyride
         steps={steps}
@@ -205,12 +222,21 @@ export default function IntroLevel() {
         showProgress
         callback={handleJoyrideCallback}
         disableOverlay={false}
+        spotlightClicks={true}
         styles={{
           options: {
             arrowColor: "#e3ffeb",
             backgroundColor: "#e3ffeb",
             primaryColor: "#000",
-            textColor: "#004a14",
+            textColor: "black",
+          },
+          tooltip: {
+            padding: 5,
+            maxWidth: "300px"
+          },
+          tooltipContainer: {
+            padding: 0,
+            fontSize: "15px",
           },
           spotlight: {
             backgroundColor: "rgba(255, 255, 255, 0.1)",
@@ -225,13 +251,22 @@ export default function IntroLevel() {
             border: "solid 1px",
             borderRadius: "4px",
             color: "black",
+            fontSize: "14px"
           },
+          buttonNext: {
+            backgroundColor: "oklch(62.3% 0.214 259.815)", // bg-blue-500
+            color: "white",
+            fontSize: "14px"
+          },
+          buttonBack: {
+            fontSize: "14px"
+          }
         }}
         hideCloseButton
         showSkipButton
         locale={{
-          skip: "Skip Tutorial",
-          last: "Next Level"
+          skip: tourContent.skipTutorial.value,
+          last: tourContent.finish.value,
         }}
       />
     </>

@@ -8,10 +8,12 @@
   "home": {
     "title": "AI Ethics Suitcase",
     "subtitle": "Interactive application for exploring linear classification",
-    "getStarted": "Get Started"
+    "getStarted": "Get Started",
+    "description": "Interactive game consisting of 9 levels around ethical AI concepts. Progress through different levels by building simple linear classifiers to classify students who pass or fail an exam based on their study and screen time hours."
   },
   "intro": {
     "headerTitle": "Welcome to the AI Ethics Suitcase!",
+    "goal": "Introduction: Getting familiar with visualization using charts",
     "tour": {
       "0": "Welcome to the AI Ethics Suitcase! This is the introduction level where you will learn about the interface and basics of visualization using charts. You may skip this tutorial if you are already familiar with these concepts.",
       "1": "You are currently on Level -1, which is the introduction level. There are 8 more levels.",
@@ -20,7 +22,8 @@
       "4": "This is the X-axis representing Study Time in minutes.",
       "5": "This is the Y-axis representing Screen Time in minutes.",
       "6": "This is a data point for a student who passed, with study time of 150 minutes and screen time of 300 minutes.",
-      "7": "This is a data point for a student who failed, with study time of 100 minutes and screen time of 200 minutes."
+      "7": "This is a data point for a student who failed, with study time of 100 minutes and screen time of 200 minutes.",
+      "8": "Finally, once you are done with a level, click this button to proceed to the next level."
     }
   },
   "legend": {
@@ -46,17 +49,16 @@
       "TN": "True Negative",
       "FP": "False Positive",
       "FN": "False Negative"
-    },
-    "trainingTitle": "Performance on Training Data",
-    "unseenTitle": "Performance on Unseen Data"
+    }
   },
   "classificationVisualizer": {
+    "flipButton": "Flip Pass/Fail",
     "toggles": {
       "yourClassifier": "Your Classifier",
-      "bestClassifier": "Best Classifier",
-      "trainingData": "Training Data",
-      "testData": "Test Data"
+      "bestClassifier": "Best Classifier"
     },
+    "seenData": "Seen data",
+    "unseenData": "Unseen data",
     "alerts": {
       "invalidIntersection": "The line does not properly intersect the graph boundaries. Please retry."
     }
@@ -64,7 +66,8 @@
   "levelProgressBar": {
     "levelLabel": "Level:",
     "introLabel": "Intro",
-    "nextLevelButtonText": "Next Level"
+    "nextLevelButtonText": "Next Level",
+    "previousLevel": "Previous Level"
   },
   "chart": {
     "axisLabels": {
@@ -77,21 +80,25 @@
     }
   },
   "level0": {
+    "goal": "Level 0: Create your first classifier!",
     "stages": {
       "0": "We want to classify a simple dataset of 4 students first by drawing a line that seperates Pass and Fail students. To start, click to select the first point of the line",
       "1": "Now click the second point to draw the classification line",
       "2": "Drag the black circles to adjust the line, then click one of the regions to classify as Pass",
       "3": "Adjust your classifier by rotating the line or creating a new one (by clicking 2 points). When satisfied, click 'Next' to continue.",
       "4": "Complete! You can now see the classification results. In the next level we will introduce the new terms and how to estimate the performance of a classifier."
-    },
-    "buttons": {
-      "next": "Next"
     }
   },
   "level1": {
     "instructions": {
-      "0": "How to measure the accuracy of a linear classifier?"
+      "0": "How to measure the accuracy of a linear classifier?",
+      "1": "Click inside the pass region to add a student who has passed",
+      "2": "Now click inside the fail region to add a student who has failed",
+      "3": "Now click inside the pass region to add a student who has failed",
+      "4": "Finally, click inside the fail region to add a student who has passed",
+      "5": "Great! You have classified all types of students. Click next to proceed."
     },
+    "goal": "Level 1: How to calcuate the accuracy of a classifier?",
     "tour": {
       "0": "We will now explain the terms used to measure the accuracy of a linear classifier.",
       "1": "The classification results show the counts of true positives, true negatives, false positives, and false negatives.",
@@ -104,22 +111,25 @@
     }
   },
   "level2_5": {
+    "goals": {
+      "2": "Level 2: Can you achieve 100% accuracy?",
+      "3": "Level 3: Can you still achieve 100% accuracy?",
+      "4": "Level 4: Try to achieve maximum possible accuracy!",
+      "5": "Level 5: Try to achieve maximum possible accuracy!"
+    },
     "stages": {
-      "0": "Click to select the first point of the line",
+      "0": "Click to select the first point of the classifier line to seperate the pass from the fail region.",
       "1": "Now click the second point to draw the classification line",
       "2": "Drag the black circles to adjust the line, then click one of the regions to classify as Pass",
       "3": "Adjust your classifier by rotating the line or creating a new one. When satisfied, click 'Next' to continue.",
       "4": "Complete! You can now see the classification results. You can compare your classifier with the best classifier found by AI.",
       "5": "Compare your classifier with the best classifier. Both results are shown side by side."
-    },
-    "buttons": {
-      "next": "Next",
-      "compare": "Compare"
     }
   },
   "level6": {
+    "goal": "Level 6: Test your classifier on unseen data!",
     "stages": {
-      "0": "Click to select the first point of the line",
+      "0": "Click to select the first point of the classifier line to seperate the pass from the fail region.",
       "1": "Now click the second point to draw the classification line",
       "2": "Drag the black circles to adjust the line, then click one of the regions to classify as Pass",
       "3": "Adjust your classifier by rotating the line or creating a new one. When satisfied, click 'Next' to continue.",
@@ -128,15 +138,12 @@
       "6": "Now toggle between already seen data and the unseen data. Notice how performance may differ on unseen data!"
     },
     "titles": {
-      "trainingPerformance": "Performance on Seen Data",
-      "unseenPerformance": "Performance on Unseen Data"
-    },
-    "buttons": {
-      "next": "Next",
-      "compare": "Compare"
+      "trainingPerformance": "Seen Data Results",
+      "unseenPerformance": "Unseen Data Results"
     }
   },
   "level7": {
+    "goal": "Level 7: Classifying using a curve!",
     "stages": {
       "0": "Start drawing a curve starting outside the graph area and ending outside the graph area",
       "1": "Click an area to classify it as Pass",
@@ -145,16 +152,11 @@
       "4": "Now toggle between seen and unseen  data. Notice how performance may differ on unseen data!"
     },
     "titles": {
-      "unseenPerformance": "Performance on Unseen Data"
-    },
-    "buttons": {
-      "finish": "Finish",
-      "next": "Next"
+      "unseenPerformance": "Unseen Data Results"
     }
   },
   "levelPage": {
-    "invalidLevel": "Invalid level",
-    "notImplemented": "Level {level} is not implemented yet."
+    "invalidLevel": "Invalid level"
   },
   "finish": {
     "title": "Congratulations on finishing this interaction",
@@ -180,5 +182,14 @@
       "loading": "Loading...",
       "unexpectedError": "An unexpected error occurred."
     }
+  },
+  "classificationAreas": {
+    "pass": "PASS",
+    "fail": "FAIL"
+  },
+  "tour": {
+    "skipTutorial": "Skip Tutorial",
+    "nextLevel": "Next level",
+    "finish": "Finish"
   }
 }

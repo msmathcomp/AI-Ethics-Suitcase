@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@tailwindcss/vite':
         specifier: ^4.1.11
-        version: 4.1.11(vite@7.0.2(@types/node@24.0.10)(jiti@2.4.2)(lightningcss@1.30.1))
+        version: 4.1.11(vite@7.0.2(@types/node@24.6.1)(jiti@2.4.2)(lightningcss@1.30.1))
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -22,7 +22,7 @@ importers:
         version: 5.7.5(@intlayer/cli@5.7.5)(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)
       lucide-react:
         specifier: ^0.525.0
-        version: 0.525.0(react@19.1.0)
+        version: 0.525.0(react@18.3.1)
       martinez-polygon-clipping:
         specifier: ^0.7.4
         version: 0.7.4
@@ -33,26 +33,26 @@ importers:
         specifier: ^6.12.1
         version: 6.12.1
       react:
-        specifier: ^19.1.0
-        version: 19.1.0
+        specifier: ^18.3.1
+        version: 18.3.1
       react-async-hook:
         specifier: ^4.0.0
-        version: 4.0.0(react@19.1.0)
+        version: 4.0.0(react@18.3.1)
       react-dom:
-        specifier: ^19.1.0
-        version: 19.1.0(react@19.1.0)
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
       react-intlayer:
         specifier: ^5.7.5
-        version: 5.7.5(@intlayer/api@5.7.5)(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(@intlayer/dictionaries-entry@5.7.5)(@intlayer/editor-react@5.7.5(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(intlayer@5.7.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 5.7.5(@intlayer/api@5.7.5)(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(@intlayer/dictionaries-entry@5.7.5)(@intlayer/editor-react@5.7.5(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(intlayer@5.7.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-joyride:
         specifier: ^2.9.3
-        version: 2.9.3(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 2.9.3(@types/react@18.3.25)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-router:
         specifier: ^7.7.0
-        version: 7.7.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 7.7.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       recharts:
         specifier: ^3.0.2
-        version: 3.0.2(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react-is@19.1.0)(react@19.1.0)(redux@5.0.1)
+        version: 3.0.2(@types/react@18.3.25)(react-dom@18.3.1(react@18.3.1))(react-is@19.1.0)(react@18.3.1)(redux@5.0.1)
       seedrandom:
         specifier: ^3.0.5
         version: 3.0.5
@@ -72,18 +72,21 @@ importers:
       '@types/d3-random':
         specifier: ^3.0.3
         version: 3.0.3
+      '@types/node':
+        specifier: ^24.6.1
+        version: 24.6.1
       '@types/react':
-        specifier: ^19.1.8
-        version: 19.1.8
+        specifier: ^18.3.1
+        version: 18.3.25
       '@types/react-dom':
-        specifier: ^19.1.6
-        version: 19.1.6(@types/react@19.1.8)
+        specifier: ^18.3.1
+        version: 18.3.7(@types/react@18.3.25)
       '@types/seedrandom':
         specifier: ^3.0.8
         version: 3.0.8
       '@vitejs/plugin-react-swc':
         specifier: ^3.10.2
-        version: 3.10.2(vite@7.0.2(@types/node@24.0.10)(jiti@2.4.2)(lightningcss@1.30.1))
+        version: 3.10.2(vite@7.0.2(@types/node@24.6.1)(jiti@2.4.2)(lightningcss@1.30.1))
       eslint:
         specifier: ^9.29.0
         version: 9.30.1(jiti@2.4.2)
@@ -104,10 +107,10 @@ importers:
         version: 8.35.1(eslint@9.30.1(jiti@2.4.2))(typescript@5.8.3)
       vite:
         specifier: ^7.0.0
-        version: 7.0.2(@types/node@24.0.10)(jiti@2.4.2)(lightningcss@1.30.1)
+        version: 7.0.2(@types/node@24.6.1)(jiti@2.4.2)(lightningcss@1.30.1)
       vite-intlayer:
         specifier: ^5.7.5
-        version: 5.7.5(@intlayer/chokidar@5.7.5)(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(vite@7.0.2(@types/node@24.0.10)(jiti@2.4.2)(lightningcss@1.30.1))
+        version: 5.7.5(@intlayer/chokidar@5.7.5)(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(vite@7.0.2(@types/node@24.6.1)(jiti@2.4.2)(lightningcss@1.30.1))
 
 packages:
 
@@ -831,16 +834,19 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
-  '@types/node@24.0.10':
-    resolution: {integrity: sha512-ENHwaH+JIRTDIEEbDK6QSQntAYGtbvdDXnMXnZaZ6k13Du1dPMmprkEHIL7ok2Wl2aZevetwTAb5S+7yIF+enA==}
+  '@types/node@24.6.1':
+    resolution: {integrity: sha512-ljvjjs3DNXummeIaooB4cLBKg2U6SPI6Hjra/9rRIy7CpM0HpLtG9HptkMKAb4HYWy5S7HUvJEuWgr/y0U8SHw==}
 
-  '@types/react-dom@19.1.6':
-    resolution: {integrity: sha512-4hOiT/dwO8Ko0gV1m/TJZYk3y0KBnY9vzDh7W+DH17b2HFSOGgdj33dhihPeuy3l0q23+4e+hoXHV6hCC4dCXw==}
+  '@types/prop-types@15.7.15':
+    resolution: {integrity: sha512-F6bEyamV9jKGAFBEmlQnesRPGOQqS2+Uwi0Em15xenOxHaf2hv6L8YCVn3rPdPJOiJfPiCnLIRyvwVaqMY3MIw==}
+
+  '@types/react-dom@18.3.7':
+    resolution: {integrity: sha512-MEe3UeoENYVFXzoXEWsvcpg6ZvlrFNlOQ7EOsvhI3CfAXwzPfO8Qwuxd40nepsYKqyyVQnTdEfv68q91yLcKrQ==}
     peerDependencies:
-      '@types/react': ^19.0.0
+      '@types/react': ^18.0.0
 
-  '@types/react@19.1.8':
-    resolution: {integrity: sha512-AwAfQ2Wa5bCx9WP8nZL2uMZWod7J7/JSplxbTmBQ5ms6QpqNYm672H0Vu9ZVKVngQ+ii4R/byguVEUZQyeg44g==}
+  '@types/react@18.3.25':
+    resolution: {integrity: sha512-oSVZmGtDPmRZtVDqvdKUi/qgCsWp5IDY29wp8na8Bj4B3cc99hfNzvNhlMkVVxctkAOGUA3Km7MMpBHAnWfcIA==}
 
   '@types/seedrandom@3.0.8':
     resolution: {integrity: sha512-TY1eezMU2zH2ozQoAFAQFOPpvP15g+ZgSfTZt31AUUH/Rxtnz3H+A/Sv1Snw2/amp//omibc+AEkTaA8KUeOLQ==}
@@ -1752,10 +1758,10 @@ packages:
     peerDependencies:
       react: '>=16.8'
 
-  react-dom@19.1.0:
-    resolution: {integrity: sha512-Xs1hdnE+DyKgeHJeJznQmYMIBG3TKIHJJT95Q58nHLSrElKlGQqDTR2HQ9fx5CN/Gk6Vh/kupBTDLU11/nDk/g==}
+  react-dom@18.3.1:
+    resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
     peerDependencies:
-      react: ^19.1.0
+      react: ^18.3.1
 
   react-floater@0.7.9:
     resolution: {integrity: sha512-NXqyp9o8FAXOATOEo0ZpyaQ2KPb4cmPMXGWkx377QtJkIXHlHRAGer7ai0r0C1kG5gf+KJ6Gy+gdNIiosvSicg==}
@@ -1816,8 +1822,8 @@ packages:
       react-dom:
         optional: true
 
-  react@19.1.0:
-    resolution: {integrity: sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg==}
+  react@18.3.1:
+    resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
     engines: {node: '>=0.10.0'}
 
   readdirp@3.6.0:
@@ -1870,8 +1876,8 @@ packages:
     resolution: {integrity: sha512-x/+Cz4YrimQxQccJf5mKEbIa1NzeCRNI5Ecl/ekmlYaampdNLPalVyIcCZNNH3MvmqBugV5TMYZXv0ljslUlaw==}
     engines: {node: '>= 0.4'}
 
-  scheduler@0.26.0:
-    resolution: {integrity: sha512-NlHwttCI/l5gCPR3D1nNXtWABUmBwvZpEQiD4IXSbIDq8BzLIK/7Ir5gTFSGZDUu37K5cMNp0hFtzO38sC7gWA==}
+  scheduler@0.23.2:
+    resolution: {integrity: sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==}
 
   scroll@3.0.1:
     resolution: {integrity: sha512-pz7y517OVls1maEzlirKO5nPYle9AXsFzTMNJrRGmT951mzpIBy7sNHOg5o/0MQd/NqliCiWnAi0kZneMPFLcg==}
@@ -2008,8 +2014,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  undici-types@7.8.0:
-    resolution: {integrity: sha512-9UJ2xGDvQ43tYyVMpuHlsgApydB8ZKfVYTsLDhXkFL/6gfkp+U8xTGdh8pMJv1SpZna0zxG1DwsKZsreLbXBxw==}
+  undici-types@7.13.0:
+    resolution: {integrity: sha512-Ov2Rr9Sx+fRgagJ5AX0qvItZG/JKKoBRAVITs1zk7IqZGTJUwgUr7qoYBpWwakpWilTZFM98rG/AFRocu10iIQ==}
 
   update-browserslist-db@1.1.3:
     resolution: {integrity: sha512-UxhIZQ+QInVdunkDAaiazvvT/+fXL5Osr0JZlJulepYu6Jd7qJtDZjlur0emRlT71EN3ScPoE7gvsuIKKNavKw==}
@@ -2373,12 +2379,12 @@ snapshots:
       '@babel/generator': 7.28.0
       '@babel/parser': 7.28.0
       '@babel/traverse': 7.28.0
-      '@intlayer/chokidar': 5.7.5(@intlayer/api@5.7.5)(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(fast-glob@3.3.3)(intlayer@5.7.5)(react@19.1.0)
+      '@intlayer/chokidar': 5.7.5(@intlayer/api@5.7.5)(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(fast-glob@3.3.3)(intlayer@5.7.5)(react@18.3.1)
       '@intlayer/config': 5.7.5(intlayer@5.7.5)
     transitivePeerDependencies:
       - supports-color
 
-  '@intlayer/chokidar@5.7.5(@intlayer/api@5.7.5)(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(fast-glob@3.3.3)(intlayer@5.7.5)(react@19.1.0)':
+  '@intlayer/chokidar@5.7.5(@intlayer/api@5.7.5)(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(fast-glob@3.3.3)(intlayer@5.7.5)(react@18.3.1)':
     dependencies:
       '@babel/generator': 7.28.0
       '@babel/parser': 7.28.0
@@ -2396,7 +2402,7 @@ snapshots:
       fast-glob: 3.3.3
       intlayer: 5.7.5(@intlayer/cli@5.7.5)(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)
       p-limit: 3.1.0
-      react: 19.1.0
+      react: 18.3.1
       simple-git: 3.28.0
     transitivePeerDependencies:
       - supports-color
@@ -2404,7 +2410,7 @@ snapshots:
   '@intlayer/cli@5.7.5(@intlayer/api@5.7.5)(@intlayer/chokidar@5.7.5)(@intlayer/config@5.7.5)(@intlayer/dictionaries-entry@5.7.5)(intlayer@5.7.5)':
     dependencies:
       '@intlayer/api': 5.7.5(@intlayer/config@5.7.5)
-      '@intlayer/chokidar': 5.7.5(@intlayer/api@5.7.5)(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(fast-glob@3.3.3)(intlayer@5.7.5)(react@19.1.0)
+      '@intlayer/chokidar': 5.7.5(@intlayer/api@5.7.5)(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(fast-glob@3.3.3)(intlayer@5.7.5)(react@18.3.1)
       '@intlayer/config': 5.7.5(intlayer@5.7.5)
       '@intlayer/dictionaries-entry': 5.7.5(@intlayer/config@5.7.5)(intlayer@5.7.5)
       '@intlayer/unmerged-dictionaries-entry': 5.7.5(@intlayer/config@5.7.5)(intlayer@5.7.5)
@@ -2434,13 +2440,13 @@ snapshots:
       '@intlayer/config': 5.7.5(intlayer@5.7.5)
       intlayer: 5.7.5(@intlayer/cli@5.7.5)(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)
 
-  '@intlayer/editor-react@5.7.5(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@intlayer/editor-react@5.7.5(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@intlayer/config': 5.7.5(intlayer@5.7.5)
       '@intlayer/core': 5.7.5(@intlayer/api@5.7.5)(@intlayer/config@5.7.5)(@intlayer/dictionaries-entry@5.7.5)(intlayer@5.7.5)
       '@intlayer/editor': 5.7.5
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
       uuid: 11.1.0
 
   '@intlayer/editor@5.7.5': {}
@@ -2488,7 +2494,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
-  '@reduxjs/toolkit@2.8.2(react-redux@9.2.0(@types/react@19.1.8)(react@19.1.0)(redux@5.0.1))(react@19.1.0)':
+  '@reduxjs/toolkit@2.8.2(react-redux@9.2.0(@types/react@18.3.25)(react@18.3.1)(redux@5.0.1))(react@18.3.1)':
     dependencies:
       '@standard-schema/spec': 1.0.0
       '@standard-schema/utils': 0.3.0
@@ -2497,8 +2503,8 @@ snapshots:
       redux-thunk: 3.1.0(redux@5.0.1)
       reselect: 5.1.1
     optionalDependencies:
-      react: 19.1.0
-      react-redux: 9.2.0(@types/react@19.1.8)(react@19.1.0)(redux@5.0.1)
+      react: 18.3.1
+      react-redux: 9.2.0(@types/react@18.3.25)(react@18.3.1)(redux@5.0.1)
 
   '@rolldown/pluginutils@1.0.0-beta.11': {}
 
@@ -2682,12 +2688,12 @@ snapshots:
       '@tailwindcss/oxide-win32-arm64-msvc': 4.1.11
       '@tailwindcss/oxide-win32-x64-msvc': 4.1.11
 
-  '@tailwindcss/vite@4.1.11(vite@7.0.2(@types/node@24.0.10)(jiti@2.4.2)(lightningcss@1.30.1))':
+  '@tailwindcss/vite@4.1.11(vite@7.0.2(@types/node@24.6.1)(jiti@2.4.2)(lightningcss@1.30.1))':
     dependencies:
       '@tailwindcss/node': 4.1.11
       '@tailwindcss/oxide': 4.1.11
       tailwindcss: 4.1.11
-      vite: 7.0.2(@types/node@24.0.10)(jiti@2.4.2)(lightningcss@1.30.1)
+      vite: 7.0.2(@types/node@24.6.1)(jiti@2.4.2)(lightningcss@1.30.1)
 
   '@types/d3-array@3.2.1': {}
 
@@ -2719,17 +2725,19 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
-  '@types/node@24.0.10':
+  '@types/node@24.6.1':
     dependencies:
-      undici-types: 7.8.0
-    optional: true
+      undici-types: 7.13.0
 
-  '@types/react-dom@19.1.6(@types/react@19.1.8)':
-    dependencies:
-      '@types/react': 19.1.8
+  '@types/prop-types@15.7.15': {}
 
-  '@types/react@19.1.8':
+  '@types/react-dom@18.3.7(@types/react@18.3.25)':
     dependencies:
+      '@types/react': 18.3.25
+
+  '@types/react@18.3.25':
+    dependencies:
+      '@types/prop-types': 15.7.15
       csstype: 3.1.3
 
   '@types/seedrandom@3.0.8': {}
@@ -2828,11 +2836,11 @@ snapshots:
       '@typescript-eslint/types': 8.35.1
       eslint-visitor-keys: 4.2.1
 
-  '@vitejs/plugin-react-swc@3.10.2(vite@7.0.2(@types/node@24.0.10)(jiti@2.4.2)(lightningcss@1.30.1))':
+  '@vitejs/plugin-react-swc@3.10.2(vite@7.0.2(@types/node@24.6.1)(jiti@2.4.2)(lightningcss@1.30.1))':
     dependencies:
       '@rolldown/pluginutils': 1.0.0-beta.11
       '@swc/core': 1.12.9
-      vite: 7.0.2(@types/node@24.0.10)(jiti@2.4.2)(lightningcss@1.30.1)
+      vite: 7.0.2(@types/node@24.6.1)(jiti@2.4.2)(lightningcss@1.30.1)
     transitivePeerDependencies:
       - '@swc/helpers'
 
@@ -3505,9 +3513,9 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucide-react@0.525.0(react@19.1.0):
+  lucide-react@0.525.0(react@18.3.1):
     dependencies:
-      react: 19.1.0
+      react: 18.3.1
 
   magic-string@0.30.17:
     dependencies:
@@ -3652,56 +3660,57 @@ snapshots:
 
   queue-microtask@1.2.3: {}
 
-  react-async-hook@4.0.0(react@19.1.0):
+  react-async-hook@4.0.0(react@18.3.1):
     dependencies:
-      react: 19.1.0
+      react: 18.3.1
 
-  react-dom@19.1.0(react@19.1.0):
+  react-dom@18.3.1(react@18.3.1):
     dependencies:
-      react: 19.1.0
-      scheduler: 0.26.0
+      loose-envify: 1.4.0
+      react: 18.3.1
+      scheduler: 0.23.2
 
-  react-floater@0.7.9(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  react-floater@0.7.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       deepmerge: 4.3.1
       is-lite: 0.8.2
       popper.js: 1.16.1
       prop-types: 15.8.1
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
       tree-changes: 0.9.3
 
-  react-innertext@1.1.5(@types/react@19.1.8)(react@19.1.0):
+  react-innertext@1.1.5(@types/react@18.3.25)(react@18.3.1):
     dependencies:
-      '@types/react': 19.1.8
-      react: 19.1.0
+      '@types/react': 18.3.25
+      react: 18.3.1
 
-  react-intlayer@5.7.5(@intlayer/api@5.7.5)(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(@intlayer/dictionaries-entry@5.7.5)(@intlayer/editor-react@5.7.5(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(intlayer@5.7.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  react-intlayer@5.7.5(@intlayer/api@5.7.5)(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(@intlayer/dictionaries-entry@5.7.5)(@intlayer/editor-react@5.7.5(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(intlayer@5.7.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@intlayer/api': 5.7.5(@intlayer/config@5.7.5)
       '@intlayer/config': 5.7.5(intlayer@5.7.5)
       '@intlayer/core': 5.7.5(@intlayer/api@5.7.5)(@intlayer/config@5.7.5)(@intlayer/dictionaries-entry@5.7.5)(intlayer@5.7.5)
       '@intlayer/dictionaries-entry': 5.7.5(@intlayer/config@5.7.5)(intlayer@5.7.5)
-      '@intlayer/editor-react': 5.7.5(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@intlayer/editor-react': 5.7.5(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       intlayer: 5.7.5(@intlayer/cli@5.7.5)(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)
       js-cookie: 3.0.5
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   react-is@16.13.1: {}
 
   react-is@19.1.0: {}
 
-  react-joyride@2.9.3(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  react-joyride@2.9.3(@types/react@18.3.25)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@gilbarbara/deep-equal': 0.3.1
       deep-diff: 1.0.2
       deepmerge: 4.3.1
       is-lite: 1.2.1
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
-      react-floater: 0.7.9(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      react-innertext: 1.1.5(@types/react@19.1.8)(react@19.1.0)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      react-floater: 0.7.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-innertext: 1.1.5(@types/react@18.3.25)(react@18.3.1)
       react-is: 16.13.1
       scroll: 3.0.1
       scrollparent: 2.1.0
@@ -3710,44 +3719,46 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  react-redux@9.2.0(@types/react@19.1.8)(react@19.1.0)(redux@5.0.1):
+  react-redux@9.2.0(@types/react@18.3.25)(react@18.3.1)(redux@5.0.1):
     dependencies:
       '@types/use-sync-external-store': 0.0.6
-      react: 19.1.0
-      use-sync-external-store: 1.5.0(react@19.1.0)
+      react: 18.3.1
+      use-sync-external-store: 1.5.0(react@18.3.1)
     optionalDependencies:
-      '@types/react': 19.1.8
+      '@types/react': 18.3.25
       redux: 5.0.1
 
-  react-router@7.7.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  react-router@7.7.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       cookie: 1.0.2
-      react: 19.1.0
+      react: 18.3.1
       set-cookie-parser: 2.7.1
     optionalDependencies:
-      react-dom: 19.1.0(react@19.1.0)
+      react-dom: 18.3.1(react@18.3.1)
 
-  react@19.1.0: {}
+  react@18.3.1:
+    dependencies:
+      loose-envify: 1.4.0
 
   readdirp@3.6.0:
     dependencies:
       picomatch: 2.3.1
 
-  recharts@3.0.2(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react-is@19.1.0)(react@19.1.0)(redux@5.0.1):
+  recharts@3.0.2(@types/react@18.3.25)(react-dom@18.3.1(react@18.3.1))(react-is@19.1.0)(react@18.3.1)(redux@5.0.1):
     dependencies:
-      '@reduxjs/toolkit': 2.8.2(react-redux@9.2.0(@types/react@19.1.8)(react@19.1.0)(redux@5.0.1))(react@19.1.0)
+      '@reduxjs/toolkit': 2.8.2(react-redux@9.2.0(@types/react@18.3.25)(react@18.3.1)(redux@5.0.1))(react@18.3.1)
       clsx: 2.1.1
       decimal.js-light: 2.5.1
       es-toolkit: 1.39.6
       eventemitter3: 5.0.1
       immer: 10.1.1
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
       react-is: 19.1.0
-      react-redux: 9.2.0(@types/react@19.1.8)(react@19.1.0)(redux@5.0.1)
+      react-redux: 9.2.0(@types/react@18.3.25)(react@18.3.1)(redux@5.0.1)
       reselect: 5.1.1
       tiny-invariant: 1.3.3
-      use-sync-external-store: 1.5.0(react@19.1.0)
+      use-sync-external-store: 1.5.0(react@18.3.1)
       victory-vendor: 37.3.6
     transitivePeerDependencies:
       - '@types/react'
@@ -3812,7 +3823,9 @@ snapshots:
       es-errors: 1.3.0
       is-regex: 1.2.1
 
-  scheduler@0.26.0: {}
+  scheduler@0.23.2:
+    dependencies:
+      loose-envify: 1.4.0
 
   scroll@3.0.1: {}
 
@@ -3959,8 +3972,7 @@ snapshots:
 
   typescript@5.8.3: {}
 
-  undici-types@7.8.0:
-    optional: true
+  undici-types@7.13.0: {}
 
   update-browserslist-db@1.1.3(browserslist@4.25.1):
     dependencies:
@@ -3972,9 +3984,9 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  use-sync-external-store@1.5.0(react@19.1.0):
+  use-sync-external-store@1.5.0(react@18.3.1):
     dependencies:
-      react: 19.1.0
+      react: 18.3.1
 
   uuid@11.1.0: {}
 
@@ -3995,17 +4007,17 @@ snapshots:
       d3-time: 3.1.0
       d3-timer: 3.0.1
 
-  vite-intlayer@5.7.5(@intlayer/chokidar@5.7.5)(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(vite@7.0.2(@types/node@24.0.10)(jiti@2.4.2)(lightningcss@1.30.1)):
+  vite-intlayer@5.7.5(@intlayer/chokidar@5.7.5)(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(vite@7.0.2(@types/node@24.6.1)(jiti@2.4.2)(lightningcss@1.30.1)):
     dependencies:
       '@intlayer/babel': 5.7.5(@intlayer/chokidar@5.7.5)(@intlayer/config@5.7.5)
-      '@intlayer/chokidar': 5.7.5(@intlayer/api@5.7.5)(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(fast-glob@3.3.3)(intlayer@5.7.5)(react@19.1.0)
+      '@intlayer/chokidar': 5.7.5(@intlayer/api@5.7.5)(@intlayer/config@5.7.5)(@intlayer/core@5.7.5)(fast-glob@3.3.3)(intlayer@5.7.5)(react@18.3.1)
       '@intlayer/config': 5.7.5(intlayer@5.7.5)
       '@intlayer/core': 5.7.5(@intlayer/api@5.7.5)(@intlayer/config@5.7.5)(@intlayer/dictionaries-entry@5.7.5)(intlayer@5.7.5)
-      vite: 7.0.2(@types/node@24.0.10)(jiti@2.4.2)(lightningcss@1.30.1)
+      vite: 7.0.2(@types/node@24.6.1)(jiti@2.4.2)(lightningcss@1.30.1)
     transitivePeerDependencies:
       - supports-color
 
-  vite@7.0.2(@types/node@24.0.10)(jiti@2.4.2)(lightningcss@1.30.1):
+  vite@7.0.2(@types/node@24.6.1)(jiti@2.4.2)(lightningcss@1.30.1):
     dependencies:
       esbuild: 0.25.5
       fdir: 6.4.6(picomatch@4.0.2)
@@ -4014,7 +4026,7 @@ snapshots:
       rollup: 4.44.1
       tinyglobby: 0.2.14
     optionalDependencies:
-      '@types/node': 24.0.10
+      '@types/node': 24.6.1
       fsevents: 2.3.3
       jiti: 2.4.2
       lightningcss: 1.30.1

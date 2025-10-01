@@ -4,7 +4,7 @@ export const Legend = () => {
   const { legend: content } = useIntlayer("app");
   return (
     <div id="legend">
-      <h3 className="text-xl font-semibold text-start">{content.title}</h3>
+      <h3 className="text-lg font-semibold text-start">{content.title}</h3>
       <div className="flex gap-4">
         <div>
           <h4 className="font-medium mb-2">{content.dataPoints.title}</h4>

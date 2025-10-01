@@ -8,6 +8,7 @@ A config file (`public/config.json`) is loaded before the application is started
 
 - **defaultLanguage** (string, default: "en"): Default language to use.
 - **startLevel** (number, default: -1): Starting level.
+- **showHomePage** (boolean, default: true): Show the home page on load otherwise directly show the introduction level
 
 ## Development and Building
 
