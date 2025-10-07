@@ -21,6 +21,7 @@ export default function Router() {
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route
+          index
           path="/"
           element={
             <Navigate
@@ -32,6 +33,7 @@ export default function Router() {
         <Route path="/home" element={<Home />} />
         <Route path="/level/:level" element={<Level />} />
         <Route path="/finish" element={<Finish />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );
