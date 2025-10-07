@@ -163,7 +163,8 @@ export const CurveVisualizer = ({
     if (!el) return;
 
     // Optional: If you want to prevent scroll and get better control
-    const blockTouch = (e) => e.preventDefault();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const blockTouch = (e: any) => e.preventDefault();
 
     el.addEventListener('touchstart', blockTouch, { passive: false });
     el.addEventListener('touchmove', blockTouch, { passive: false });
