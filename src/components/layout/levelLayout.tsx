@@ -26,7 +26,7 @@ export default function LevelLayout({
   showNextLevelButton,
 }: Props) {
   return (
-    <main className="h-screen w-screen flex flex-col px-4 pt-4">
+    <main className="h-screen w-screen flex flex-col px-4 pt-4 overflow-hidden">
       <Nav />
       <div className="flex flex-1">
         <div className="flex flex-1 flex-col">
@@ -63,6 +63,7 @@ export default function LevelLayout({
           showNextLevelButton={showNextLevelButton}
         />
       </div>
+      <div className="h-2 w-full" />
     </main>
   );
 }

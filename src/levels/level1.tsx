@@ -116,6 +116,7 @@ export default function Level1() {
   const [stage, setStage] = useState(0);
   const [data, setData] = useState<DataPoint[]>([]);
   const [stepIndex, setStepIndex] = useState(0);
+  const [disableClick, setDisableClick] = useState(false);
 
   const results: ClassificationCounts = useMemo(
     () =>
@@ -253,28 +254,36 @@ export default function Level1() {
       )
     );
     if (stage === 0 && classificationResults.includes("TP")) {
-      setStage(1);
-      setStepIndex(3);
+      setDisableClick(true);
       setTimeout(() => {
+        setStage(1);
+        setStepIndex(3);
         setRun(true);
+        setDisableClick(false);
       }, 700);
     } else if (stage === 1 && classificationResults.includes("TN")) {
-      setStage(2);
+      setDisableClick(true);
       setTimeout(() => {
+        setStage(2);
         setRun(true);
         setStepIndex(4);
+        setDisableClick(false);
       }, 700);
     } else if (stage === 2 && classificationResults.includes("FP")) {
+      setDisableClick(true);
       setStage(3);
       setTimeout(() => {
         setRun(true);
         setStepIndex(5);
+        setDisableClick(false); 
       }, 700);
     } else if (stage === 3 && classificationResults.includes("FN")) {
-      setStage(4);
+      setDisableClick(true);
       setTimeout(() => {
+        setStage(4);
         setRun(true);
         setStepIndex(6);
+        setDisableClick(false);
       }, 700);
     }
   }, [data, stage]);
@@ -470,10 +479,10 @@ export default function Level1() {
             <div
               className={cn(
                 "absolute z-20",
-                run ? "cursor-default" : "cursor-pointer"
+                run || disableClick ? "cursor-default" : "cursor-pointer"
               )}
               ref={graphRef}
-              onPointerDown={run ? undefined : handleGraphClick}
+              onPointerDown={run || disableClick ? undefined : handleGraphClick}
             ></div>
           </>
         }
@@ -506,7 +515,7 @@ export default function Level1() {
           },
           tooltip: {
             padding: 5,
-            maxWidth: "300px"
+            maxWidth: "300px",
           },
           tooltipContainer: {
             padding: 0,
@@ -526,16 +535,16 @@ export default function Level1() {
             border: "solid 1px",
             borderRadius: "4px",
             color: "black",
-            fontSize: "14px"
+            fontSize: "14px",
           },
           buttonNext: {
             backgroundColor: "oklch(62.3% 0.214 259.815)", // bg-blue-500
             color: "white",
-            fontSize: "14px"
+            fontSize: "14px",
           },
           buttonBack: {
-            fontSize: "14px"
-          }
+            fontSize: "14px",
+          },
         }}
         hideCloseButton
         hideBackButton

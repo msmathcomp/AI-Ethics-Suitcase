@@ -52,7 +52,6 @@ export const CurveVisualizer = ({
   const [showUnseenData, setShowUnseenData] = useState(false);
 
   const { classificationVisualizer: content } = useIntlayer("app");
-  
 
   const data = useMemo(() => {
     const data = [];
@@ -129,9 +128,11 @@ export const CurveVisualizer = ({
     });
     setArea1IsRed(null);
     setAreaColorsAssigned(false);
+    setStage(0);
   };
 
   const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
     if (isDrawing || !overlayRef.current || stage === 4) return;
 
     reset();
@@ -142,7 +143,8 @@ export const CurveVisualizer = ({
     setOverlayCurve([{ x, y }]);
   };
 
-  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pressure === 0) return;
     if (overlayCurve.length === 0 || !isDrawing) return;
     const overlayRect = overlayRef.current!.getBoundingClientRect();
     const x = event.clientX - overlayRect.left;
@@ -155,6 +157,23 @@ export const CurveVisualizer = ({
     setIsDrawing(false);
     setStage(1);
   };
+
+  useEffect(() => {
+    const el = overlayRef.current;
+    if (!el) return;
+
+    // Optional: If you want to prevent scroll and get better control
+    const blockTouch = (e) => e.preventDefault();
+
+    el.addEventListener('touchstart', blockTouch, { passive: false });
+    el.addEventListener('touchmove', blockTouch, { passive: false });
+
+    return () => {
+      el.removeEventListener('touchstart', blockTouch);
+      el.removeEventListener('touchmove', blockTouch);
+    };
+  }, []);
+
 
   useEffect(() => {
     if (overlayCurve.length > 1 && isDrawing === false && stage === 1) {
@@ -323,6 +342,9 @@ export const CurveVisualizer = ({
         onPointerMove={handleMouseMove}
         onPointerUp={handleMouseUp}
         onPointerLeave={handleMouseUp}
+        // onTouchStart={handleMouseDown}
+        // onTouchMove={handleMouseMove}
+        onTouchEnd={handleMouseUp}
       >
         {isDrawing && overlayCurve.length > 0 && (
           <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">

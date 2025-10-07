@@ -90,6 +90,12 @@ const stepsFactory = (introContent: IntroContentShape): Step[] => [
     content: introContent.tour[1],
     disableBeacon: true,
     placement: "right-end",
+    styles: {
+      spotlight: {
+        transform: "translateY(-1px)"
+
+      }
+    }
   },
   {
     target: "#legend",
@@ -228,7 +234,7 @@ export default function IntroLevel() {
             arrowColor: "#e3ffeb",
             backgroundColor: "#e3ffeb",
             primaryColor: "#000",
-            textColor: "black",
+            textColor: "black"
           },
           tooltip: {
             padding: 5,
