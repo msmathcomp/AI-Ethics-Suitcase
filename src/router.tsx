@@ -18,7 +18,13 @@ export default function Router() {
   }
 
   return (
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
+    <BrowserRouter
+      basename={
+        import.meta.env.BASE_URL.startsWith("/")
+          ? import.meta.env.BASE_URL
+          : "/"
+      }
+    >
       <Routes>
         <Route
           index
