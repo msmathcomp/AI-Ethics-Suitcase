@@ -2,8 +2,8 @@
   "title": "AI Ethics Suitcase",
   "nav": {
     "title": "AI Ethics Suitcase",
-    "english": "English",
-    "nederlands": "Dutch"
+    "english": "English (EN)",
+    "nederlands": "Nederlands (NL)"
   },
   "home": {
     "title": "AI Ethics Suitcase",
@@ -82,7 +82,7 @@
   "level0": {
     "goal": "Level 0: Create your first classifier!",
     "stages": {
-      "0": "We want to classify a simple dataset of 4 students first by drawing a line that seperates Pass and Fail students. To start, click to select the first point of the line",
+      "0": "We want to classify a simple dataset of 4 students first by drawing a line that separates Pass and Fail students. To start, click to select the first point of the line.",
       "1": "Now click the second point to draw the classification line",
       "2": "Drag the black circles to adjust the line, then click one of the regions to classify as Pass",
       "3": "Adjust your classifier by rotating the line or creating a new one (by clicking 2 points). When satisfied, click 'Next' to continue.",
@@ -98,7 +98,7 @@
       "4": "Finally, click inside the fail region to add a student who has passed",
       "5": "Great! You have classified all types of students. Click next to proceed."
     },
-    "goal": "Level 1: How to calcuate the accuracy of a classifier?",
+    "goal": "Level 1: How to calculate the accuracy of a classifier?",
     "tour": {
       "0": "We will now explain the terms used to measure the accuracy of a linear classifier.",
       "1": "The classification results show the counts of true positives, true negatives, false positives, and false negatives.",
@@ -118,7 +118,7 @@
       "5": "Level 5: Try to achieve maximum possible accuracy!"
     },
     "stages": {
-      "0": "Click to select the first point of the classifier line to seperate the pass from the fail region.",
+      "0": "Click to select the first point of the classifier line to separate the pass from the fail region.",
       "1": "Now click the second point to draw the classification line",
       "2": "Drag the black circles to adjust the line, then click one of the regions to classify as Pass",
       "3": "Adjust your classifier by rotating the line or creating a new one. When satisfied, click 'Next' to continue.",
@@ -129,7 +129,7 @@
   "level6": {
     "goal": "Level 6: Test your classifier on unseen data!",
     "stages": {
-      "0": "Click to select the first point of the classifier line to seperate the pass from the fail region.",
+      "0": "Click to select the first point of the classifier line to separate the pass from the fail region.",
       "1": "Now click the second point to draw the classification line",
       "2": "Drag the black circles to adjust the line, then click one of the regions to classify as Pass",
       "3": "Adjust your classifier by rotating the line or creating a new one. When satisfied, click 'Next' to continue.",
