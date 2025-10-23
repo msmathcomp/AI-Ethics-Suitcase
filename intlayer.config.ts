@@ -6,7 +6,7 @@ const config: IntlayerConfig = {
       Locales.ENGLISH,
       Locales.DUTCH
     ],
-    defaultLocale: Locales.ENGLISH,
+    defaultLocale: Locales.DUTCH,
   },
   middleware: {
     headerName: "x-intlayer-locale",
