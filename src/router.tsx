@@ -1,6 +1,6 @@
 import Finish from "./pages/finish";
 import Level from "./pages/level";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router";
+import { HashRouter, Route, Routes, Navigate } from "react-router";
 import Home from "./pages/home.tsx";
 import { useConfig } from "./context/ConfigContext.tsx";
 import { useIntlayer } from "react-intlayer";
@@ -18,13 +18,7 @@ export default function Router() {
   }
 
   return (
-    <BrowserRouter
-      basename={
-        import.meta.env.BASE_URL.startsWith("/")
-          ? import.meta.env.BASE_URL
-          : "/"
-      }
-    >
+    <HashRouter>
       <Routes>
         <Route
           index
@@ -41,6 +35,6 @@ export default function Router() {
         <Route path="/finish" element={<Finish />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
