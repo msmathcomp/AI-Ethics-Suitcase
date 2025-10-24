@@ -271,6 +271,9 @@ export default function IntroLevel() {
         hideCloseButton
         showSkipButton
         locale={{
+          next: tourContent.next,
+          nextLabelWithProgress: tourContent.nextLabelWithProgress,
+          back: tourContent.back,
           skip: tourContent.skipTutorial.value,
           last: tourContent.finish.value,
         }}

@@ -187,7 +187,11 @@
     "pass": "GESLAAGD",
     "fail": "GEZAKT"
   },
+
   "tour": {
+    "next": "Volgende",
+    "nextLabelWithProgress": "Volgende (Stap {step} van {steps})",
+    "back": "Laatste",
     "skipTutorial": "Sla uitleg over",
     "nextLevel": "Volgend niveau",
     "finish": "Voltooien"

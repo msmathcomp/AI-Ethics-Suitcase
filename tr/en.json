@@ -188,6 +188,9 @@
     "fail": "FAIL"
   },
   "tour": {
+    "next": "Next",
+    "nextLabelWithProgress": "Next (Step {step} of {steps})",
+    "back": "Back",
     "skipTutorial": "Skip Tutorial",
     "nextLevel": "Next level",
     "finish": "Finish"
