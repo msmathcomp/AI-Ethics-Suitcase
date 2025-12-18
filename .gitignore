@@ -28,3 +28,6 @@ dist-ssr
 
 # data
 data/.venv/
+
+# nix
+.direnv
