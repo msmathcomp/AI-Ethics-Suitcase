@@ -21,7 +21,7 @@ import { ClassificationAreas } from "~/components/chart/ClassificationAreas";
 import Joyride, { type CallBackProps, type Step } from "react-joyride";
 import { Frown, Smile } from "lucide-react";
 import { useIntlayer } from "react-intlayer";
-import LevelLayout from "~/components/layout/levelLayout";
+import LevelLayout from "~/components/layout/LevelLayout";
 import { getPointClassification } from "~/utils/classification";
 import { cn } from "~/utils/cn";
 
