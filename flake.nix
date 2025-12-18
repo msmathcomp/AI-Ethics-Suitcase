@@ -18,12 +18,19 @@
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
             nodejs_25
+            pnpm
           ];
 
           shellHook = ''
-            echo "Node.js dev shell (Node ${pkgs.nodejs_25.version})"
+            echo "node: $(node -v)"
+            echo "pnpm: $(pnpm -v)"
+            echo "To install dependencies, run: pnpm install"
           '';
         };
+
+        packages.default = pkgs.writeShellScriptBin "setup-project" ''
+          pnpm install --frozen-lockfile
+        '';
       };
     };
 }
