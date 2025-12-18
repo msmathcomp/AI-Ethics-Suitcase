@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { useIntlayer } from "react-intlayer";
 import { useConfig } from "~/context/ConfigContext";
-import { LanguageSwitch } from "~/components/UI/LanguageSwitch";
+import { LanguageSwitch } from "~/components/ui/LanguageSwitch";
 
 export default function Home() {
   const { home: content, common: commonContent } = useIntlayer("app");

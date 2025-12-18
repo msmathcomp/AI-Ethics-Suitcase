@@ -1,6 +1,6 @@
 import { ClassificationVisualizer } from "~/components/ClassificationVisualizer";
 import { useMemo, useState, useEffect } from "react";
-import { ClassificationResults } from "~/components/UI/ClassificationResults";
+import { ClassificationResults } from "~/components/ui/ClassificationResults";
 import type { ClassificationCounts, DataPoint, LevelJsonShape } from "~/types";
 import { useClassificationResults } from "~/context/ClassificationResultsContext";
 import level6Json from "@/data/level6.json";

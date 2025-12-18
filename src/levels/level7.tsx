@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
-import { ClassificationResults } from "~/components/UI/ClassificationResults";
+import { ClassificationResults } from "~/components/ui/ClassificationResults";
 import type { ClassificationCounts, DataPoint, LevelJsonShape } from "~/types";
 import { CurveVisualizer } from "~/components/CurveVisualizer";
 import { useClassificationResults } from "~/context/ClassificationResultsContext";

@@ -1,8 +1,9 @@
 import type { ReactNode } from "react";
-import Nav from "./Nav";
-import { LevelProgressBar } from "~/components/UI/LevelProgressBar";
-import { Legend } from "~/components/UI/Legend";
+import { LevelProgressBar } from "~/components/ui/LevelProgressBar";
+import { Legend } from "~/components/ui/Legend";
 import { cn } from "~/utils/cn";
+import { useIntlayer } from "react-intlayer";
+import { LanguageSwitch } from "~/components/ui/LanguageSwitch";
 
 interface Props {
   goalElement: ReactNode;
@@ -25,9 +26,14 @@ export default function LevelLayout({
   level,
   showNextLevelButton,
 }: Props) {
+  const { title: title } = useIntlayer("app");
+
   return (
     <main className="h-screen w-screen flex flex-col px-4 pt-4 overflow-hidden">
-      <Nav />
+      <nav className="w-full h-14 flex items-center justify-between border-b z-50">
+        <h1 className="text-3xl">{title}</h1>
+        <LanguageSwitch />
+      </nav>
       <div className="flex flex-1">
         <div className="flex flex-1 flex-col">
           <h1 className="text-xl xl:text-2xl mt-4">{goalElement}</h1>

@@ -9,7 +9,7 @@ interface Props extends CustomDotProps {
   areaColorsAssigned: boolean;
 }
 
-export const CustomDot_Curve = ({
+export const CustomDotCurve = ({
   cx,
   cy,
   payload,
