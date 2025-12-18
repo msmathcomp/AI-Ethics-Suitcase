@@ -1,5 +1,3 @@
-import nlFlag from "@/assets/nl.svg";
-import ukFlag from "@/assets/uk.svg";
 import { useIntlayer, useLocale } from "react-intlayer";
 import { Locales } from "intlayer";
 
@@ -15,7 +13,6 @@ export function LanguageSwitch() {
         }`}
         onClick={() => setLocale(Locales.ENGLISH)}
       >
-        <img src={ukFlag} alt="English" className="h-6" />
         <span className="ml-1">{content.english}</span>
       </button>
       <hr className="inline-block h-6 w-px bg-black m-2" />
@@ -25,7 +22,6 @@ export function LanguageSwitch() {
         }`}
         onClick={() => setLocale(Locales.DUTCH)}
       >
-        <img src={nlFlag} alt="Nederlands" className="h-6" />
         <span className="ml-1">{content.nederlands}</span>
       </button>
     </div>
