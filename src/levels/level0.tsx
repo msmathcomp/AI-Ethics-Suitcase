@@ -1,9 +1,9 @@
 import { ClassificationVisualizer } from "~/components/ClassificationVisualizer";
 import { useState } from "react";
-import { ClassificationResults } from "~/components/UI/ClassificationResults";
+import { ClassificationResults } from "~/components/ui/ClassificationResults";
 import type { DataPoint, ClassificationCounts } from "~/types";
 import { useIntlayer } from "react-intlayer";
-import LevelLayout from "~/components/layout/levelLayout";
+import LevelLayout from "~/components/layout/LevelLayout";
 
 const data: DataPoint[] = [
   { study_time: 100, screen_time: 300, type: "Fail" },

@@ -2,14 +2,14 @@
   "title": "AI Ethiek Koffer",
   "nav": {
     "title": "AI Ethiek Koffer",
-    "english": "English (EN)",
-    "nederlands": "Nederlands (NL)"
+    "english": "English",
+    "nederlands": "Nederlands"
   },
   "home": {
     "title": "AI Ethiek Koffer",
     "subtitle": "Interactieve toepassing om lineaire classificatie te verkennen",
     "getStarted": "Start",
-    "description": "Interactief spel met 9 niveaus over ethische AI-concepten. Ga door de verschillende niveaus door eenvoudige lineaire classificaties te bouwen om studenten die slagen of zakken te onderscheiden op basis van hun studie- en schermtijd."
+    "description": "Interactief spel met 9 niveaus over ethische AI-concepten. Ga door de verschillende niveaus door eenvoudige lineaire classificaties te bouwen om studenten die slagen of zakken te onderscheiden op basis van hun studie- en vrije tijd."
   },
   "intro": {
     "headerTitle": "Welkom bij de AI Ethiek Koffer!",
@@ -18,11 +18,11 @@
       "0": "Welkom bij de AI Ethiek Koffer! Dit is het introductieniveau waarin je leert over de interface en de basis van visualisatie met grafieken. Je kunt deze uitleg overslaan als je al bekend bent met deze concepten.",
       "1": "Je bent nu op niveau -1, het introductieniveau. Er zijn nog 8 niveaus meer.",
       "2": "Dit is de legenda die de datapunten en classificatie uitlegt.",
-      "3": "Dit is de grafiek die de relatie tussen studietijd en schermtijd weergeeft.",
+      "3": "Dit is de grafiek die de relatie tussen studietijd en vrije tijd weergeeft.",
       "4": "Dit is de X-as, die de studietijd in minuten laat zien.",
-      "5": "Dit is de Y-as, die de schermtijd in minuten laat zien.",
-      "6": "Dit is een datapunt van een student die geslaagd is, met 150 minuten studietijd en 300 minuten schermtijd.",
-      "7": "Dit is een datapunt van een student die gezakt is, met 100 minuten studietijd en 200 minuten schermtijd.",
+      "5": "Dit is de Y-as, die de vrije tijd in minuten laat zien.",
+      "6": "Dit is een datapunt van een student die geslaagd is, met 150 minuten studietijd en 300 minuten vrije tijd.",
+      "7": "Dit is een datapunt van een student die gezakt is, met 100 minuten studietijd en 200 minuten vrije tijd.",
       "8": "Als je klaar bent met een niveau, klik dan op deze knop om door te gaan naar het volgende niveau."
     }
   },
@@ -72,7 +72,7 @@
   "chart": {
     "axisLabels": {
       "x": "Studietijd (min)",
-      "y": "Schermtijd (min)"
+      "y": "Vrije Tijd (min)"
     },
     "seriesNames": {
       "dataPoints": "Datapunten",

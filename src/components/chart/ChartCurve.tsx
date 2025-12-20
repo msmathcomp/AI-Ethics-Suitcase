@@ -8,7 +8,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import type { AreaPolygons, DataPoint, Point } from "~/types";
-import { CustomDot_Curve as CustomDot } from "./CustomDot_Curve";
+import { CustomDotCurve as CustomDot } from "./CustomDotCurve";
 import { useIntlayer } from "react-intlayer";
 
 interface Props {

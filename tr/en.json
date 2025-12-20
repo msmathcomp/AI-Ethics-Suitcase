@@ -2,14 +2,14 @@
   "title": "AI Ethics Suitcase",
   "nav": {
     "title": "AI Ethics Suitcase",
-    "english": "English (EN)",
-    "nederlands": "Nederlands (NL)"
+    "english": "English",
+    "nederlands": "Nederlands"
   },
   "home": {
     "title": "AI Ethics Suitcase",
     "subtitle": "Interactive application for exploring linear classification",
     "getStarted": "Get Started",
-    "description": "Interactive game consisting of 9 levels around ethical AI concepts. Progress through different levels by building simple linear classifiers to classify students who pass or fail an exam based on their study and screen time hours."
+    "description": "Interactive game consisting of 9 levels around ethical AI concepts. Progress through different levels by building simple linear classifiers to classify students who pass or fail an exam based on their study and leisure time hours."
   },
   "intro": {
     "headerTitle": "Welcome to the AI Ethics Suitcase!",
@@ -18,11 +18,11 @@
       "0": "Welcome to the AI Ethics Suitcase! This is the introduction level where you will learn about the interface and basics of visualization using charts. You may skip this tutorial if you are already familiar with these concepts.",
       "1": "You are currently on Level -1, which is the introduction level. There are 8 more levels.",
       "2": "This is the legend that explains the data points and classification.",
-      "3": "This is the chart that visualizes the relationship between Study Time and Screen Time.",
-      "4": "This is the X-axis representing Study Time in minutes.",
-      "5": "This is the Y-axis representing Screen Time in minutes.",
-      "6": "This is a data point for a student who passed, with study time of 150 minutes and screen time of 300 minutes.",
-      "7": "This is a data point for a student who failed, with study time of 100 minutes and screen time of 200 minutes.",
+      "3": "This is the chart that visualizes the relationship between study time and leisure time.",
+      "4": "This is the X-axis representing study time in minutes.",
+      "5": "This is the Y-axis representing leisure time in minutes.",
+      "6": "This is a data point for a student who passed, with study time of 150 minutes and leisure time of 300 minutes.",
+      "7": "This is a data point for a student who failed, with study time of 100 minutes and leisure time of 200 minutes.",
       "8": "Finally, once you are done with a level, click this button to proceed to the next level."
     }
   },
@@ -72,7 +72,7 @@
   "chart": {
     "axisLabels": {
       "x": "Study Time (min)",
-      "y": "Screen Time (min)"
+      "y": "Leisure Time (min)"
     },
     "seriesNames": {
       "dataPoints": "Data Points",

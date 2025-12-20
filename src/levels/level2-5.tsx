@@ -1,6 +1,6 @@
 import { ClassificationVisualizer } from "~/components/ClassificationVisualizer";
 import { useState, useMemo, useEffect } from "react";
-import { ClassificationResults } from "~/components/UI/ClassificationResults";
+import { ClassificationResults } from "~/components/ui/ClassificationResults";
 import type { ClassificationCounts, LevelJsonShape, Point } from "~/types";
 import { useClassificationResults } from "~/context/ClassificationResultsContext";
 
@@ -10,7 +10,7 @@ import level3Json from "@/data/level3.json";
 import level4Json from "@/data/level4.json";
 import level5Json from "@/data/level5.json";
 import { useIntlayer } from "react-intlayer";
-import LevelLayout from "~/components/layout/levelLayout";
+import LevelLayout from "~/components/layout/LevelLayout";
 
 export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
   const { level2_5: content, common: commonContent } = useIntlayer("app");

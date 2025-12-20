@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { ClassificationResults } from "~/components/UI/ClassificationResults";
+import { ClassificationResults } from "~/components/ui/ClassificationResults";
 import {
   type ClassificationCounts,
   type Point,
@@ -21,7 +21,7 @@ import { ClassificationAreas } from "~/components/chart/ClassificationAreas";
 import Joyride, { type CallBackProps, type Step } from "react-joyride";
 import { Frown, Smile } from "lucide-react";
 import { useIntlayer } from "react-intlayer";
-import LevelLayout from "~/components/layout/levelLayout";
+import LevelLayout from "~/components/layout/LevelLayout";
 import { getPointClassification } from "~/utils/classification";
 import { cn } from "~/utils/cn";
 

@@ -10,7 +10,7 @@ import Joyride, { type Step, type CallBackProps } from "react-joyride";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useIntlayer, type IntlayerNode } from "react-intlayer";
-import LevelLayout from "~/components/layout/levelLayout";
+import LevelLayout from "~/components/layout/LevelLayout";
 
 const CustomDotIntro = ({
   cx,

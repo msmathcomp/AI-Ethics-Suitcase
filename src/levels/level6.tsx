@@ -1,11 +1,11 @@
 import { ClassificationVisualizer } from "~/components/ClassificationVisualizer";
 import { useMemo, useState, useEffect } from "react";
-import { ClassificationResults } from "~/components/UI/ClassificationResults";
+import { ClassificationResults } from "~/components/ui/ClassificationResults";
 import type { ClassificationCounts, DataPoint, LevelJsonShape } from "~/types";
 import { useClassificationResults } from "~/context/ClassificationResultsContext";
 import level6Json from "@/data/level6.json";
 import { useIntlayer } from "react-intlayer";
-import LevelLayout from "~/components/layout/levelLayout";
+import LevelLayout from "~/components/layout/LevelLayout";
 
 export default function Level6() {
   const level = 6;

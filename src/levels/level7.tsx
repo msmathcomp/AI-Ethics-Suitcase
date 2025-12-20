@@ -1,11 +1,11 @@
 import { useMemo, useState, useEffect } from "react";
-import { ClassificationResults } from "~/components/UI/ClassificationResults";
+import { ClassificationResults } from "~/components/ui/ClassificationResults";
 import type { ClassificationCounts, DataPoint, LevelJsonShape } from "~/types";
 import { CurveVisualizer } from "~/components/CurveVisualizer";
 import { useClassificationResults } from "~/context/ClassificationResultsContext";
 import level7Json from "@/data/level7.json";
 import { useIntlayer } from "react-intlayer";
-import LevelLayout from "~/components/layout/levelLayout";
+import LevelLayout from "~/components/layout/LevelLayout";
 
 export default function Level7() {
   const level = 7;

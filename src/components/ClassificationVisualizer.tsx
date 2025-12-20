@@ -16,7 +16,7 @@ import {
 import { Chart } from "./chart/Chart";
 import { ClassificationAreas } from "./chart/ClassificationAreas";
 import { ExtendedLinePoints } from "./chart/ExtendedLinePoints";
-import Toggle from "./UI/Toggle";
+import Toggle from "./ui/Toggle";
 import { useIntlayer } from "react-intlayer";
 import { cn } from "~/utils/cn";
 
