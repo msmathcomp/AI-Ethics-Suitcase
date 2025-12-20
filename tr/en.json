@@ -67,7 +67,9 @@
     "levelLabel": "Level:",
     "introLabel": "Intro",
     "nextLevelButtonText": "Next Level",
-    "previousLevel": "Previous Level"
+    "previousLevel": "Previous Level",
+    "restartLevel": "Restart Level",
+    "restartApp": "Restart App"
   },
   "chart": {
     "axisLabels": {
