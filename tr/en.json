@@ -67,7 +67,11 @@
     "levelLabel": "Level:",
     "introLabel": "Intro",
     "nextLevelButtonText": "Next Level",
-    "previousLevel": "Previous Level"
+    "previousLevel": "Previous Level",
+    "restartLevel": "Restart Level",
+    "restartApp": "Restart App",
+    "restartDialogTitle": "Restart Application",
+    "restartDialogMessage": "Are you sure you want to restart the application? All progress will be lost."
   },
   "chart": {
     "axisLabels": {
@@ -176,7 +180,9 @@
       "next": "Next",
       "compare": "Compare",
       "finish": "Finish",
-      "restart": "Restart"
+      "restart": "Restart",
+      "yes": "Yes",
+      "no": "No"
     },
     "status": {
       "loading": "Loading...",
