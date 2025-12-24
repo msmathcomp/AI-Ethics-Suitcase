@@ -352,7 +352,7 @@ export const ClassificationVisualizer = ({
     } else {
       setLineCoords([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [clickCoords, graphToOverlayCoords]);
 
   useEffect(() => {

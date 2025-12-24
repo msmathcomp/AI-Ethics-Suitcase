@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router";
 import { cn } from "~/utils/cn";
 import { useIntlayer } from "react-intlayer";
 import { useEffect, useRef, useState } from "react";
+import Dialog from "./Dialog";
 
 interface LevelProgressBarProps {
   level: number;
@@ -24,6 +25,9 @@ export function LevelProgressBar({
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+
+  // Dialog state
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // Effect to handle clicks outside the menu to close it
   useEffect(() => {
@@ -48,7 +52,7 @@ export function LevelProgressBar({
     if (option === "level") {
       window.location.reload();
     } else if (option === "app") {
-      navigate(`/`);
+      setIsDialogOpen(true);
     }
   };
 
@@ -130,6 +134,15 @@ export function LevelProgressBar({
       >
         <RotateCcw size={30} />
       </button>
+      <Dialog
+        open={isDialogOpen}
+        title={content.restartDialogTitle.value}
+        message={content.restartDialogMessage.value}
+        onYes={() => {
+          navigate(`/`);
+        }}
+        onNo={() => setIsDialogOpen(false)}
+      />
       {showMenu && (
         <div
           ref={menuRef}

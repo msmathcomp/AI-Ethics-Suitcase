@@ -69,7 +69,9 @@
     "nextLevelButtonText": "Volgend niveau",
     "previousLevel": "Vorig niveau",
     "restartLevel": "Niveau opnieuw starten",
-    "restartApp": "App opnieuw starten"
+    "restartApp": "App opnieuw starten",
+    "restartDialogTitle": "App opnieuw starten",
+    "restartDialogMessage": "Weet je zeker dat je de app opnieuw wilt starten? Je voortgang gaat verloren."
   },
   "chart": {
     "axisLabels": {
@@ -178,7 +180,9 @@
       "next": "Volgende",
       "compare": "Vergelijk",
       "finish": "Voltooien",
-      "restart": "Opnieuw starten"
+      "restart": "Opnieuw starten",
+      "yes": "Ja",
+      "no": "Nee"
     },
     "status": {
       "loading": "Laden...",
