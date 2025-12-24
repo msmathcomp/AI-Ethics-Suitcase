@@ -4,6 +4,7 @@ import { cn } from "~/utils/cn";
 import { useIntlayer } from "react-intlayer";
 import { useEffect, useRef, useState } from "react";
 import Dialog from "./Dialog";
+import ThemeSwitch from "./ThemeSwitch";
 
 interface LevelProgressBarProps {
   level: number;
@@ -124,16 +125,19 @@ export function LevelProgressBar({
         {nextLevelButtonText || content.nextLevelButtonText}
         <ChevronRight size={25} />
       </button>
-      <button
-        id="reset-button"
-        ref={buttonRef}
-        onClick={() => setShowMenu((v) => !v)}
-        className={cn(
-          "absolute right-0 top-0 hover:bg-gray-100 items-center mr-2 mt-2 text-black rounded p-1 ",
-        )}
-      >
-        <RotateCcw size={30} />
-      </button>
+      <div className="absolute right-0 top-0 flex items-center justify-center p-2">
+        <button
+          id="reset-button"
+          ref={buttonRef}
+          onClick={() => setShowMenu((v) => !v)}
+          className={cn(
+            "hover:bg-gray-100 items-center text-black rounded p-1 ",
+          )}
+        >
+          <RotateCcw size={30} />
+        </button>
+        <ThemeSwitch />
+      </div>
       <Dialog
         open={isDialogOpen}
         title={content.restartDialogTitle.value}
