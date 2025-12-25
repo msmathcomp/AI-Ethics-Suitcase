@@ -163,7 +163,7 @@
     "invalidLevel": "Invalid level"
   },
   "finish": {
-    "title": "Congratulations on finishing this interaction",
+    "title": "Congratulations!",
     "restart": "Restart",
     "table": {
       "level": "Level",

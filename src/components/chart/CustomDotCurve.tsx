@@ -52,7 +52,7 @@ export const CustomDotCurve = ({
           cy={cy}
           r={10}
           fill={fillColor}
-          stroke="black"
+          stroke="var(--chart-stroke)"
           strokeWidth={1}
         />
         {IconComponent && (
@@ -71,7 +71,7 @@ export const CustomDotCurve = ({
           width={20}
           height={20}
           fill={fillColor}
-          stroke="black"
+          stroke="var(--chart-stroke)"
           strokeWidth={1}
         />
         {IconComponent && (

@@ -33,7 +33,7 @@ export const CurveChart = ({
   const { chart } = useIntlayer("app");
 
   return (
-    <div className="ml-10 h-full aspect-square flex items-center justify-center">
+    <div className="ml-10 h-full aspect-square flex items-center justify-center z-50">
       <ResponsiveContainer ref={chartContainerRef} height="95%" width="95%">
         <ComposedChart
           margin={{
@@ -94,15 +94,12 @@ export const CurveChart = ({
                 study_time: point.x,
                 screen_time: point.y,
               }))}
-              stroke="black"
+              stroke="var(--chart-stroke)"
               strokeWidth={3}
               dot={false}
               connectNulls={true}
               name="Separator Curve"
               animationDuration={0}
-              style={{
-                zIndex: 100,
-              }}
             />
           )}
         </ComposedChart>

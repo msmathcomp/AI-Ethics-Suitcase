@@ -124,7 +124,7 @@ export const ClassificationAreas = ({
   }, [areaPolygons]);
 
   return (
-    <svg className="absolute top-0 left-0 w-full h-full pointer-events-none -z-10">
+    <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
       <defs>
         <pattern
           id="pass-area-pattern"
@@ -132,9 +132,9 @@ export const ClassificationAreas = ({
           width="28"
           height="49"
         >
-          <rect width="28" height="49" fill="#ffffff" />
+          <rect width="28" height="49" fill="var(--chart-fill)" />
           <g fillRule="evenodd">
-            <g fill="#9C92AC" fillOpacity="0.4" fillRule="nonzero">
+            <g fill="#9C92AC" fillOpacity="0.7" fillRule="nonzero">
               <path d="M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z" />
             </g>
           </g>
@@ -146,9 +146,9 @@ export const ClassificationAreas = ({
           width="8"
           height="8"
         >
-          <rect width="8" height="8" fill="#ffffff" />
+          <rect width="8" height="8" fill="var(--chart-fill)" />
           <g fillRule="evenodd">
-            <g fill="#9C92AC" fillOpacity="0.4" fillRule="nonzero">
+            <g fill="#9C92AC" fillOpacity="0.7" fillRule="nonzero">
               <path d="M0 0h4v4H0V0zm4 4h4v4H4V4z" />
             </g>
           </g>
@@ -172,7 +172,6 @@ export const ClassificationAreas = ({
         style={{
           pointerEvents: areaColorsAssigned ? "none" : "auto",
           cursor: areaColorsAssigned ? "default" : "pointer",
-          zIndex: -10,
         }}
         onClick={(e) => onAreaSelection(e, true)}
       />
@@ -194,7 +193,6 @@ export const ClassificationAreas = ({
         style={{
           pointerEvents: areaColorsAssigned ? "none" : "auto",
           cursor: areaColorsAssigned ? "default" : "pointer",
-          zIndex: -10,
         }}
         onClick={(e) => onAreaSelection(e, false)}
       />
@@ -205,7 +203,7 @@ export const ClassificationAreas = ({
             <text
               x={labelPositions.area1.overlay.x}
               y={labelPositions.area1.overlay.y}
-              fill="#111827"
+              fill="var(--chart-stroke)"
               fontSize="12"
               fontWeight="700"
               textAnchor={
@@ -220,7 +218,7 @@ export const ClassificationAreas = ({
             <text
               x={labelPositions.area2.overlay.x}
               y={labelPositions.area2.overlay.y}
-              fill="#111827"
+              fill="var(--chart-stroke)"
               fontSize="12"
               fontWeight="700"
               textAnchor={

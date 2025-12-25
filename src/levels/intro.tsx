@@ -30,7 +30,7 @@ const CustomDotIntro = ({
           cx={cx}
           cy={cy}
           r={10}
-          stroke="black"
+          stroke="var(--chart-stroke)"
           strokeWidth={1}
           fill="transparent"
         />
@@ -44,7 +44,7 @@ const CustomDotIntro = ({
           y={cy - 10}
           width={20}
           height={20}
-          stroke="black"
+          stroke="var(--chart-stroke)"
           fill="transparent"
           strokeWidth={1}
         />
@@ -246,7 +246,7 @@ export default function IntroLevel() {
           },
           spotlight: {
             backgroundColor: "rgba(255, 255, 255, 0.1)",
-            border: "solid 2px black",
+            border: "solid 2px var(--chart-stroke)",
             pointerEvents: "none",
           },
           overlay: {
@@ -260,7 +260,7 @@ export default function IntroLevel() {
             fontSize: "14px"
           },
           buttonNext: {
-            backgroundColor: "oklch(62.3% 0.214 259.815)", // bg-blue-500
+            backgroundColor: "oklch(0.696 0.17 162.48)", // bg-emerald-500
             color: "white",
             fontSize: "14px"
           },

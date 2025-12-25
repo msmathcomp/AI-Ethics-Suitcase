@@ -2,6 +2,8 @@ import { Link } from "react-router";
 import { useIntlayer } from "react-intlayer";
 import { useClassificationResults } from "~/context/ClassificationResultsContext";
 import type { ClassificationCounts } from "~/types";
+import { LanguageSwitch } from "~/components/ui/LanguageSwitch";
+import ThemeSwitch from "~/components/ui/ThemeSwitch";
 
 function calculateAccuracy(counts: ClassificationCounts): number {
   const total = counts.TP + counts.TN + counts.FP + counts.FN;
@@ -47,41 +49,41 @@ export default function Finish() {
   }, 0);
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center gap-8 p-8">
-      <h1 className="text-4xl font-bold text-gray-800">{content.title}</h1>
+    <main className="min-h-screen bg-white dark:bg-stone-900 text-black dark:text-white flex flex-col items-center justify-center gap-8 p-8">
+      <h1 className="text-4xl font-bold text-stone-800 dark:text-stone-200 w-1/2 text-center">{content.title}</h1>
 
       {/* Score Display */}
       <div className="text-center">
-        <div className="text-6xl font-bold text-gray-900 mb-2">
+        <div className="text-6xl font-bold text-emerald-600 dark:text-emerald-200 mb-2">
           {Math.round(totalScore)}
         </div>
-        <div className="text-xl text-gray-600">{content.outOf} 100</div>
-        <div className="text-sm text-gray-500 mt-1">{content.totalScore}</div>
+        <div className="text-xl text-emerald-500 dark:text-emerald-300">{content.outOf} 100</div>
+        <div className="text-sm text-emerald-400 dark:text-emerald-500 mt-1">{content.totalScore}</div>
       </div>
 
       {/* Results Table */}
       <div className="w-full max-w-4xl">
-        <table className="w-full border-collapse border border-gray-300 bg-white shadow-sm">
-          <thead>
-            <tr className="bg-gray-50">
-              <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">
+        <table className="w-full border-collapse border border-stone-300 bg-white dark:bg-stone-900 shadow-sm table-fixed">
+          <thead className=" text-left font-semibold text-emerald-700 dark:text-emerald-200">
+            <tr className="bg-stone-50 dark:bg-stone-800">
+              <th className="border border-stone-300 px-4 py-3 w-1/6">
                 {content.table.level}
               </th>
-              <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">
+              <th className="border border-stone-300 px-4 py-3">
                 {content.table.yourAccuracy}
               </th>
-              <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">
+              <th className="border border-stone-300 px-4 py-3">
                 {content.table.bestAccuracy}
               </th>
-              <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">
+              <th className="border border-stone-300 px-4 py-3">
                 {content.table.unseenAccuracy}
               </th>
             </tr>
           </thead>
           <tbody>
             {levelResults.map((result) => (
-              <tr key={result.level} className="hover:bg-gray-50">
-                <td className="border border-gray-300 px-4 py-3 font-medium">
+              <tr key={result.level} className="hover:bg-stone-100 dark:hover:bg-stone-800">
+                <td className="border border-gray-300 px-4 py-3 font-bold">
                   {content.table.level} {result.level}
                 </td>
                 <td className="border border-gray-300 px-4 py-3">
@@ -103,14 +105,19 @@ export default function Finish() {
         </table>
       </div>
 
-      <Link to="/level/-1">
+      <Link to="/">
         <button
           onClick={reset}
-          className="cursor-pointer rounded-lg border border-gray-300 p-3 font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+          className="cursor-pointer rounded-lg border border-stone-900 dark:border-0 dark:bg-stone-700 p-3 font-semibold hover:bg-stone-200 dark:hover:bg-stone-600 transition-colors"
         >
           {content.restart}
         </button>
       </Link>
+
+      <div className="flex justify-between absolute bottom-4 w-full px-8">
+        <LanguageSwitch />
+        <ThemeSwitch />
+      </div>
     </main>
   );
 }

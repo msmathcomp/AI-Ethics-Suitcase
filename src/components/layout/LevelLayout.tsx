@@ -29,7 +29,7 @@ export default function LevelLayout({
   const { title: title } = useIntlayer("app");
 
   return (
-    <main className="h-screen w-screen flex flex-col px-4 pt-4 overflow-hidden">
+    <main className="h-screen w-screen flex flex-col px-4 pt-4 overflow-hidden dark:bg-stone-900 dark:text-white">
       <nav className="w-full h-14 flex items-center justify-between border-b z-50">
         <h1 className="text-3xl">{title}</h1>
         <LanguageSwitch />
@@ -51,7 +51,7 @@ export default function LevelLayout({
 
           <button
             className={cn(
-              "h-8 self-end bg-blue-500 text-white rounded px-3 mt-1",
+              "h-8 self-end bg-emerald-200 hover:bg-emerald-300 dark:bg-emerald-900 hover:dark:bg-emerald-800 text-black dark:text-white rounded px-3 mt-1",
               instructionButton === null && "invisible"
             )}
             onClick={instructionButtonCallback}

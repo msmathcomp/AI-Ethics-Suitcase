@@ -53,7 +53,7 @@ export const CustomDot = ({
           cy={cy}
           r={10}
           fill={fillColor}
-          stroke="black"
+          stroke="var(--chart-stroke)"
           strokeWidth={1}
         />
         {IconComponent && (
@@ -72,7 +72,7 @@ export const CustomDot = ({
           width={20}
           height={20}
           fill={fillColor}
-          stroke="black"
+          stroke="var(--chart-stroke)"
           strokeWidth={1}
         />
         {IconComponent && (

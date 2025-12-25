@@ -19,7 +19,7 @@ export default function ThemeSwitch() {
         }
         setIsDarkMode(!isDarkMode);
       }}
-      className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+      className="p-1 rounded hover:bg-stone-200 dark:hover:bg-stone-800"
     >
       {isDarkMode ? <SunIcon size={30} /> : <MoonIcon size={30} />}
     </button>
