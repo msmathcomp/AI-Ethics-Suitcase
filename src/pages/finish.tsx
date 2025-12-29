@@ -4,10 +4,7 @@ import { useClassificationResults } from "~/context/ClassificationResultsContext
 import type { ClassificationCounts } from "~/types";
 import { LanguageSwitch } from "~/components/ui/LanguageSwitch";
 import ThemeSwitch from "~/components/ui/ThemeSwitch";
-<<<<<<< Updated upstream
-=======
 import { SmileIcon } from "lucide-react";
->>>>>>> Stashed changes
 
 function calculateAccuracy(counts: ClassificationCounts): number {
   const total = counts.TP + counts.TN + counts.FP + counts.FN;
