@@ -4,9 +4,19 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="./vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Switch theme based on system theme, taken from Tailwindcss docs -->
+    <!-- https://tailwindcss.com/docs/dark-mode#with-system-theme-support -->
+    <script>
+      document.documentElement.classList.toggle(
+        "dark",
+        localStorage.theme === "dark" ||
+        (!("theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches),
+      );
+    </script>
     <title>AI Ethics Suitcase</title>
-    <script type="module" crossorigin src="./assets/index-BC3PoO13.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-De9zMai2.css">
+    <script type="module" crossorigin src="./assets/index-DXjI26wT.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-g894T-A3.css">
   </head>
   <body>
     <div id="root"></div>
