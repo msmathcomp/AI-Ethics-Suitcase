@@ -16,9 +16,9 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center gap-4">
+    <main className="min-h-screen flex flex-col items-center justify-center gap-4 dark:bg-stone-900 dark:text-white">
       <h1 className="text-4xl">{content.title}</h1>
-      <h2 className="text-2xl text-stone-600">{content.subtitle}</h2>
+      <h2 className="text-2xl text-stone-600 dark:text-stone-400">{content.subtitle}</h2>
       <p className="max-w-xl text-center">{content.description}</p>
       <Link to={`/level/${config.startLevel}`}>
         <button className="cursor-pointer rounded border-1 p-1">

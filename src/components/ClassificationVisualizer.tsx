@@ -492,7 +492,7 @@ export const ClassificationVisualizer = ({
     ) {
       areaPolygonsElement.style.zIndex = "20";
     } else if (areaColorsAssigned && areaPolygonsElement && overlayElement) {
-      areaPolygonsElement.style.zIndex = "-50";
+      areaPolygonsElement.style.zIndex = "5";
       overlayElement.style.zIndex = "10";
     }
   }, [clickCoords, areaColorsAssigned]);
@@ -539,7 +539,7 @@ export const ClassificationVisualizer = ({
 
       {clickCoords.length === 1 && (
         <div
-          className={cn("absolute bg-blue-500 w-3 h-3 rounded-full")}
+          className={cn("absolute bg-emerald-500 w-3 h-3 rounded-full")}
           style={{
             top: clickCoords[0].overlay.y - 6,
             left: clickCoords[0].overlay.x - 6,
@@ -574,7 +574,7 @@ export const ClassificationVisualizer = ({
                 type="checkbox"
                 checked={showSeenData}
                 onChange={() => setShowSeenData((prev) => !prev)}
-                className="accent-blue-500"
+                className="accent-emerald-200 dark:accent-emerald-900"
               />
             </div>
             <div className="flex items-center justify-between">
@@ -583,7 +583,7 @@ export const ClassificationVisualizer = ({
                 type="checkbox"
                 checked={showUnseenData}
                 onChange={() => setShowUnseenData((prev) => !prev)}
-                className="accent-blue-500"
+                className="accent-emerald-200 dark:accent-emerald-900"
               />
             </div>
           </div>

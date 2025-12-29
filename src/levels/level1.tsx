@@ -69,7 +69,7 @@ const CustomDotLevel1 = ({
           cx={cx}
           cy={cy}
           r={10}
-          stroke="black"
+          stroke="var(--chart-stroke)"
           fill={fillColor}
           strokeWidth={1}
         />
@@ -88,7 +88,7 @@ const CustomDotLevel1 = ({
           y={cy - 10}
           width={20}
           height={20}
-          stroke="black"
+          stroke="var(--chart-stroke)"
           fill={fillColor}
           strokeWidth={1}
         />
@@ -399,7 +399,7 @@ export default function Level1() {
         goalElement={content.goal.value}
         classificationVisualizer={
           <>
-            <div className="ml-10 h-full aspect-square flex items-center justify-center">
+            <div className="ml-10 h-full aspect-square flex items-center justify-center z-5">
               <ResponsiveContainer
                 height="95%"
                 width="95%"
@@ -453,7 +453,7 @@ export default function Level1() {
                       { screen_time: 0, study_time: 250 },
                       { screen_time: 500, study_time: 250 },
                     ]}
-                    stroke="black"
+                    stroke="var(--chart-stroke)"
                     strokeWidth={3}
                     dot={false}
                     connectNulls={true}
@@ -523,7 +523,7 @@ export default function Level1() {
           },
           spotlight: {
             backgroundColor: "rgba(255, 255, 255, 0.1)",
-            border: "solid 2px black",
+            border: "solid 2px var(--chart-stroke)",
             pointerEvents: "none",
             cursor: "default",
           },
@@ -538,7 +538,7 @@ export default function Level1() {
             fontSize: "14px",
           },
           buttonNext: {
-            backgroundColor: "oklch(62.3% 0.214 259.815)", // bg-blue-500
+            backgroundColor: "oklch(0.696 0.17 162.48)", // bg-emerald-500
             color: "white",
             fontSize: "14px",
           },

@@ -31,7 +31,7 @@ export const Chart = ({
   const { chart } = useIntlayer("app");
 
   return (
-    <div className="ml-10 h-full aspect-square flex items-center justify-center">
+    <div className="ml-10 h-full aspect-square flex items-center justify-center z-10">
       <ResponsiveContainer ref={chartContainerRef} height="95%" width="95%">
         <ComposedChart
           margin={{
@@ -89,7 +89,8 @@ export const Chart = ({
                 study_time: point.graph.x,
                 screen_time: point.graph.y,
               }))}
-              stroke="black"
+              stroke="var(--chart-stroke)"
+              className=""
               strokeWidth={3}
               dot={false}
               connectNulls={true}

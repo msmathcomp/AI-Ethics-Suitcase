@@ -311,8 +311,8 @@ export const CurveVisualizer = ({
       graphCurve.length > 0 &&
       !areaColorsAssigned
     ) {
-      overlayElement.style.zIndex = "9";
-      areaPolygonsElement.style.zIndex = "9";
+      overlayElement.style.zIndex = "51";
+      areaPolygonsElement.style.zIndex = "100";
     }
   }, [graphCurve, areaColorsAssigned]);
 
@@ -320,7 +320,7 @@ export const CurveVisualizer = ({
     const areaPolygonsElement = areaPolygonsRef.current;
     const overlayElement = overlayRef.current;
     if (areaPolygonsElement && overlayElement && areaColorsAssigned) {
-      areaPolygonsElement.style.zIndex = "-50";
+      areaPolygonsElement.style.zIndex = "5";
       overlayElement.style.zIndex = "10";
     }
   }, [areaColorsAssigned]);
@@ -337,7 +337,7 @@ export const CurveVisualizer = ({
         areaColorsAssigned={areaColorsAssigned}
       />
       <div
-        className="absolute top-0 left-0 w-full h-full cursor-crosshair select-none z-10"
+        className="absolute top-0 left-0 w-full h-full cursor-crosshair select-none z-50"
         ref={overlayRef}
         onPointerDown={handleMouseDown}
         onPointerMove={handleMouseMove}
@@ -377,7 +377,7 @@ export const CurveVisualizer = ({
                   type="checkbox"
                   checked={showSeenData}
                   onChange={() => setShowSeenData((prev) => !prev)}
-                  className="accent-blue-500"
+                  className="accent-emerald-200 dark:accent-emerald-900"
                 />
               </div>
               <div className="flex items-center justify-between">
@@ -386,7 +386,7 @@ export const CurveVisualizer = ({
                   type="checkbox"
                   checked={showUnseenData}
                   onChange={() => setShowUnseenData((prev) => !prev)}
-                  className="accent-blue-500"
+                  className="accent-emerald-200 dark:accent-emerald-900"
                 />
               </div>
             </div>

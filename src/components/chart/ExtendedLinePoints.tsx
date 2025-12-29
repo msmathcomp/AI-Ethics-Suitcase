@@ -29,7 +29,7 @@ export const ExtendedLinePoints = ({
           y1={extendedLinePoints[0].overlay.y}
           x2={lineCoords[0].overlay.x}
           y2={lineCoords[0].overlay.y}
-          stroke="black"
+          stroke="var(--chart-stroke)"
           strokeWidth="3"
           strokeDasharray="6 3"
         />
@@ -39,7 +39,7 @@ export const ExtendedLinePoints = ({
           y1={lineCoords[1].overlay.y}
           x2={extendedLinePoints[1].overlay.x}
           y2={extendedLinePoints[1].overlay.y}
-          stroke="black"
+          stroke="var(--chart-stroke)"
           strokeWidth="3"
           strokeDasharray="6 3"
         />
@@ -48,7 +48,7 @@ export const ExtendedLinePoints = ({
       {extendedLinePoints.map((coords, index) => (
         <div
           key={`extended-${index}`}
-          className="absolute bg-black border-2 cursor-move flex items-center justify-center z-50 touch-none"
+          className="absolute bg-black dark:bg-stone-900 border-2 cursor-move flex items-center justify-center z-50 touch-none"
           style={{
             top: coords.overlay.y - 12,
             left: coords.overlay.x - 12,

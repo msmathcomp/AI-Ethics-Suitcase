@@ -11,7 +11,7 @@ const getLocale = (lang: string) => {
     case "nl":
       return Locales.DUTCH;
     default:
-      return Locales.ENGLISH; // fallback
+      return Locales.DUTCH; // fallback
   }
 };
 export default function LocaleInitializer() {
