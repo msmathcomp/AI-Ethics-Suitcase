@@ -311,8 +311,8 @@ export const CurveVisualizer = ({
       graphCurve.length > 0 &&
       !areaColorsAssigned
     ) {
-      overlayElement.style.zIndex = "9";
-      areaPolygonsElement.style.zIndex = "9";
+      overlayElement.style.zIndex = "51";
+      areaPolygonsElement.style.zIndex = "100";
     }
   }, [graphCurve, areaColorsAssigned]);
 
@@ -337,7 +337,7 @@ export const CurveVisualizer = ({
         areaColorsAssigned={areaColorsAssigned}
       />
       <div
-        className="absolute top-0 left-0 w-full h-full cursor-crosshair select-none z-10"
+        className="absolute top-0 left-0 w-full h-full cursor-crosshair select-none z-50"
         ref={overlayRef}
         onPointerDown={handleMouseDown}
         onPointerMove={handleMouseMove}

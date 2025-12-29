@@ -539,7 +539,7 @@ export const ClassificationVisualizer = ({
 
       {clickCoords.length === 1 && (
         <div
-          className={cn("absolute bg-blue-500 w-3 h-3 rounded-full")}
+          className={cn("absolute bg-emerald-500 w-3 h-3 rounded-full")}
           style={{
             top: clickCoords[0].overlay.y - 6,
             left: clickCoords[0].overlay.x - 6,

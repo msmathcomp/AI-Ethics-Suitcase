@@ -399,7 +399,7 @@ export default function Level1() {
         goalElement={content.goal.value}
         classificationVisualizer={
           <>
-            <div className="ml-10 h-full aspect-square flex items-center justify-center z-50">
+            <div className="ml-10 h-full aspect-square flex items-center justify-center z-5">
               <ResponsiveContainer
                 height="95%"
                 width="95%"
