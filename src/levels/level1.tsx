@@ -24,6 +24,7 @@ import { useIntlayer } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
 import { getPointClassification } from "~/utils/classification";
 import { cn } from "~/utils/cn";
+import { useClassificationResults } from "~/context/ClassificationResultsContext";
 
 const CustomDotLevel1 = ({
   cx,
@@ -144,6 +145,8 @@ export default function Level1() {
   const [areaPolygons, setAreaPolygons] = useState<AreaPolygons | null>(null);
   const [run, setRun] = useState(false);
 
+  const { markLevelCompleted } = useClassificationResults();
+
   const graphToOverlayCoords = (graphCoords: Point): Point => {
     if (!overlayRef.current || !chartContainerRef.current)
       throw new Error("Refs not set");
@@ -168,6 +171,12 @@ export default function Level1() {
 
     return { x: overlayX, y: overlayY };
   };
+
+  useEffect(() => {
+    if (stage === 4) {
+      markLevelCompleted(1);
+    }
+  }, [stage, markLevelCompleted]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -491,7 +500,7 @@ export default function Level1() {
           <ClassificationResults classificationCounts={results} />
         }
         level={1}
-        showNextLevelButton={false}
+        stage={stage}
         instructionButton={null}
       />
 

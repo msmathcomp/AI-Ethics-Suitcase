@@ -1,9 +1,10 @@
 import { ClassificationVisualizer } from "~/components/ClassificationVisualizer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ClassificationResults } from "~/components/ui/ClassificationResults";
 import type { DataPoint, ClassificationCounts } from "~/types";
 import { useIntlayer } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
+import { useClassificationResults } from "~/context/ClassificationResultsContext";
 
 const data: DataPoint[] = [
   { study_time: 100, screen_time: 300, type: "Fail" },
@@ -22,6 +23,14 @@ export default function Level0() {
     FN: 0,
   });
   const { level0: content, common: commonContent } = useIntlayer("app");
+
+  const { markLevelCompleted } = useClassificationResults();
+
+  useEffect(() => {
+    if (stage === 4) {
+      markLevelCompleted(level);
+    }
+  }, [stage, markLevelCompleted, level]);
 
   return (
     <LevelLayout
@@ -49,7 +58,7 @@ export default function Level0() {
         ) : null
       }
       level={level}
-      showNextLevelButton={stage === 4}
+      stage={stage}
     />
   );
 }

@@ -9,7 +9,8 @@ import type { ClassificationCounts } from "~/types";
 
 export interface LevelResult {
   level: number;
-  user: ClassificationCounts;
+  completed: boolean;
+  user?: ClassificationCounts;
   best?: ClassificationCounts;
   unseen?: ClassificationCounts;
   unseenBest?: ClassificationCounts;
@@ -23,6 +24,7 @@ interface ClassificationResultsContextValue {
     counts: ClassificationCounts,
     overwrite?: boolean
   ) => void;
+  markLevelCompleted: (level: number) => void;
   hasLevelResult: (level: number) => boolean;
   reset: () => void;
 }
@@ -47,7 +49,7 @@ export function ClassificationResultsProvider({
     setResultsByLevel((prev) => {
       const existing = prev.get(level) || {
         level,
-        user: { TP: 0, TN: 0, FP: 0, FN: 0 },
+        completed: true,
       };
       const updated = {
         ...existing,
@@ -57,6 +59,20 @@ export function ClassificationResultsProvider({
         return new Map(prev).set(level, updated);
       }
       return prev;
+    });
+  }, []);
+
+  const markLevelCompleted = useCallback((level: number) => {
+    setResultsByLevel((prev) => {
+      const existing = prev.get(level) || {
+        level,
+        completed: false,
+      };
+      const updated = {
+        ...existing,
+        completed: true,
+      };
+      return new Map(prev).set(level, updated);
     });
   }, []);
 
@@ -70,7 +86,7 @@ export function ClassificationResultsProvider({
   }, []);
 
   const value = useMemo<ClassificationResultsContextValue>(
-    () => ({ resultsByLevel, recordLevelResult, hasLevelResult, reset }),
+    () => ({ resultsByLevel, recordLevelResult, markLevelCompleted, hasLevelResult, reset }),
     [resultsByLevel, recordLevelResult, hasLevelResult, reset]
   );
 

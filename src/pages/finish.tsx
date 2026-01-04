@@ -22,7 +22,7 @@ export default function Finish() {
     const result = resultsByLevel.get(level);
     return {
       level,
-      yourAccuracy: result ? calculateAccuracy(result.user) : 0,
+      yourAccuracy: result ? calculateAccuracy(result.user || {TP:0,TN:0,FP:0,FN:0}) : 0,
       bestAccuracy: result?.best ? calculateAccuracy(result.best) : null,
       unseenAccuracy: result?.unseen ? calculateAccuracy(result.unseen) : null,
     };
@@ -55,7 +55,7 @@ export default function Finish() {
         <h1 className="text-4xl font-bold text-stone-800 dark:text-stone-200 w-full text-center">{content.title}</h1>
 
         {/* Decorative Circles */}
-        <div className="absolute top-0 left-20 w-1/4 h-1/3">
+        <div className="absolute top-0 left-20 w-1/4 h-1/3 text-white">
           <div className="absolute top-1/2 translate-y-6 right-0 w-18 h-18 bg-emerald-900 rounded-full flex items-center justify-center animate-pulse [animation-delay:100ms] p-1">
             <SmileIcon size={64} className="rotate-5"/>
           </div>
@@ -69,7 +69,7 @@ export default function Finish() {
             <SmileIcon size={64} className="rotate-22"/>
           </div>
         </div>
-        <div className="absolute top-0 right-20 w-1/4 h-1/3">
+        <div className="absolute top-0 right-20 w-1/4 h-1/3 text-white">
           <div className="absolute top-1/2 translate-y-6 left-0 w-18 h-18 bg-emerald-900 rounded-full flex items-center justify-center animate-pulse [animation-delay:100ms] p-1">
             <SmileIcon size={64} className="rotate-25"/>
           </div>

@@ -67,6 +67,7 @@
     "levelLabel": "Niveau:",
     "introLabel": "Intro",
     "nextLevelButtonText": "Volgend niveau",
+    "skipLevelButtonText": "Niveau overslaan",
     "previousLevel": "Vorig niveau",
     "restartLevel": "Niveau opnieuw starten",
     "restartApp": "App opnieuw starten",

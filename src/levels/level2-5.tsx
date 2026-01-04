@@ -27,7 +27,7 @@ export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
     FP: 0,
     FN: 0,
   });
-  const { recordLevelResult, reset } = useClassificationResults();
+  const { recordLevelResult } = useClassificationResults();
 
   const rawJson: LevelJsonShape = useMemo(() => {
     const mapping: Record<number, LevelJsonShape> = {
@@ -38,10 +38,6 @@ export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
     };
     return mapping[level] ?? (level2Json as LevelJsonShape);
   }, [level]);
-
-  useEffect(() => {
-    if (level === 2) reset();
-  }, [level, reset]);
 
   useEffect(() => {
     if (stage === 4 && results.TP + results.TN + results.FP + results.FN > 0) {
@@ -97,7 +93,7 @@ export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
         ) : null
       }
       level={level}
-      showNextLevelButton={stage === 5}
+      stage={stage}
     />
   );
 }
