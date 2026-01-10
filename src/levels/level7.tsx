@@ -90,7 +90,7 @@ export default function Level7() {
         </>
       }
       level={level}
-      stage={stage}
+      showNextLevelButton={stage === 4}
     />
   );
 }

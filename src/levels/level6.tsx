@@ -135,7 +135,7 @@ export default function Level6() {
         </>
       }
       level={level}
-      stage={stage}
+      showNextLevelButton={stage === 6}
     />
   );
 }

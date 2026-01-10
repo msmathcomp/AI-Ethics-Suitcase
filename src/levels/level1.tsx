@@ -500,7 +500,7 @@ export default function Level1() {
           <ClassificationResults classificationCounts={results} />
         }
         level={1}
-        stage={stage}
+        showNextLevelButton={stage === 4}
         instructionButton={null}
       />
 

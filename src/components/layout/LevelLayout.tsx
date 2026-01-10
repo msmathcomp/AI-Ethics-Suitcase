@@ -13,7 +13,7 @@ interface Props {
   instructionButtonCallback?: () => void;
   classificationResults: ReactNode;
   level: number;
-  stage: number;
+  showNextLevelButton: boolean;
 }
 
 export default function LevelLayout({
@@ -24,7 +24,7 @@ export default function LevelLayout({
   instructionButton,
   classificationResults,
   level,
-  stage,
+  showNextLevelButton,
 }: Props) {
   const { title: title } = useIntlayer("app");
 
@@ -66,7 +66,7 @@ export default function LevelLayout({
       <div className="py-1 w-full flex items-center justify-center">
         <LevelProgressBar
           level={level}
-          stage={stage}
+          showNextLevelButton={showNextLevelButton}
         />
       </div>
       <div className="h-2 w-full" />

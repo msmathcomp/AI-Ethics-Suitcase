@@ -9,14 +9,14 @@ import { useClassificationResults } from "~/context/ClassificationResultsContext
 
 interface LevelProgressBarProps {
   level: number;
-  stage: number;
+  showNextLevelButton: boolean;
 }
 
 const TOTAL_LEVELS = 9;
 
 export function LevelProgressBar({
   level,
-  stage,
+  showNextLevelButton,
 }: LevelProgressBarProps) {
   const navigate = useNavigate();
   const { levelProgressBar: content } = useIntlayer("app");
@@ -112,7 +112,7 @@ export function LevelProgressBar({
       <button
         id="next-level-button"
         onClick={handleNextLevel}
-        className={stage >= 5 
+        className={showNextLevelButton 
           ? cn(
             "flex items-center ml-2 bg-emerald-200 hover:bg-emerald-300 dark:bg-emerald-900 hover:dark:bg-emerald-800",
             "text-black dark:text-white rounded pl-2 py-1 border-emerald-200 dark:border-emerald-900 border",
@@ -120,7 +120,7 @@ export function LevelProgressBar({
           : "flex items-center border rounded pl-2 py-1 mr-4 hover:bg-stone-200 dark:hover:bg-stone-800"
         }
       >
-        {stage >= 5 ? content.nextLevelButtonText : content.skipLevelButtonText}
+        {showNextLevelButton ? content.nextLevelButtonText : content.skipLevelButtonText}
         <ChevronRight size={25} />
       </button>
       <div className="absolute right-0 top-0 flex items-center justify-center p-2">

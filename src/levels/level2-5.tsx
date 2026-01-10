@@ -93,7 +93,7 @@ export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
         ) : null
       }
       level={level}
-      stage={stage}
+      showNextLevelButton={stage === 5}
     />
   );
 }
