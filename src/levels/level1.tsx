@@ -24,7 +24,7 @@ import { useIntlayer } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
 import { getPointClassification } from "~/utils/classification";
 import { cn } from "~/utils/cn";
-import { useClassificationResults } from "~/context/ClassificationResultsContext";
+import { useLevelData } from "~/context/ClassificationResultsContext";
 
 const CustomDotLevel1 = ({
   cx,
@@ -145,7 +145,7 @@ export default function Level1() {
   const [areaPolygons, setAreaPolygons] = useState<AreaPolygons | null>(null);
   const [run, setRun] = useState(false);
 
-  const { markLevelCompleted } = useClassificationResults();
+  const { markLevelCompleted } = useLevelData();
 
   const graphToOverlayCoords = (graphCoords: Point): Point => {
     if (!overlayRef.current || !chartContainerRef.current)

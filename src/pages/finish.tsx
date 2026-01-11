@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { useIntlayer } from "react-intlayer";
-import { useClassificationResults } from "~/context/ClassificationResultsContext";
+import { useLevelData } from "~/context/ClassificationResultsContext";
 import type { ClassificationCounts } from "~/types";
 import { LanguageSwitch } from "~/components/ui/LanguageSwitch";
 import ThemeSwitch from "~/components/ui/ThemeSwitch";
@@ -14,7 +14,7 @@ function calculateAccuracy(counts: ClassificationCounts): number {
 
 export default function Finish() {
   const { finish: content } = useIntlayer("app");
-  const { resultsByLevel, reset } = useClassificationResults();
+  const { dataByLevel: resultsByLevel, reset } = useLevelData();
 
   // Calculate total score (sum of accuracies for levels 2-7)
   const levels = [2, 3, 4, 5, 6, 7];

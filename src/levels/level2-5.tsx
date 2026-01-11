@@ -2,7 +2,7 @@ import { ClassificationVisualizer } from "~/components/ClassificationVisualizer"
 import { useState, useMemo, useEffect } from "react";
 import { ClassificationResults } from "~/components/ui/ClassificationResults";
 import type { ClassificationCounts, LevelJsonShape, Point } from "~/types";
-import { useClassificationResults } from "~/context/ClassificationResultsContext";
+import { useLevelData } from "~/context/ClassificationResultsContext";
 
 // Static JSON imports for levels 2-5
 import level2Json from "@/data/level2.json";
@@ -14,7 +14,8 @@ import LevelLayout from "~/components/layout/LevelLayout";
 
 export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
   const { level2_5: content, common: commonContent } = useIntlayer("app");
-  const [stage, setStage] = useState(0);
+  // const [stage, setStage] = useState(0);
+
   const [results, setResults] = useState<ClassificationCounts>({
     TP: 0,
     TN: 0,
@@ -27,7 +28,17 @@ export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
     FP: 0,
     FN: 0,
   });
-  const { recordLevelResult } = useClassificationResults();
+  const { getStage, setStage: setStageByLevel, recordLevelResult, getVisualizerData, modifyVisualizerData } = useLevelData();
+
+  const stage = getStage(level);
+  const setStage = (newStage: number | ((old: number) => number)) => {
+    // modifyVisualizerData(level, (data) => data); // Dummy call to trigger re-render
+    if (typeof newStage === "number") {
+      setStageByLevel(level, newStage);
+    } else {
+      setStageByLevel(level, newStage(stage));
+    }
+  };
 
   const rawJson: LevelJsonShape = useMemo(() => {
     const mapping: Record<number, LevelJsonShape> = {
@@ -59,10 +70,14 @@ export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
         <ClassificationVisualizer
           key={`visualizer-${level}`}
           seenData={rawJson.data}
+          visualizerData={getVisualizerData(level)}
           stage={stage}
           setStage={setStage}
           setResults={setResults}
           setBestResults={setBestResults}
+          modifyVisualizerData={(modifyFn) =>
+            modifyVisualizerData(level, modifyFn)
+          }
           bestClassifier={{
             line: rawJson.best as Point[],
             originIsPass: rawJson.originIsPass,

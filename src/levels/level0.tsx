@@ -4,7 +4,7 @@ import { ClassificationResults } from "~/components/ui/ClassificationResults";
 import type { DataPoint, ClassificationCounts } from "~/types";
 import { useIntlayer } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
-import { useClassificationResults } from "~/context/ClassificationResultsContext";
+import { useLevelData } from "~/context/ClassificationResultsContext";
 
 const data: DataPoint[] = [
   { study_time: 100, screen_time: 300, type: "Fail" },
@@ -24,7 +24,7 @@ export default function Level0() {
   });
   const { level0: content, common: commonContent } = useIntlayer("app");
 
-  const { markLevelCompleted } = useClassificationResults();
+  const { markLevelCompleted, getVisualizerData, modifyVisualizerData } = useLevelData();
 
   useEffect(() => {
     if (stage === 4) {
@@ -39,9 +39,13 @@ export default function Level0() {
         <ClassificationVisualizer
           key={`visualizer-${level}`}
           seenData={data}
+          visualizerData={getVisualizerData(level)}
           stage={stage}
           setStage={setStage}
           setResults={setResults}
+          modifyVisualizerData={(modifyFn) =>
+            modifyVisualizerData(level, modifyFn)
+          }
           bestClassifier={{ line: [], originIsPass: true }} // irrelevant for this level
         />
       }

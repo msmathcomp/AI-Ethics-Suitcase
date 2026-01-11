@@ -2,7 +2,7 @@ import { useMemo, useState, useEffect } from "react";
 import { ClassificationResults } from "~/components/ui/ClassificationResults";
 import type { ClassificationCounts, DataPoint, LevelJsonShape } from "~/types";
 import { CurveVisualizer } from "~/components/CurveVisualizer";
-import { useClassificationResults } from "~/context/ClassificationResultsContext";
+import { useLevelData } from "~/context/ClassificationResultsContext";
 import level7Json from "@/data/level7.json";
 import { useIntlayer } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
@@ -35,7 +35,7 @@ export default function Level7() {
     return level7Json as LevelJsonShape & { testData: DataPoint[] };
   }, []);
 
-  const { recordLevelResult } = useClassificationResults();
+  const { recordLevelResult } = useLevelData();
 
   useEffect(() => {
     if (stage === 3 && results.TP + results.TN + results.FP + results.FN > 0) {

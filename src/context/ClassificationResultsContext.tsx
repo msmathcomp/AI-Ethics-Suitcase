@@ -5,54 +5,86 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import type { ClassificationCounts } from "~/types";
+import type { ClassificationCounts, ClickCoordinates } from "~/types";
 
-export interface LevelResult {
-  level: number;
+// Define the shape of data stored for each level
+export interface LevelData {
+  stage: number;
   completed: boolean;
   user?: ClassificationCounts;
   best?: ClassificationCounts;
   unseen?: ClassificationCounts;
   unseenBest?: ClassificationCounts;
+  visualizerData: VisualizerData;
 }
 
-interface ClassificationResultsContextValue {
-  resultsByLevel: Map<number, LevelResult>;
+export interface VisualizerData {
+  clickCoords?: ClickCoordinates[];
+  areaColorsAssigned: boolean;
+  showBestLine: boolean;
+  showSeenData: boolean;
+  showUnseenData: boolean;
+  originIsPass: boolean | null;
+}
+
+const defaultVisualizerData: VisualizerData = {
+  areaColorsAssigned: false,
+  showBestLine: false,
+  showSeenData: true,
+  showUnseenData: false,
+  originIsPass: null,
+};
+
+interface LevelDataContextValue {
+  dataByLevel: Map<number, LevelData>;
   recordLevelResult: (
     level: number,
     type: "user" | "best" | "unseen" | "unseenBest",
     counts: ClassificationCounts,
     overwrite?: boolean
   ) => void;
+  getStage: (level: number) => number;
+  setStage: (level: number, stage: number) => void;
+  isLevelCompleted: (level: number) => boolean;
   markLevelCompleted: (level: number) => void;
-  hasLevelResult: (level: number) => boolean;
+  getVisualizerData: (level: number) => VisualizerData;
+  setVisualizerData: (
+    level: number,
+    data: VisualizerData
+  ) => void;
+  modifyVisualizerData: (
+    level: number,
+    modifyFn: (data: VisualizerData) => VisualizerData
+  ) => void;
   reset: () => void;
 }
 
-const ClassificationResultsContext = createContext<
-  ClassificationResultsContextValue | undefined
+const LevelDataContext = createContext<
+  LevelDataContextValue | undefined
 >(undefined);
 
-export function ClassificationResultsProvider({
+export function LevelDataProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
   // init Map state
-  const [resultsByLevel, setResultsByLevel] = useState<
-    Map<number, LevelResult>
+  const [dataByLevel, setDataByLevel] = useState<
+    Map<number, LevelData>
   >(() => new Map());
 
   const recordLevelResult = useCallback<
-    ClassificationResultsContextValue["recordLevelResult"]
+    LevelDataContextValue["recordLevelResult"]
   >((level, type, counts, overwrite = false) => {
-    setResultsByLevel((prev) => {
+    setDataByLevel((prev) => {
       const existing = prev.get(level) || {
-        level,
+        stage: 0,
         completed: true,
+        visualizerData: defaultVisualizerData,
       };
       const updated = {
         ...existing,
+        completed: true,
         [type]: counts,
       };
       if (overwrite || !prev.has(level) || !existing[type]) {
@@ -63,10 +95,11 @@ export function ClassificationResultsProvider({
   }, []);
 
   const markLevelCompleted = useCallback((level: number) => {
-    setResultsByLevel((prev) => {
+    setDataByLevel((prev) => {
       const existing = prev.get(level) || {
-        level,
+        stage: 0,
         completed: false,
+        visualizerData: defaultVisualizerData,
       };
       const updated = {
         ...existing,
@@ -76,30 +109,96 @@ export function ClassificationResultsProvider({
     });
   }, []);
 
-  const hasLevelResult = useCallback(
-    (level: number) => resultsByLevel.has(level),
-    [resultsByLevel]
-  );
+  const getStage = useCallback((level: number) => {
+    const levelData = dataByLevel.get(level);
+    return levelData ? levelData.stage : 0;
+  }, [dataByLevel]);
 
-  const reset = useCallback(() => {
-    setResultsByLevel(new Map());
+  const setStage = useCallback((level: number, stage: number) => {
+    setDataByLevel((prev) => {
+      const existing = prev.get(level) || {
+        stage: 0,
+        completed: false,
+        visualizerData: defaultVisualizerData,
+      };
+      const updated = {
+        ...existing,
+        stage,
+      };
+      return new Map(prev).set(level, updated);
+    });
+  }, [])
+
+  const isLevelCompleted = useCallback((level: number) => {
+    const levelData = dataByLevel.get(level);
+    return levelData ? levelData.completed : false;
+  }, [dataByLevel]);
+
+  const getVisualizerData = useCallback((level: number) => {
+    const levelData = dataByLevel.get(level);
+    return levelData ? levelData.visualizerData : defaultVisualizerData;
+  }, [dataByLevel]);
+  
+  const setVisualizerData = useCallback((level: number, data: VisualizerData) => {
+    setDataByLevel((prev) => {
+      const existing = prev.get(level) || {
+        stage: 0,
+        completed: false,
+      };
+      const updated = {
+        ...existing,
+        visualizerData: data,
+      };
+      return new Map(prev).set(level, updated);
+    });
   }, []);
 
-  const value = useMemo<ClassificationResultsContextValue>(
-    () => ({ resultsByLevel, recordLevelResult, markLevelCompleted, hasLevelResult, reset }),
-    [resultsByLevel, recordLevelResult, hasLevelResult, reset]
+  const modifyVisualizerData = useCallback((level: number, modifyFn: (data: VisualizerData) => VisualizerData) => {
+    setDataByLevel((prev) => {
+      const existing = prev.get(level) || {
+        stage: 0,
+        completed: false,
+        visualizerData: defaultVisualizerData,
+      }
+      const currentData = existing.visualizerData;
+      const newData = modifyFn(currentData);
+      const updated = {
+        ...existing,
+        visualizerData: newData,
+      };
+      return new Map(prev).set(level, updated);
+    });
+  }, []);
+
+  const reset = useCallback(() => {
+    setDataByLevel(new Map());
+  }, []);
+
+  const value = useMemo<LevelDataContextValue>(
+    () => ({ 
+      dataByLevel: dataByLevel,
+      recordLevelResult,
+      getStage, setStage,
+      isLevelCompleted,
+      markLevelCompleted,
+      getVisualizerData,
+      setVisualizerData,
+      modifyVisualizerData,
+      reset
+    }),
+    [dataByLevel, recordLevelResult, getStage, setStage, isLevelCompleted, markLevelCompleted, getVisualizerData, setVisualizerData, modifyVisualizerData, reset]
   );
 
   return (
-    <ClassificationResultsContext.Provider value={value}>
+    <LevelDataContext.Provider value={value}>
       {children}
-    </ClassificationResultsContext.Provider>
+    </LevelDataContext.Provider>
   );
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
-export function useClassificationResults() {
-  const ctx = useContext(ClassificationResultsContext);
+export function useLevelData() {
+  const ctx = useContext(LevelDataContext);
   if (!ctx)
     throw new Error(
       "useClassificationResults must be used within a ClassificationResultsProvider"

@@ -5,7 +5,7 @@ import { useIntlayer } from "react-intlayer";
 import { useEffect, useRef, useState } from "react";
 import Dialog from "./Dialog";
 import ThemeSwitch from "./ThemeSwitch";
-import { useClassificationResults } from "~/context/ClassificationResultsContext";
+import { useLevelData } from "~/context/ClassificationResultsContext";
 
 interface LevelProgressBarProps {
   level: number;
@@ -22,7 +22,7 @@ export function LevelProgressBar({
   const { levelProgressBar: content } = useIntlayer("app");
 
   // Result 
-  const { hasLevelResult, reset } = useClassificationResults();
+  const { isLevelCompleted, reset } = useLevelData();
 
   // Restart button popup menu state
   const [showMenu, setShowMenu] = useState(false);
@@ -81,11 +81,11 @@ export function LevelProgressBar({
         {content.previousLevel}
       </button>
       {[...Array(TOTAL_LEVELS)].map((_, index) => {
-        const isCompleted = hasLevelResult(index - 1);
+        const isCompleted = isLevelCompleted(index - 1);
         if (index === level + 1) {
           return (
             <div
-              key={index}
+              key={`level-button-${index}`}
               className={cn(
                 "rounded-full w-8 h-8 flex items-center justify-center",
                 "bg-indigo-500"
@@ -96,9 +96,11 @@ export function LevelProgressBar({
           );
         }
         return (
-          <Link to={`/level/${index - 1}`}>
+          <Link
+            to={`/level/${index - 1}`}
+            key={`level-button-${index}`}
+          >
             <div
-              key={index}
               className={cn(
                 "rounded-full w-8 h-8 flex items-center justify-center",
                 isCompleted ? "bg-teal-500" : "bg-stone-300 dark:bg-stone-700 hover:bg-stone-400 dark:hover:bg-stone-600"

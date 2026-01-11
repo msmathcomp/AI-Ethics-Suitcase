@@ -2,7 +2,7 @@ import { ClassificationVisualizer } from "~/components/ClassificationVisualizer"
 import { useMemo, useState, useEffect } from "react";
 import { ClassificationResults } from "~/components/ui/ClassificationResults";
 import type { ClassificationCounts, DataPoint, LevelJsonShape } from "~/types";
-import { useClassificationResults } from "~/context/ClassificationResultsContext";
+import { useLevelData } from "~/context/ClassificationResultsContext";
 import level6Json from "@/data/level6.json";
 import { useIntlayer } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
@@ -46,7 +46,7 @@ export default function Level6() {
     return level6Json as LevelJsonShape & { testData: DataPoint[] };
   }, []);
 
-  const { recordLevelResult } = useClassificationResults();
+  const { recordLevelResult, getVisualizerData, modifyVisualizerData } = useLevelData();
 
   useEffect(() => {
     if (stage === 4 && results.TP + results.TN + results.FP + results.FN > 0) {
@@ -85,12 +85,16 @@ export default function Level6() {
           key={`visualizer-${level}`}
           seenData={levelJson.data}
           unseenData={levelJson.testData}
+          visualizerData={getVisualizerData(level)}
           stage={stage}
           setStage={setStage}
           setResults={(res) => setResults(res)}
           setBestResults={(res) => setBestResults(res)}
           setUnseenResults={(res) => setUnseenResults(res)}
           setUnseenBestResults={(res) => setUnseenBestResults(res)}
+          modifyVisualizerData={(modifyFn) =>
+            modifyVisualizerData(level, modifyFn)
+          }
           bestClassifier={{
             line: level6Json.best,
             originIsPass: level6Json.originIsPass,

@@ -11,7 +11,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useIntlayer, type IntlayerNode } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
-import { useClassificationResults } from "~/context/ClassificationResultsContext";
+import { useLevelData } from "~/context/ClassificationResultsContext";
 
 const CustomDotIntro = ({
   cx,
@@ -147,10 +147,9 @@ export default function IntroLevel() {
   } = useIntlayer("app");
   const [run, setRun] = useState(false);
   const navigate = useNavigate();
-  // TODO: use showNextLevelButton to actually show the button
   const [showNextLevelButton, setShowNextLevelButton] = useState(false);
 
-  const { markLevelCompleted } = useClassificationResults();
+  const { markLevelCompleted } = useLevelData();
 
   useEffect(() => setRun(true), []);
   const steps = stepsFactory(introContent);
@@ -225,7 +224,7 @@ export default function IntroLevel() {
         instructionButton={null}
         classificationResults={null}
         level={-1}
-        stage={5}
+        showNextLevelButton={showNextLevelButton}
       />
       <Joyride
         steps={steps}

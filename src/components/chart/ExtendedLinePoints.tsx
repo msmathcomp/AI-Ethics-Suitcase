@@ -2,7 +2,7 @@ import { Move } from "lucide-react";
 import type { ClickCoordinates } from "~/types";
 
 interface Props {
-  ref: React.LegacyRef<HTMLDivElement>;
+  elementRef: React.LegacyRef<HTMLDivElement>;
   extendedLinePoints: ClickCoordinates[];
   lineCoords: ClickCoordinates[];
   onExtendedPointMouseDown: (
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const ExtendedLinePoints = ({
-  ref,
+  elementRef,
   extendedLinePoints,
   lineCoords,
   onExtendedPointMouseDown,
@@ -22,7 +22,7 @@ export const ExtendedLinePoints = ({
   }
 
   return (
-    <div ref={ref}>
+    <div ref={elementRef}>
       <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
         <line
           x1={extendedLinePoints[0].overlay.x}
