@@ -22,7 +22,7 @@ export function LevelProgressBar({
   const { levelProgressBar: content } = useIntlayer("app");
 
   // Result 
-  const { isLevelCompleted, reset } = useLevelData();
+  const { isLevelCompleted, resetLevelData, reset } = useLevelData();
 
   // Restart button popup menu state
   const [showMenu, setShowMenu] = useState(false);
@@ -53,7 +53,7 @@ export function LevelProgressBar({
     setShowMenu(false);
 
     if (option === "level") {
-      window.location.reload();
+      resetLevelData(level);
     } else if (option === "app") {
       setIsDialogOpen(true);
     }

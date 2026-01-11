@@ -56,6 +56,7 @@ interface LevelDataContextValue {
     level: number,
     modifyFn: (data: VisualizerData) => VisualizerData
   ) => void;
+  resetLevelData: (level: number) => void;
   reset: () => void;
 }
 
@@ -170,13 +171,21 @@ export function LevelDataProvider({
     });
   }, []);
 
+  const resetLevelData = useCallback((level: number) => {
+    setDataByLevel((prev) => {
+      const newMap = new Map(prev);
+      newMap.delete(level);
+      return newMap;
+    });
+  }, []);
+
   const reset = useCallback(() => {
     setDataByLevel(new Map());
   }, []);
 
   const value = useMemo<LevelDataContextValue>(
     () => ({ 
-      dataByLevel: dataByLevel,
+      dataByLevel,
       recordLevelResult,
       getStage, setStage,
       isLevelCompleted,
@@ -184,6 +193,7 @@ export function LevelDataProvider({
       getVisualizerData,
       setVisualizerData,
       modifyVisualizerData,
+      resetLevelData,
       reset
     }),
     [dataByLevel, recordLevelResult, getStage, setStage, isLevelCompleted, markLevelCompleted, getVisualizerData, setVisualizerData, modifyVisualizerData, reset]

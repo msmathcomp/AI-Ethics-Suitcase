@@ -14,7 +14,7 @@ function calculateAccuracy(counts: ClassificationCounts): number {
 
 export default function Finish() {
   const { finish: content } = useIntlayer("app");
-  const { dataByLevel: resultsByLevel, reset } = useLevelData();
+  const { dataByLevel: resultsByLevel, reset: reset } = useLevelData();
 
   // Calculate total score (sum of accuracies for levels 2-7)
   const levels = [2, 3, 4, 5, 6, 7];

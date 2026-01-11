@@ -73,8 +73,10 @@ const [lineCoords, setLineCoords] = useState<ClickCoordinates[]>([]);
 const [bestLineCoords, setBestLineCoords] = useState<ClickCoordinates[]>([]);
 
 // State for user click coordinates (used to define line)
-// const [clickCoords, setClickCoords] = useState<ClickCoordinates[]>([]);
-const clickCoords = visualizerData.clickCoords || [];
+const clickCoords = useMemo(() => {
+  return visualizerData.clickCoords || [];
+}, [visualizerData.clickCoords]);
+
 const setClickCoords = (newClickCoords: ClickCoordinates[]) => {
   modifyVisualizerData((data) => ({
     ...data,
@@ -111,16 +113,16 @@ const [extendedLinePoints, setExtendedLinePoints] = useState<
     ClickCoordinates[]
   >([]);
 
-// const [areaColorsAssigned, setAreaColorsAssigned] = useState(false);
 // Whether area colors have been assigned (pass/fail)
-const areaColorsAssigned = visualizerData.areaColorsAssigned || false;
+const areaColorsAssigned = useMemo(() => {
+  return visualizerData.areaColorsAssigned;
+}, [visualizerData.areaColorsAssigned]);
 const setAreaColorsAssigned = (newValue: boolean) => {
   modifyVisualizerData((data) => ({
     ...data,
     areaColorsAssigned: newValue,
   }));
 };
-// const [showBestLine, setShowBestLine] = useState(true);
 
 // Whether to show best classifier line or user's line
 const showBestLine = visualizerData.showBestLine;
