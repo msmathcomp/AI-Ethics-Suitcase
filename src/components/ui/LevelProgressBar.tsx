@@ -5,7 +5,7 @@ import { useIntlayer } from "react-intlayer";
 import { useEffect, useRef, useState } from "react";
 import Dialog from "./Dialog";
 import ThemeSwitch from "./ThemeSwitch";
-import { useLevelData } from "~/context/ClassificationResultsContext";
+import { useLevelData } from "~/context/LevelDataContext";
 
 interface LevelProgressBarProps {
   level: number;

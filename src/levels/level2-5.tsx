@@ -2,7 +2,7 @@ import { ClassificationVisualizer } from "~/components/ClassificationVisualizer"
 import { useState, useMemo, useEffect } from "react";
 import { ClassificationResults } from "~/components/ui/ClassificationResults";
 import type { ClassificationCounts, LevelJsonShape, Point } from "~/types";
-import { useLevelData } from "~/context/ClassificationResultsContext";
+import { useLevelData } from "~/context/LevelDataContext";
 
 // Static JSON imports for levels 2-5
 import level2Json from "@/data/level2.json";
@@ -28,16 +28,18 @@ export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
     FP: 0,
     FN: 0,
   });
-  const { getStage, setStage: setStageByLevel, recordLevelResult, getVisualizerData, modifyVisualizerData } = useLevelData();
+  const {
+    getStage,
+    setStage: setStageByLevel,
+    recordLevelResult,
+    getVisualizerData,
+    modifyVisualizerData,
+    markLevelCompleted,
+  } = useLevelData();
 
   const stage = getStage(level);
   const setStage = (newStage: number | ((old: number) => number)) => {
-    // modifyVisualizerData(level, (data) => data); // Dummy call to trigger re-render
-    if (typeof newStage === "number") {
-      setStageByLevel(level, newStage);
-    } else {
-      setStageByLevel(level, newStage(stage));
-    }
+    setStageByLevel(level, typeof newStage === "number" ? newStage : newStage(stage));
   };
 
   const rawJson: LevelJsonShape = useMemo(() => {
@@ -58,6 +60,7 @@ export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
       bestResults.TP + bestResults.TN + bestResults.FP + bestResults.FN > 0
     ) {
       recordLevelResult(level, "best", bestResults);
+      markLevelCompleted(level);
     }
   }, [stage, recordLevelResult, level, results, bestResults]);
 

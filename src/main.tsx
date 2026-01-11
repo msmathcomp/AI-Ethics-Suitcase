@@ -4,7 +4,7 @@ import { IntlayerProvider } from "react-intlayer";
 import "./index.css";
 import LocaleInitializer from "./components/LocaleInitializer.tsx";
 import { ConfigProvider } from "./context/ConfigContext";
-import { LevelDataProvider } from "./context/ClassificationResultsContext";
+import { LevelDataProvider } from "./context/LevelDataContext.tsx";
 import Router from "./router.tsx";
 
 createRoot(document.getElementById("root")!).render(

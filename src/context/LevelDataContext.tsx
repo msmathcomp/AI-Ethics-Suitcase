@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import type { ClassificationCounts, ClickCoordinates } from "~/types";
+import type { ClassificationCounts, ClickCoordinates, Point } from "~/types";
 
 // Define the shape of data stored for each level
 export interface LevelData {
@@ -20,8 +20,9 @@ export interface LevelData {
 
 export interface VisualizerData {
   clickCoords?: ClickCoordinates[];
+  graphCurve?: Point[];
   areaColorsAssigned: boolean;
-  showBestLine: boolean;
+  showBestLine?: boolean;
   showSeenData: boolean;
   showUnseenData: boolean;
   originIsPass: boolean | null;
@@ -78,14 +79,9 @@ export function LevelDataProvider({
     LevelDataContextValue["recordLevelResult"]
   >((level, type, counts, overwrite = false) => {
     setDataByLevel((prev) => {
-      const existing = prev.get(level) || {
-        stage: 0,
-        completed: true,
-        visualizerData: defaultVisualizerData,
-      };
+      const existing = prev.get(level) || defaultLevelData;
       const updated = {
         ...existing,
-        completed: true,
         [type]: counts,
       };
       if (overwrite || !prev.has(level) || !existing[type]) {
@@ -97,11 +93,7 @@ export function LevelDataProvider({
 
   const markLevelCompleted = useCallback((level: number) => {
     setDataByLevel((prev) => {
-      const existing = prev.get(level) || {
-        stage: 0,
-        completed: false,
-        visualizerData: defaultVisualizerData,
-      };
+      const existing = prev.get(level) || defaultLevelData;
       const updated = {
         ...existing,
         completed: true,
@@ -117,11 +109,7 @@ export function LevelDataProvider({
 
   const setStage = useCallback((level: number, stage: number) => {
     setDataByLevel((prev) => {
-      const existing = prev.get(level) || {
-        stage: 0,
-        completed: false,
-        visualizerData: defaultVisualizerData,
-      };
+      const existing = prev.get(level) || defaultLevelData;
       const updated = {
         ...existing,
         stage,
@@ -142,10 +130,7 @@ export function LevelDataProvider({
   
   const setVisualizerData = useCallback((level: number, data: VisualizerData) => {
     setDataByLevel((prev) => {
-      const existing = prev.get(level) || {
-        stage: 0,
-        completed: false,
-      };
+      const existing = prev.get(level) || defaultLevelData;
       const updated = {
         ...existing,
         visualizerData: data,
@@ -156,11 +141,7 @@ export function LevelDataProvider({
 
   const modifyVisualizerData = useCallback((level: number, modifyFn: (data: VisualizerData) => VisualizerData) => {
     setDataByLevel((prev) => {
-      const existing = prev.get(level) || {
-        stage: 0,
-        completed: false,
-        visualizerData: defaultVisualizerData,
-      }
+      const existing = prev.get(level) || defaultLevelData;
       const currentData = existing.visualizerData;
       const newData = modifyFn(currentData);
       const updated = {
@@ -204,6 +185,12 @@ export function LevelDataProvider({
       {children}
     </LevelDataContext.Provider>
   );
+}
+
+const defaultLevelData: LevelData = {
+  stage: 0,
+  completed: false,
+  visualizerData: defaultVisualizerData,
 }
 
 // eslint-disable-next-line react-refresh/only-export-components

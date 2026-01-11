@@ -2,7 +2,7 @@ import { useMemo, useState, useEffect } from "react";
 import { ClassificationResults } from "~/components/ui/ClassificationResults";
 import type { ClassificationCounts, DataPoint, LevelJsonShape } from "~/types";
 import { CurveVisualizer } from "~/components/CurveVisualizer";
-import { useLevelData } from "~/context/ClassificationResultsContext";
+import { useLevelData } from "~/context/LevelDataContext";
 import level7Json from "@/data/level7.json";
 import { useIntlayer } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
@@ -14,8 +14,6 @@ export default function Level7() {
     common: commonContent,
     classificationResults: classifcationResultsContent,
   } = useIntlayer("app");
-
-  const [stage, setStage] = useState(0);
 
   const [results, setResults] = useState<ClassificationCounts>({
     TP: 0,
@@ -35,7 +33,19 @@ export default function Level7() {
     return level7Json as LevelJsonShape & { testData: DataPoint[] };
   }, []);
 
-  const { recordLevelResult } = useLevelData();
+  const {
+    getStage,
+    setStage: setStageByLevel,
+    recordLevelResult,
+    getVisualizerData,
+    modifyVisualizerData,
+    markLevelCompleted,
+  } = useLevelData();
+
+  const stage = getStage(level);
+  const setStage = (newStage: number | ((old: number) => number)) => {
+    setStageByLevel(level, typeof newStage === "number" ? newStage : newStage(stage));
+  };
 
   useEffect(() => {
     if (stage === 3 && results.TP + results.TN + results.FP + results.FN > 0) {
@@ -49,6 +59,7 @@ export default function Level7() {
         0
     ) {
       recordLevelResult(level, "unseen", unseenResults);
+      markLevelCompleted(level);
     }
   }, [stage, recordLevelResult, level, results, unseenResults]);
 
@@ -60,10 +71,14 @@ export default function Level7() {
           key={`visualizer-${level}`}
           seenData={levelJson.data}
           unseenData={levelJson.testData}
+          visualizerData={getVisualizerData(level)}
           stage={stage}
           setStage={setStage}
           setResults={setResults}
           setUnseenResults={setUnseenResults}
+          modifyVisualizerData={(modifyFn) =>
+            modifyVisualizerData(level, modifyFn)
+          }
         />
       }
       instruction={

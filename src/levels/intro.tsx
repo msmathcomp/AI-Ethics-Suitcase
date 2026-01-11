@@ -11,7 +11,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useIntlayer, type IntlayerNode } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
-import { useLevelData } from "~/context/ClassificationResultsContext";
+import { useLevelData } from "~/context/LevelDataContext";
 
 const CustomDotIntro = ({
   cx,

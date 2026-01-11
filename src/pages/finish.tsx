@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { useIntlayer } from "react-intlayer";
-import { useLevelData } from "~/context/ClassificationResultsContext";
+import { useLevelData } from "~/context/LevelDataContext";
 import type { ClassificationCounts } from "~/types";
 import { LanguageSwitch } from "~/components/ui/LanguageSwitch";
 import ThemeSwitch from "~/components/ui/ThemeSwitch";
