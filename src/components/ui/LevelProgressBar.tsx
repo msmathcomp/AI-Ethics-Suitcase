@@ -126,16 +126,18 @@ export function LevelProgressBar({
         <ChevronRight size={25} />
       </button>
       <div className="absolute right-0 top-0 flex items-center justify-center p-2">
-        <button
-          id="reset-button"
-          ref={buttonRef}
-          onClick={() => setShowMenu((v) => !v)}
-          className={cn(
-            "hover:bg-stone-200 dark:hover:bg-stone-800 items-center rounded p-1 ",
-          )}
-        >
-          <RotateCcw size={30} />
-        </button>
+        {level !== -1 && level !== 1 && (
+          <button
+            id="reset-button"
+            ref={buttonRef}
+            onClick={() => setShowMenu((v) => !v)}
+            className={cn(
+              "hover:bg-stone-200 dark:hover:bg-stone-800 items-center rounded p-1 ",
+            )}
+          >
+            <RotateCcw size={30} />
+          </button>
+        )}
         <ThemeSwitch />
       </div>
       <Dialog

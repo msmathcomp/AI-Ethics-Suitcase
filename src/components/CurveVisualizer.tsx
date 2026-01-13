@@ -369,7 +369,7 @@ export const CurveVisualizer = ({
   };
 
   useEffect(() => {
-    if (stage === 3) {
+    if (stage >= 3 && areaColorsAssigned) {
       const counts = getClassificationCounts_Curve(
         seenData,
         areaPolygons,
