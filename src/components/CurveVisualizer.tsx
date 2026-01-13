@@ -349,6 +349,11 @@ export const CurveVisualizer = ({
         graphToOverlayCoords
       );
       setAreaPolygons(polygons);
+    } else {
+      setAreaPolygons({
+        area1: { graph: [], overlay: [] },
+        area2: { graph: [], overlay: [] },
+      });
     }
   }, [stage, graphCurve, graphToOverlayCoords, chartReady, overlayReady]);
 
@@ -395,19 +400,18 @@ export const CurveVisualizer = ({
       graphCurve.length > 0 &&
       !areaColorsAssigned
     ) {
-      overlayElement.style.zIndex = "51";
       areaPolygonsElement.style.zIndex = "100";
+      overlayElement.style.zIndex = "51";
     }
-  }, [graphCurve, areaColorsAssigned]);
-
-  useEffect(() => {
-    const areaPolygonsElement = areaPolygonsRef.current;
-    const overlayElement = overlayRef.current;
-    if (areaPolygonsElement && overlayElement && areaColorsAssigned) {
+    else if (areaPolygonsElement && overlayElement && areaColorsAssigned) {
       areaPolygonsElement.style.zIndex = "5";
       overlayElement.style.zIndex = "10";
+    } 
+    else if (overlayElement && areaPolygonsElement) {
+      overlayElement.style.zIndex = "";
+      areaPolygonsElement.style.zIndex = "";
     }
-  }, [areaColorsAssigned]);
+  }, [graphCurve, areaColorsAssigned]);
 
   return (
     <>
