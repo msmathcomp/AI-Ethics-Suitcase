@@ -2,7 +2,7 @@ import { ClassificationVisualizer } from "~/components/ClassificationVisualizer"
 import { useState, useMemo, useEffect } from "react";
 import { ClassificationResults } from "~/components/ui/ClassificationResults";
 import type { ClassificationCounts, LevelJsonShape, Point } from "~/types";
-import { useClassificationResults } from "~/context/ClassificationResultsContext";
+import { useLevelData } from "~/context/LevelDataContext";
 
 // Static JSON imports for levels 2-5
 import level2Json from "@/data/level2.json";
@@ -14,7 +14,8 @@ import LevelLayout from "~/components/layout/LevelLayout";
 
 export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
   const { level2_5: content, common: commonContent } = useIntlayer("app");
-  const [stage, setStage] = useState(0);
+  // const [stage, setStage] = useState(0);
+
   const [results, setResults] = useState<ClassificationCounts>({
     TP: 0,
     TN: 0,
@@ -27,7 +28,19 @@ export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
     FP: 0,
     FN: 0,
   });
-  const { recordLevelResult, reset } = useClassificationResults();
+  const {
+    getStage,
+    setStage: setStageByLevel,
+    recordLevelResult,
+    getVisualizerData,
+    modifyVisualizerData,
+    markLevelCompleted,
+  } = useLevelData();
+
+  const stage = getStage(level);
+  const setStage = (newStage: number | ((old: number) => number)) => {
+    setStageByLevel(level, typeof newStage === "number" ? newStage : newStage(stage));
+  };
 
   const rawJson: LevelJsonShape = useMemo(() => {
     const mapping: Record<number, LevelJsonShape> = {
@@ -40,10 +53,6 @@ export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
   }, [level]);
 
   useEffect(() => {
-    if (level === 2) reset();
-  }, [level, reset]);
-
-  useEffect(() => {
     if (stage === 4 && results.TP + results.TN + results.FP + results.FN > 0) {
       recordLevelResult(level, "user", results);
     } else if (
@@ -51,6 +60,7 @@ export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
       bestResults.TP + bestResults.TN + bestResults.FP + bestResults.FN > 0
     ) {
       recordLevelResult(level, "best", bestResults);
+      markLevelCompleted(level);
     }
   }, [stage, recordLevelResult, level, results, bestResults]);
 
@@ -63,10 +73,14 @@ export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
         <ClassificationVisualizer
           key={`visualizer-${level}`}
           seenData={rawJson.data}
+          visualizerData={getVisualizerData(level)}
           stage={stage}
           setStage={setStage}
           setResults={setResults}
           setBestResults={setBestResults}
+          modifyVisualizerData={(modifyFn) =>
+            modifyVisualizerData(level, modifyFn)
+          }
           bestClassifier={{
             line: rawJson.best as Point[],
             originIsPass: rawJson.originIsPass,

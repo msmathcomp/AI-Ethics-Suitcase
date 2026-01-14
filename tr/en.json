@@ -67,6 +67,7 @@
     "levelLabel": "Level:",
     "introLabel": "Intro",
     "nextLevelButtonText": "Next Level",
+    "skipLevelButtonText": "Skip Level",
     "previousLevel": "Previous Level",
     "restartLevel": "Restart Level",
     "restartApp": "Restart App",

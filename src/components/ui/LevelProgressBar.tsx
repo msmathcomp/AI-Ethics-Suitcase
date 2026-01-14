@@ -5,11 +5,11 @@ import { useIntlayer } from "react-intlayer";
 import { useEffect, useRef, useState } from "react";
 import Dialog from "./Dialog";
 import ThemeSwitch from "./ThemeSwitch";
+import { useLevelData } from "~/context/LevelDataContext";
 
 interface LevelProgressBarProps {
   level: number;
   showNextLevelButton: boolean;
-  nextLevelButtonText?: string;
 }
 
 const TOTAL_LEVELS = 9;
@@ -17,10 +17,12 @@ const TOTAL_LEVELS = 9;
 export function LevelProgressBar({
   level,
   showNextLevelButton,
-  nextLevelButtonText,
 }: LevelProgressBarProps) {
   const navigate = useNavigate();
   const { levelProgressBar: content } = useIntlayer("app");
+
+  // Result 
+  const { isLevelCompleted, resetLevelData, reset } = useLevelData();
 
   // Restart button popup menu state
   const [showMenu, setShowMenu] = useState(false);
@@ -51,7 +53,7 @@ export function LevelProgressBar({
     setShowMenu(false);
 
     if (option === "level") {
-      window.location.reload();
+      resetLevelData(level);
     } else if (option === "app") {
       setIsDialogOpen(true);
     }
@@ -73,69 +75,69 @@ export function LevelProgressBar({
       <button
         disabled={level === -1}
         onClick={() => navigate(`/level/${level - 1}`)}
-        className="flex items-center border rounded pr-2 mr-4 hover:bg-stone-200 dark:hover:bg-stone-800"
+        className="flex items-center border rounded pr-2 py-1 mr-4 hover:bg-stone-200 dark:hover:bg-stone-800"
       >
         <ChevronLeft size={25} />
         {content.previousLevel}
       </button>
       {[...Array(TOTAL_LEVELS)].map((_, index) => {
-        let backgroundColor = "bg-stone-300 dark:bg-stone-700";
-        if (index <= level) {
-          backgroundColor = "bg-teal-500";
-        } else if (index === level + 1) {
-          backgroundColor = "bg-indigo-500";
-        }
-        if (index <= level) {
+        const isCompleted = isLevelCompleted(index - 1);
+        if (index === level + 1) {
           return (
-            <Link to={`/level/${index - 1}`}>
-              <div
-                key={index}
-                className={cn(
-                  "rounded-full w-8 h-8 flex items-center justify-center",
-                  backgroundColor
-                )}
-              >
-                {<Smile color="white" />}
-              </div>
-            </Link>
+            <div
+              key={`level-button-${index}`}
+              className={cn(
+                "rounded-full w-8 h-8 flex items-center justify-center",
+                "bg-indigo-500"
+              )}
+            >
+              <Meh color="white" />
+            </div>
           );
         }
         return (
-          <div
-            key={index}
-            className={cn(
-              "rounded-full w-8 h-8 flex items-center justify-center",
-              backgroundColor
-            )}
+          <Link
+            to={`/level/${index - 1}`}
+            key={`level-button-${index}`}
           >
-            {index === level + 1 && <Meh color="white" />}
-          </div>
+            <div
+              className={cn(
+                "rounded-full w-8 h-8 flex items-center justify-center",
+                isCompleted ? "bg-teal-500" : "bg-stone-300 dark:bg-stone-700 hover:bg-stone-400 dark:hover:bg-stone-600"
+              )}
+            >
+              {isCompleted && <Smile color="white" />}
+            </div>
+          </Link>
         );
       })}
       <button
         id="next-level-button"
         onClick={handleNextLevel}
-        disabled={!showNextLevelButton}
-        className={cn(
-          "flex items-center ml-2 bg-emerald-200 hover:bg-emerald-300 dark:bg-emerald-900 hover:dark:bg-emerald-800 text-black dark:text-white rounded px-2 border-emerald-200 dark:border-emerald-900 border",
-          // showNextLevelButton ? "visible" : "invisible"
-        )
-      }
+        className={showNextLevelButton 
+          ? cn(
+            "flex items-center ml-2 bg-emerald-200 hover:bg-emerald-300 dark:bg-emerald-900 hover:dark:bg-emerald-800",
+            "text-black dark:text-white rounded pl-2 py-1 border-emerald-200 dark:border-emerald-900 border",
+          )
+          : "flex items-center border rounded pl-2 py-1 mr-4 hover:bg-stone-200 dark:hover:bg-stone-800"
+        }
       >
-        {nextLevelButtonText || content.nextLevelButtonText}
+        {showNextLevelButton ? content.nextLevelButtonText : content.skipLevelButtonText}
         <ChevronRight size={25} />
       </button>
       <div className="absolute right-0 top-0 flex items-center justify-center p-2">
-        <button
-          id="reset-button"
-          ref={buttonRef}
-          onClick={() => setShowMenu((v) => !v)}
-          className={cn(
-            "hover:bg-stone-200 dark:hover:bg-stone-800 items-center rounded p-1 ",
-          )}
-        >
-          <RotateCcw size={30} />
-        </button>
+        {level !== -1 && level !== 1 && (
+          <button
+            id="reset-button"
+            ref={buttonRef}
+            onClick={() => setShowMenu((v) => !v)}
+            className={cn(
+              "hover:bg-stone-200 dark:hover:bg-stone-800 items-center rounded p-1 ",
+            )}
+          >
+            <RotateCcw size={30} />
+          </button>
+        )}
         <ThemeSwitch />
       </div>
       <Dialog
@@ -143,6 +145,7 @@ export function LevelProgressBar({
         title={content.restartDialogTitle.value}
         message={content.restartDialogMessage.value}
         onYes={() => {
+          reset();
           navigate(`/`);
         }}
         onNo={() => setIsDialogOpen(false)}

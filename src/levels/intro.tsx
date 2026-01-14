@@ -11,6 +11,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useIntlayer, type IntlayerNode } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
+import { useLevelData } from "~/context/LevelDataContext";
 
 const CustomDotIntro = ({
   cx,
@@ -148,6 +149,8 @@ export default function IntroLevel() {
   const navigate = useNavigate();
   const [showNextLevelButton, setShowNextLevelButton] = useState(false);
 
+  const { markLevelCompleted } = useLevelData();
+
   useEffect(() => setRun(true), []);
   const steps = stepsFactory(introContent);
 
@@ -156,8 +159,10 @@ export default function IntroLevel() {
       const { status, index } = data;
       if (status === "skipped") {
         navigate("/level/0");
+        markLevelCompleted(-1);
       } else if (index === steps.length - 1) {
         setShowNextLevelButton(true);
+        markLevelCompleted(-1);
       }
     },
     [navigate]

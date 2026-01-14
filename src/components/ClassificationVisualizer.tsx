@@ -1,4 +1,7 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
+// ClassificationVisualizer: Interactive chart for visualizing and manipulating classification boundaries
+// Handles user input, area selection, and classifier evaluation stages
+
 import type {
   ClickCoordinates,
   AreaPolygons,
@@ -19,41 +22,69 @@ import { ExtendedLinePoints } from "./chart/ExtendedLinePoints";
 import Toggle from "./ui/Toggle";
 import { useIntlayer } from "react-intlayer";
 import { cn } from "~/utils/cn";
+import { type VisualizerData } from "~/context/LevelDataContext";
 
+// Props for ClassificationVisualizer
 interface Props {
   seenData: DataPoint[];
   unseenData?: DataPoint[];
+  visualizerData: VisualizerData;
   stage: number;
   setStage: (stage: number) => void;
   setResults: (results: ClassificationCounts) => void;
   setBestResults?: (results: ClassificationCounts) => void;
   setUnseenResults?: (results: ClassificationCounts) => void;
   setUnseenBestResults?: (results: ClassificationCounts) => void;
+  modifyVisualizerData: (modifyFn: (data: VisualizerData) => VisualizerData) => void;
   bestClassifier: {
     line: Point[];
     originIsPass: boolean;
   };
 }
 
+// Main component definition
 export const ClassificationVisualizer = ({
-  seenData: seenData,
-  unseenData: unseenData,
+  seenData,
+  unseenData,
+  visualizerData,
   stage,
   setStage,
   setResults,
   setBestResults,
   setUnseenResults,
   setUnseenBestResults,
+  modifyVisualizerData,
   bestClassifier,
 }: Props) => {
+
+  // Chart and overlay refs for DOM access
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const areaPolygonsRef = useRef<HTMLDivElement>(null);
   const extendedLinePointsRef = useRef<HTMLDivElement>(null);
+
+  const [chartReady, setChartReady] = useState(false);
+  const [overlayReady, setOverlayReady] = useState(false);
+    
+  // State for current classifier line endpoints
   const [lineCoords, setLineCoords] = useState<ClickCoordinates[]>([]);
+    
+  // State for best classifier line endpoints
   const [bestLineCoords, setBestLineCoords] = useState<ClickCoordinates[]>([]);
 
-  const [clickCoords, setClickCoords] = useState<ClickCoordinates[]>([]);
+  // State for user click coordinates (used to define line)
+  const clickCoords = useMemo(() => {
+    return visualizerData.clickCoords || [];
+  }, [visualizerData.clickCoords]);
+
+  const setClickCoords = (newClickCoords: ClickCoordinates[]) => {
+    modifyVisualizerData((data) => ({
+      ...data,
+      clickCoords: newClickCoords,
+    }));
+  };
+
+  // State for polygons representing classified areas
   const [areaPolygons, setAreaPolygons] = useState<AreaPolygons>({
     area1: {
       graph: [],
@@ -65,6 +96,7 @@ export const ClassificationVisualizer = ({
     },
   });
 
+  // State for polygons for best classifier
   const [bestAreaPolygons, setBestAreaPolygons] = useState<AreaPolygons>({
     area1: {
       graph: [],
@@ -76,21 +108,72 @@ export const ClassificationVisualizer = ({
     },
   });
 
+  // State for extended line endpoints (for dragging)
   const [extendedLinePoints, setExtendedLinePoints] = useState<
-    ClickCoordinates[]
-  >([]);
+      ClickCoordinates[]
+    >([]);
 
-  const [areaColorsAssigned, setAreaColorsAssigned] = useState(false);
-  const [showBestLine, setShowBestLine] = useState(true);
-  const [showSeenData, setShowSeenData] = useState(true);
-  const [showUnseenData, setShowUnseenData] = useState(false);
+  // Whether area colors have been assigned (pass/fail)
+  const areaColorsAssigned = useMemo(() => {
+    return visualizerData.areaColorsAssigned;
+  }, [visualizerData.areaColorsAssigned]);
+  const setAreaColorsAssigned = (newValue: boolean) => {
+    modifyVisualizerData((data) => ({
+      ...data,
+      areaColorsAssigned: newValue,
+    }));
+  };
 
+  // Whether to show best classifier line or user's line
+  const showBestLine = useMemo(() => {
+    return visualizerData.showBestLine || false;
+  }, [visualizerData.showBestLine]);
+
+  const setShowBestLine = (newValue: boolean) => {
+    modifyVisualizerData((data) => ({
+      ...data,
+      showBestLine: newValue,
+    }));
+  };
+
+  // const [showSeenData, setShowSeenData] = useState(true);
+  // Whether to show seen data points
+  const showSeenData = visualizerData.showSeenData;
+  const setShowSeenData = (updateFn: (old: boolean) => boolean) => {
+    modifyVisualizerData((data) => ({
+      ...data,
+      showSeenData: updateFn(data.showSeenData),
+    }));
+  };
+  // const [showUnseenData, setShowUnseenData] = useState(false);
+  // Whether to show unseen data points
+  const showUnseenData = visualizerData.showUnseenData;
+  const setShowUnseenData = (updateFn: (old: boolean) => boolean) => {
+    modifyVisualizerData((data) => ({
+      ...data,
+      showUnseenData: updateFn(data.showUnseenData),
+    }));
+  };
+
+  // Dragging state for moving line endpoints
   const [isDragging, setIsDragging] = useState(false);
+  // Index of the point being dragged
   const [dragPointIndex, setDragPointIndex] = useState<number | null>(null);
+  // Offset between mouse and dragged point
   const [dragOffset, setDragOffset] = useState<Point>({ x: 0, y: 0 });
+  // Used to prevent immediate click after drag
   const [dragJustEnded, setDragJustEnded] = useState(false);
-  const [originIsPass, setOriginIsPass] = useState<boolean | null>(null);
+  // Whether the origin area is classified as pass
+  // const [originIsPass, setOriginIsPass] = useState<boolean | null>(null);
+  const originIsPass = visualizerData.originIsPass;
+  const setOriginIsPass = (newValue: boolean | null | ((old: boolean | null) => boolean | null)) => {
+    modifyVisualizerData((data) => ({
+      ...data,
+      originIsPass: typeof newValue === "function" ? newValue(data.originIsPass) : newValue,
+    }));
+  };
 
+  // Memoized data points to display (seen/unseen)
   const data = useMemo(() => {
     const data = [];
     if (showSeenData) {
@@ -104,8 +187,10 @@ export const ClassificationVisualizer = ({
 
   // Intlayer content
 
+  // UI content from intlayer (localization)
   const { classificationVisualizer: content } = useIntlayer("app");
 
+  // Memoized classification counts for current classifier
   const classificationCounts = useMemo(() => {
     return getClassificationCounts(
       seenData,
@@ -115,6 +200,7 @@ export const ClassificationVisualizer = ({
     );
   }, [seenData, lineCoords, originIsPass, areaColorsAssigned]);
 
+  // Memoized classification counts for unseen data
   const unseenClassificationCounts = useMemo(() => {
     if (!unseenData) {
       return { TP: 0, TN: 0, FP: 0, FN: 0 };
@@ -127,6 +213,7 @@ export const ClassificationVisualizer = ({
     );
   }, [unseenData, lineCoords, originIsPass, areaColorsAssigned]);
 
+  // Converts graph coordinates to overlay coordinates
   const graphToOverlayCoords = useCallback((graphCoords: Point): Point => {
     if (!overlayRef.current || !chartContainerRef.current)
       throw new Error("Refs not set");
@@ -136,6 +223,7 @@ export const ClassificationVisualizer = ({
     ) as SVGElement | null;
 
     if (!graphElement) {
+      console.log("chartContainerRef: ", chartContainerRef.current);
       throw new Error("Graph element not found");
     }
 
@@ -153,6 +241,7 @@ export const ClassificationVisualizer = ({
   }, []);
 
   // TODO: FIX this
+  // Handles user click on overlay to set line endpoints
   const handleOverlayClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (isDragging || dragJustEnded || stage >= 5) {
       return;
@@ -200,6 +289,7 @@ export const ClassificationVisualizer = ({
     }
   };
 
+  // Handles mouse down on extended line points for dragging
   const handleExtendedPointMouseDown = (
     event: React.MouseEvent<HTMLDivElement>,
     pointIndex: number
@@ -221,6 +311,7 @@ export const ClassificationVisualizer = ({
     setIsDragging(true);
   };
 
+  // Handles mouse movement for dragging line endpoints
   const handleOverlayMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (
       !isDragging ||
@@ -301,19 +392,21 @@ export const ClassificationVisualizer = ({
     }
   };
 
+  // Handles mouse up event to finish dragging
   const handleOverlayMouseUp = () => {
-    if (isDragging) {
-      setIsDragging(false);
-      setDragPointIndex(null);
-      setDragOffset({ x: 0, y: 0 });
-      setDragJustEnded(true);
+      if (isDragging) {
+        setIsDragging(false);
+        setDragPointIndex(null);
+        setDragOffset({ x: 0, y: 0 });
+        setDragJustEnded(true);
 
-      setTimeout(() => {
-        setDragJustEnded(false);
-      }, 300);
-    }
-  };
+        setTimeout(() => {
+          setDragJustEnded(false);
+        }, 300);
+      }
+    };
 
+  // Handles area selection (pass/fail) by user
   const handleAreaSelection = (
     event: React.MouseEvent<SVGPolygonElement>,
     originIsPass: boolean
@@ -329,6 +422,48 @@ export const ClassificationVisualizer = ({
   };
 
   useEffect(() => {
+    const container = chartContainerRef.current;
+    if (!container) return;
+
+    const observer = new MutationObserver(() => {
+      const graphElement = container.querySelector(
+        ".recharts-cartesian-grid"
+      ) as SVGElement | null;
+
+      if (graphElement) {
+        setChartReady(true);
+        observer.disconnect(); // stop once found
+      }
+    });
+
+    observer.observe(container, {
+      childList: true,
+      subtree: true,
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (overlayRef.current) {
+      setOverlayReady(true);
+    } else {
+      setOverlayReady(false);
+    }
+  }, [overlayRef.current]);
+
+  // Effect: Update lineCoords when clickCoords change
+  // Effect: Update areaPolygons when lineCoords change
+  // Effect: Update bestAreaPolygons when bestLineCoords change
+  // Effect: Update extendedLinePoints when lineCoords change
+  // Effect: Advance stage based on user actions
+  // Effect: Update results when stage and areaColorsAssigned change
+  // Effect: Update unseen results when stage and areaColorsAssigned change
+  // Effect: Create best classifier line and results when entering stage 5
+  // Effect: Adjust z-index for overlay and area polygons based on state
+  useEffect(() => {
+    if (!chartReady || !overlayReady) return;  
+
     if (clickCoords.length == 2) {
       const [p1, p2] = [clickCoords[0].graph, clickCoords[1].graph];
 
@@ -353,7 +488,7 @@ export const ClassificationVisualizer = ({
       setLineCoords([]);
     }
      
-  }, [clickCoords, graphToOverlayCoords]);
+  }, [clickCoords, graphToOverlayCoords, chartReady, overlayReady]);
 
   useEffect(() => {
     if (lineCoords.length < 2) {
@@ -419,6 +554,8 @@ export const ClassificationVisualizer = ({
 
   // Create best classifier line when entering stage 5
   useEffect(() => {
+    if (!chartReady || !overlayReady) return;
+
     if (stage >= 5 && bestLineCoords.length < 2) {
       const bestLineCoords2 = [
         {
@@ -467,6 +604,8 @@ export const ClassificationVisualizer = ({
     setBestResults,
     setUnseenBestResults,
     unseenData,
+    chartReady,
+    overlayReady,
   ]);
 
   useEffect(() => {
@@ -497,6 +636,7 @@ export const ClassificationVisualizer = ({
     }
   }, [clickCoords, areaColorsAssigned]);
 
+  // Render component UI
   return (
     <>
       <Chart
@@ -521,7 +661,7 @@ export const ClassificationVisualizer = ({
       >
         {areaColorsAssigned && (
           <ExtendedLinePoints
-            ref={extendedLinePointsRef}
+            elementRef={extendedLinePointsRef}
             extendedLinePoints={
               stage >= 5 && showBestLine ? [] : extendedLinePoints
             }
@@ -597,7 +737,7 @@ export const ClassificationVisualizer = ({
         onPointerUp={handleOverlayMouseUp}
       >
         <ExtendedLinePoints
-          ref={extendedLinePointsRef}
+          elementRef={extendedLinePointsRef}
           extendedLinePoints={
             stage >= 5 && showBestLine ? [] : extendedLinePoints
           }
@@ -644,6 +784,7 @@ export const ClassificationVisualizer = ({
             />
           )}
       </div>
+
     </>
   );
 };

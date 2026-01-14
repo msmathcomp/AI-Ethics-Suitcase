@@ -1,9 +1,10 @@
 import { ClassificationVisualizer } from "~/components/ClassificationVisualizer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ClassificationResults } from "~/components/ui/ClassificationResults";
 import type { DataPoint, ClassificationCounts } from "~/types";
 import { useIntlayer } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
+import { useLevelData } from "~/context/LevelDataContext";
 
 const data: DataPoint[] = [
   { study_time: 100, screen_time: 300, type: "Fail" },
@@ -14,7 +15,6 @@ const data: DataPoint[] = [
 
 export default function Level0() {
   const level = 0;
-  const [stage, setStage] = useState(0);
   const [results, setResults] = useState<ClassificationCounts>({
     TP: 0,
     TN: 0,
@@ -23,6 +23,24 @@ export default function Level0() {
   });
   const { level0: content, common: commonContent } = useIntlayer("app");
 
+  const {
+    markLevelCompleted,
+    getStage, setStage: setLevelStage,
+    getVisualizerData,
+    modifyVisualizerData
+  } = useLevelData();
+
+  const stage = getStage(1);
+  const setStage = (newStage: number) => {
+    setLevelStage(1, newStage);
+  }
+
+  useEffect(() => {
+    if (stage === 4) {
+      markLevelCompleted(level);
+    }
+  }, [stage, markLevelCompleted, level]);
+
   return (
     <LevelLayout
       goalElement={content.goal.value}
@@ -30,9 +48,13 @@ export default function Level0() {
         <ClassificationVisualizer
           key={`visualizer-${level}`}
           seenData={data}
+          visualizerData={getVisualizerData(level)}
           stage={stage}
           setStage={setStage}
           setResults={setResults}
+          modifyVisualizerData={(modifyFn) =>
+            modifyVisualizerData(level, modifyFn)
+          }
           bestClassifier={{ line: [], originIsPass: true }} // irrelevant for this level
         />
       }

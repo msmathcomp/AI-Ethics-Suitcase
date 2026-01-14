@@ -16,40 +16,91 @@ import { ClassificationAreas } from "./chart/ClassificationAreas";
 import { getClassificationCounts_Curve } from "~/utils/classification_curve";
 import { CurveChart } from "./chart/ChartCurve";
 import { useIntlayer } from "react-intlayer";
+import type { VisualizerData } from "~/context/LevelDataContext";
 
 interface Props {
   seenData: DataPoint[];
   unseenData?: DataPoint[];
+  visualizerData: VisualizerData;
   stage: number;
   setStage: (stage: number) => void;
   setResults: (results: ClassificationCounts) => void;
   setUnseenResults?: (results: ClassificationCounts) => void;
+  modifyVisualizerData: (modifyFn: (data: VisualizerData) => VisualizerData) => void;
 }
 
 export const CurveVisualizer = ({
   seenData,
   unseenData,
+  visualizerData,
   stage,
   setStage,
   setResults,
   setUnseenResults,
+  modifyVisualizerData,
 }: Props) => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const areaPolygonsRef = useRef<HTMLDivElement>(null);
 
+  const [chartReady, setChartReady] = useState(false);
+  const [overlayReady, setOverlayReady] = useState(false);
+
   const [overlayCurve, setOverlayCurve] = useState<Point[]>([]);
-  const [graphCurve, setGraphCurve] = useState<Point[]>([]);
+
+  const graphCurve = useMemo(() => {
+    return visualizerData.graphCurve || [];
+  }, [visualizerData.graphCurve]);
+  const setGraphCurve = (newClickCoords: Point[]) => {
+    modifyVisualizerData((data) => ({
+      ...data,
+      graphCurve: newClickCoords,
+    }));
+  };
+
   const [isDrawing, setIsDrawing] = useState(false);
 
   const [areaPolygons, setAreaPolygons] = useState<AreaPolygons>({
     area1: { graph: [], overlay: [] },
     area2: { graph: [], overlay: [] },
   });
-  const [area1IsRed, setArea1IsRed] = useState<boolean | null>(null);
-  const [areaColorsAssigned, setAreaColorsAssigned] = useState(false);
-  const [showSeenData, setShowSeenData] = useState(true);
-  const [showUnseenData, setShowUnseenData] = useState(false);
+
+  const originIsPass = visualizerData.originIsPass;
+  const setOriginIsPass = (newValue: boolean | null | ((old: boolean | null) => boolean | null)) => {
+    modifyVisualizerData((data) => ({
+      ...data,
+      originIsPass: typeof newValue === "function" ? newValue(data.originIsPass) : newValue,
+    }));
+  };
+
+  // Whether area colors have been assigned (pass/fail)
+  const areaColorsAssigned = useMemo(() => {
+    return visualizerData.areaColorsAssigned;
+  }, [visualizerData.areaColorsAssigned]);
+  const setAreaColorsAssigned = (newValue: boolean) => {
+    modifyVisualizerData((data) => ({
+      ...data,
+      areaColorsAssigned: newValue,
+    }));
+  };
+
+  // Whether to show seen data points
+  const showSeenData = visualizerData.showSeenData;
+  const setShowSeenData = (updateFn: (old: boolean) => boolean) => {
+    modifyVisualizerData((data) => ({
+      ...data,
+      showSeenData: updateFn(data.showSeenData),
+    }));
+  };
+
+  // Whether to show unseen data points
+  const showUnseenData = visualizerData.showUnseenData;
+  const setShowUnseenData = (updateFn: (old: boolean) => boolean) => {
+    modifyVisualizerData((data) => ({
+      ...data,
+      showUnseenData: updateFn(data.showUnseenData),
+    }));
+  };
 
   const { classificationVisualizer: content } = useIntlayer("app");
 
@@ -126,7 +177,7 @@ export const CurveVisualizer = ({
       area1: { graph: [], overlay: [] },
       area2: { graph: [], overlay: [] },
     });
-    setArea1IsRed(null);
+    setOriginIsPass(null);
     setAreaColorsAssigned(false);
     setStage(0);
   };
@@ -157,6 +208,37 @@ export const CurveVisualizer = ({
     setIsDrawing(false);
     setStage(1);
   };
+
+  useEffect(() => {
+    const container = chartContainerRef.current;
+    if (!container) return;
+
+    const observer = new MutationObserver(() => {
+      const graphElement = container.querySelector(
+        ".recharts-cartesian-grid"
+      ) as SVGElement | null;
+
+      if (graphElement) {
+        setChartReady(true);
+        observer.disconnect(); // stop once found
+      }
+    });
+
+    observer.observe(container, {
+      childList: true,
+      subtree: true,
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (overlayRef.current) {
+      setOverlayReady(true);
+    } else {
+      setOverlayReady(false);
+    }
+  }, [overlayRef.current]);
 
   useEffect(() => {
     const el = overlayRef.current;
@@ -259,14 +341,21 @@ export const CurveVisualizer = ({
   }, [stage, overlayCurve, overlayToGraphCoords, isDrawing, setStage]);
 
   useEffect(() => {
+    if (!chartReady || !overlayReady) return;  
+
     if (graphCurve.length > 1) {
       const polygons = getAreaPolygons(
         graphCurve.map((p) => ({ graph: p, overlay: graphToOverlayCoords(p) })),
         graphToOverlayCoords
       );
       setAreaPolygons(polygons);
+    } else {
+      setAreaPolygons({
+        area1: { graph: [], overlay: [] },
+        area2: { graph: [], overlay: [] },
+      });
     }
-  }, [stage, graphCurve, graphToOverlayCoords]);
+  }, [stage, graphCurve, graphToOverlayCoords, chartReady, overlayReady]);
 
   const handleAreaSelection = (
     event: React.MouseEvent<SVGPolygonElement>,
@@ -274,32 +363,32 @@ export const CurveVisualizer = ({
   ) => {
     event.stopPropagation();
     if (areaColorsAssigned) return;
-    setArea1IsRed(isArea1);
+    setOriginIsPass(isArea1);
     setAreaColorsAssigned(true);
     setStage(2);
   };
 
   useEffect(() => {
-    if (stage === 3) {
+    if (stage >= 3 && areaColorsAssigned) {
       const counts = getClassificationCounts_Curve(
         seenData,
         areaPolygons,
-        area1IsRed
+        originIsPass
       );
       setResults(counts);
     }
-  }, [stage, seenData, graphCurve, area1IsRed, areaPolygons, setResults]);
+  }, [stage, seenData, graphCurve, originIsPass, areaPolygons, setResults]);
 
   useEffect(() => {
     if (stage === 4 && setUnseenResults && unseenData) {
       const counts = getClassificationCounts_Curve(
         unseenData,
         areaPolygons,
-        area1IsRed
+        originIsPass
       );
       setUnseenResults(counts);
     }
-  }, [stage, unseenData, areaPolygons, area1IsRed, setUnseenResults]);
+  }, [stage, unseenData, areaPolygons, originIsPass, setUnseenResults]);
 
   useEffect(() => {
     const overlayElement = overlayRef.current;
@@ -311,19 +400,18 @@ export const CurveVisualizer = ({
       graphCurve.length > 0 &&
       !areaColorsAssigned
     ) {
-      overlayElement.style.zIndex = "51";
       areaPolygonsElement.style.zIndex = "100";
+      overlayElement.style.zIndex = "51";
     }
-  }, [graphCurve, areaColorsAssigned]);
-
-  useEffect(() => {
-    const areaPolygonsElement = areaPolygonsRef.current;
-    const overlayElement = overlayRef.current;
-    if (areaPolygonsElement && overlayElement && areaColorsAssigned) {
+    else if (areaPolygonsElement && overlayElement && areaColorsAssigned) {
       areaPolygonsElement.style.zIndex = "5";
       overlayElement.style.zIndex = "10";
+    } 
+    else if (overlayElement && areaPolygonsElement) {
+      overlayElement.style.zIndex = "";
+      areaPolygonsElement.style.zIndex = "";
     }
-  }, [areaColorsAssigned]);
+  }, [graphCurve, areaColorsAssigned]);
 
   return (
     <>
@@ -332,7 +420,7 @@ export const CurveVisualizer = ({
         curveCoords={graphCurve}
         areaPolygons={areaPolygons}
         chartContainerRef={chartContainerRef}
-        area1IsRed={area1IsRed}
+        area1IsRed={originIsPass}
         isClassified={stage >= 3}
         areaColorsAssigned={areaColorsAssigned}
       />
@@ -363,7 +451,7 @@ export const CurveVisualizer = ({
             <button
               className="border rounded px-2 py-1"
               onClick={() =>
-                setArea1IsRed((prev) => (prev !== null ? !prev : null))
+                setOriginIsPass((prev) => (prev !== null ? !prev : null))
               }
             >
               {content.flipButton}
@@ -402,7 +490,7 @@ export const CurveVisualizer = ({
           areaPolygons.area2.overlay.length > 0 && (
             <ClassificationAreas
               areaPolygons={areaPolygons}
-              originIsPass={area1IsRed}
+              originIsPass={originIsPass}
               areaColorsAssigned={areaColorsAssigned}
               onAreaSelection={handleAreaSelection}
             />

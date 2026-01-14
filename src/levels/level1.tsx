@@ -24,6 +24,7 @@ import { useIntlayer } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
 import { getPointClassification } from "~/utils/classification";
 import { cn } from "~/utils/cn";
+import { useLevelData } from "~/context/LevelDataContext";
 
 const CustomDotLevel1 = ({
   cx,
@@ -110,6 +111,8 @@ export default function Level1() {
     tour: tourContent,
   } = useIntlayer("app");
 
+  const { markLevelCompleted } = useLevelData();
+
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const graphRef = useRef<HTMLDivElement>(null);
@@ -168,6 +171,12 @@ export default function Level1() {
 
     return { x: overlayX, y: overlayY };
   };
+
+  useEffect(() => {
+    if (stage === 4) {
+      markLevelCompleted(1);
+    }
+  }, [stage, markLevelCompleted]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -491,7 +500,7 @@ export default function Level1() {
           <ClassificationResults classificationCounts={results} />
         }
         level={1}
-        showNextLevelButton={false}
+        showNextLevelButton={stage === 4}
         instructionButton={null}
       />
 
