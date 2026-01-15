@@ -1,6 +1,6 @@
 import { ClassificationVisualizer } from "~/components/ClassificationVisualizer";
 import { useState, useMemo, useEffect } from "react";
-import { ClassificationResults } from "~/components/ui/ClassificationResults";
+import { ClassificationResultsEntry } from "~/components/ui/ClassificationResultsEntry";
 import type { ClassificationCounts, LevelJsonShape, Point } from "~/types";
 import { useLevelData } from "~/context/LevelDataContext";
 
@@ -104,12 +104,13 @@ export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
       }
       classificationResults={
         stage >= 4 ? (
-          <ClassificationResults
+          <ClassificationResultsEntry
             classificationCounts={results}
             bestClassificationCounts={stage === 5 ? bestResults : undefined}
           />
         ) : null
       }
+      showResults={stage >= 4}
       level={level}
       showNextLevelButton={stage === 5}
     />

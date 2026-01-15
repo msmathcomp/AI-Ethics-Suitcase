@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
-import { ClassificationResults } from "~/components/ui/ClassificationResults";
+import { ClassificationResultsEntry } from "~/components/ui/ClassificationResultsEntry";
 import type { ClassificationCounts, DataPoint, LevelJsonShape } from "~/types";
 import { CurveVisualizer } from "~/components/CurveVisualizer";
 import { useLevelData } from "~/context/LevelDataContext";
@@ -91,19 +91,20 @@ export default function Level7() {
       classificationResults={
         <>
           {stage >= 3 && (
-            <ClassificationResults
+            <ClassificationResultsEntry
               title={classifcationResultsContent.title.value}
               classificationCounts={results}
             />
           )}
           {stage === 4 && (
-            <ClassificationResults
+            <ClassificationResultsEntry
               title={content.titles.unseenPerformance.value}
               classificationCounts={unseenResults}
             />
           )}
         </>
       }
+      showResults={stage >= 3}
       level={level}
       showNextLevelButton={stage === 4}
     />
