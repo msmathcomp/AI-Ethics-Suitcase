@@ -60,7 +60,9 @@
     "seenData": "Bekende data",
     "unseenData": "Onbekende data",
     "alerts": {
-      "invalidIntersection": "De lijn snijdt de grenzen van de grafiek niet goed. Probeer het opnieuw."
+      "invalidBounds": "Begin en eindig buiten het grafiekgebied.",
+      "selfIntersection": "De kromme mag zichzelf niet snijden.",
+      "invalidIntersections": "De kromme moet buiten het grafiekgebied beginnen en eindigen. Probeer het opnieuw."
     }
   },
   "levelProgressBar": {
@@ -157,6 +159,7 @@
       "4": "Schakel nu tussen bekende en onbekende data. Zie hoe de prestaties veranderen!"
     },
     "titles": {
+      "trainingPerformance": "Resultaten op bekende data",
       "unseenPerformance": "Resultaten op onbekende data"
     }
   },
@@ -183,7 +186,8 @@
       "finish": "Voltooien",
       "restart": "Opnieuw starten",
       "yes": "Ja",
-      "no": "Nee"
+      "no": "Nee",
+      "ok": "Ok"
     },
     "status": {
       "loading": "Laden...",

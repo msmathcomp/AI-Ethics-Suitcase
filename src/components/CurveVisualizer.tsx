@@ -17,6 +17,7 @@ import { getClassificationCounts_Curve } from "~/utils/classification_curve";
 import { CurveChart } from "./chart/ChartCurve";
 import { useIntlayer } from "react-intlayer";
 import type { VisualizerData } from "~/context/LevelDataContext";
+import Dialog from "./ui/Dialog";
 
 interface Props {
   seenData: DataPoint[];
@@ -39,6 +40,10 @@ export const CurveVisualizer = ({
   setUnseenResults,
   modifyVisualizerData,
 }: Props) => {
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
+
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const areaPolygonsRef = useRef<HTMLDivElement>(null);
@@ -283,24 +288,30 @@ export const CurveVisualizer = ({
         isPointInBounds(startPoint, graphBounds) ||
         isPointInBounds(endPoint, graphBounds)
       ) {
-        alert("Please start and end drawing outside the graph area.");
-        reset();
+        // alert("Please start and end drawing outside the graph area.");
+        // reset();
+        setDialogMessage(content.alerts.invalidBounds.value);
+        setIsDialogOpen(true);
         return;
       }
 
       // Validate self-intersection
       if (checkSelfIntersection(overlayCurve)) {
-        alert("The curve cannot intersect itself.");
-        reset();
+        // alert("The curve cannot intersect itself.");
+        // reset();
+        setDialogMessage(content.alerts.selfIntersection.value);
+        setIsDialogOpen(true);
         return;
       }
 
       const intersections = getCurveIntersections(overlayCurve, graphBounds);
       if (intersections.length !== 2) {
-        alert(
-          "The curve must start and end outside the graph area. Please try again."
-        );
-        reset();
+        // alert(
+        //   "The curve must start and end outside the graph area. Please try again."
+        // );
+        // reset();
+        setDialogMessage(content.alerts.invalidIntersections.value);
+        setIsDialogOpen(true);
         return;
       }
 
@@ -496,6 +507,16 @@ export const CurveVisualizer = ({
             />
           )}
       </div>
+
+      <Dialog
+        choice={false}
+        open={isDialogOpen}
+        message={dialogMessage}
+        onYes={() => {
+          setIsDialogOpen(false);
+          reset();
+        }}
+      />
     </>
   );
 };

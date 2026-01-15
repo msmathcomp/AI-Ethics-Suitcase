@@ -60,7 +60,9 @@
     "seenData": "Seen data",
     "unseenData": "Unseen data",
     "alerts": {
-      "invalidIntersection": "The line does not properly intersect the graph boundaries. Please retry."
+      "invalidBounds": "Please start and end drawing outside the graph area.",
+      "selfIntersection": "The curve cannot intersect itself.",
+      "invalidIntersections": "The curve must start and end outside the graph area. Please try again."
     }
   },
   "levelProgressBar": {
@@ -157,6 +159,7 @@
       "4": "Now toggle between seen and unseen  data. Notice how performance may differ on unseen data!"
     },
     "titles": {
+      "trainingPerformance": "Seen Data Results",
       "unseenPerformance": "Unseen Data Results"
     }
   },
@@ -183,7 +186,8 @@
       "finish": "Finish",
       "restart": "Restart",
       "yes": "Yes",
-      "no": "No"
+      "no": "No",
+      "ok": "Ok"
     },
     "status": {
       "loading": "Loading...",

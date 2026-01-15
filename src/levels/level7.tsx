@@ -12,7 +12,6 @@ export default function Level7() {
   const {
     level7: content,
     common: commonContent,
-    classificationResults: classifcationResultsContent,
   } = useIntlayer("app");
 
   const [results, setResults] = useState<ClassificationCounts>({
@@ -92,7 +91,7 @@ export default function Level7() {
         <>
           {stage >= 3 && (
             <ClassificationResultsEntry
-              title={classifcationResultsContent.title.value}
+              title={content.titles.trainingPerformance.value}
               classificationCounts={results}
             />
           )}
