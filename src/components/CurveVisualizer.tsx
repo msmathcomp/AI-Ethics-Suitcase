@@ -440,7 +440,7 @@ export const CurveVisualizer = ({
             <polyline
               points={overlayCurve.map((p) => `${p.x},${p.y}`).join(" ")}
               fill="none"
-              stroke="black"
+              stroke="var(--chart-stroke)"
               strokeWidth="2"
             />
           </svg>
