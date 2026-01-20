@@ -48,17 +48,17 @@ export const ExtendedLinePoints = ({
       {extendedLinePoints.map((coords, index) => (
         <div
           key={`extended-${index}`}
-          className="absolute bg-black dark:bg-stone-900 border-2 cursor-move flex items-center justify-center z-50 touch-none"
+          className="absolute bg-black dark:bg-stone-900 border-2 cursor-move flex items-center justify-center z-50 touch-none cursor-pointer"
           style={{
-            top: coords.overlay.y - 12,
-            left: coords.overlay.x - 12,
-            width: 24,
-            height: 24,
+            top: coords.overlay.y - 17,
+            left: coords.overlay.x - 17,
+            width: 34,
+            height: 34,
             borderRadius: "50%",
           }}
           onPointerDown={(e) => onExtendedPointMouseDown(e, index)}
         >
-          <Move size={14} color="white" />
+          <Move size={22} color="white" />
         </div>
       ))}
     </div>

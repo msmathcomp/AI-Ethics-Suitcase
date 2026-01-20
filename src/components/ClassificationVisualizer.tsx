@@ -388,7 +388,7 @@ export const ClassificationVisualizer = ({
       ];
 
       setLineCoords(newLineCoords);
-      setExtendedLinePoints(newExtendedPoints);
+      // setExtendedLinePoints(newExtendedPoints);
     }
   };
 
@@ -470,7 +470,7 @@ export const ClassificationVisualizer = ({
       const intersections = findIntersections(p1, p2);
 
       if (intersections.length < 2) {
-        alert(content.alerts.invalidIntersection);
+        alert(content.alerts.invalidIntersections);
         setLineCoords([]);
       } else {
         setLineCoords([

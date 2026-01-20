@@ -69,7 +69,7 @@ export function LevelProgressBar({
 
   return (
     <div
-      className="flex border-t w-full items-center justify-center py-2 gap-2 relative"
+      className="flex border-t w-full items-center justify-center py-2 gap-2 relative mb-4"
       id="level-progress-bar"
     >
       <button
