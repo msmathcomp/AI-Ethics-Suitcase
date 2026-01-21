@@ -78,29 +78,26 @@ export const getAreaPolygons = (
 };
 
 export const getExtendedLinePoints = (
-  lineCoords: ClickCoordinates[],
-  graphToOverlayCoords: (point: Point) => Point
+  graphToOverlayCoords: (point: Point) => Point,
+  lineCoords: [Point, Point],
+  boundingBox: [Point, Point] = [{ x: 0, y: 0 }, { x: 500, y: 500 }],
+  extendedBoxOffset: number = 30
 ): ClickCoordinates[] => {
   if (lineCoords.length !== 2) return [];
 
-  const [p1, p2] = lineCoords.map((coord) => coord.graph);
+  const [p1, p2] = lineCoords;
 
-  const dx = p2.x - p1.x;
-  const dy = p2.y - p1.y;
-
-  const length = Math.sqrt(dx * dx + dy * dy);
-  const unitX = dx / length;
-  const unitY = dy / length;
-
-  const extendedP1 = {
-    x: p1.x - unitX * 30,
-    y: p1.y - unitY * 30,
-  };
-
-  const extendedP2 = {
-    x: p2.x + unitX * 30,
-    y: p2.y + unitY * 30,
-  };
+  const [extendedP1, extendedP2] = findIntersectionsWithSquare(
+    p1, p2,
+    {
+      x: boundingBox[0].x - extendedBoxOffset,
+      y: boundingBox[0].y - extendedBoxOffset,
+    },
+    {
+      x: boundingBox[1].x + extendedBoxOffset,
+      y: boundingBox[1].y + extendedBoxOffset,
+    }
+  );
 
   try {
     return [
@@ -173,54 +170,65 @@ export const findIntersections = (point1: Point, point2: Point): Point[] => {
   return uniqueIntersections;
 };
 
-export const findIntersectionsForDrag = (
+export const findIntersectionsWithSquare = (
   point1: Point,
-  point2: Point
+  point2: Point,
+  squareCorner1: Point = { x: 0, y: 0 },
+  squareCorner2: Point = { x: 500, y: 500 }
 ): Point[] => {
   const intersections: Point[] = [];
   const dx = point2.x - point1.x;
   const dy = point2.y - point1.y;
 
+  const lenSq = dx * dx + dy * dy;
+  const paramT = (p: Point) =>
+    ((p.x - point1.x) * dx + (p.y - point1.y) * dy) / lenSq;
+
+  const sq1 = squareCorner1;
+  const sq2 = squareCorner2;
+
   if (Math.abs(dx) < 1e-10) {
-    if (point1.x >= 0 && point1.x <= 500) {
-      intersections.push({ x: point1.x, y: 0 });
-      intersections.push({ x: point1.x, y: 500 });
+    if (point1.x >= sq1.x && point1.x <= sq2.x) {
+      intersections.push({ x: point1.x, y: sq1.y });
+      intersections.push({ x: point1.x, y: sq2.y });
     }
   } else {
     const slope = dy / dx;
     const intercept = point1.y - slope * point1.x;
 
     const candidates = [
-      { x: 0, y: intercept },
-      { x: 500, y: slope * 500 + intercept },
-      { x: -intercept / slope, y: 0 },
-      { x: (500 - intercept) / slope, y: 500 },
+      { x: sq1.x, y: slope * sq1.y + intercept },
+      { x: sq2.x, y: slope * sq2.y + intercept },
+      { x: (sq1.x - intercept) / slope, y: sq1.y },
+      { x: (sq2.x - intercept) / slope, y: sq2.y },
     ];
 
     candidates.forEach((candidate) => {
       if (
-        candidate.x >= -1e-6 &&
-        candidate.x <= 500 + 1e-6 &&
-        candidate.y >= -1e-6 &&
-        candidate.y <= 500 + 1e-6
+        candidate.x >= sq1.x - 1e-6 &&
+        candidate.x <= sq2.x + 1e-6 &&
+        candidate.y >= sq1.y - 1e-6 &&
+        candidate.y <= sq2.y + 1e-6
       ) {
         intersections.push({
-          x: Math.max(0, Math.min(500, candidate.x)),
-          y: Math.max(0, Math.min(500, candidate.y)),
+          x: Math.max(sq1.x, Math.min(sq2.x, candidate.x)),
+          y: Math.max(sq1.y, Math.min(sq2.y, candidate.y)),
         });
       }
     });
   }
 
-  return intersections.filter((intersection, index) => {
-    return !intersections
-      .slice(0, index)
-      .some(
-        (prev) =>
-          Math.abs(prev.x - intersection.x) < 1e-6 &&
-          Math.abs(prev.y - intersection.y) < 1e-6
-      );
-  });
+  return intersections
+    .filter((intersection, index) => {
+      return !intersections
+        .slice(0, index)
+        .some(
+          (prev) =>
+            Math.abs(prev.x - intersection.x) < 1e-6 &&
+            Math.abs(prev.y - intersection.y) < 1e-6
+        );
+    })
+    .sort((a, b) => paramT(a) - paramT(b));
 };
 
 export function sameSide(
