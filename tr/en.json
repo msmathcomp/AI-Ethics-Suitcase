@@ -1,10 +1,5 @@
 {
   "title": "AI Ethics Suitcase",
-  "nav": {
-    "title": "AI Ethics Suitcase",
-    "english": "English",
-    "nederlands": "Nederlands"
-  },
   "home": {
     "title": "AI Ethics Suitcase",
     "subtitle": "Interactive application for exploring linear classification",

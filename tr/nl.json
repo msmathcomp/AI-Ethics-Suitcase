@@ -1,10 +1,5 @@
 {
   "title": "AI Ethiek Koffer",
-  "nav": {
-    "title": "AI Ethiek Koffer",
-    "english": "English",
-    "nederlands": "Nederlands"
-  },
   "home": {
     "title": "AI Ethiek Koffer",
     "subtitle": "Interactieve toepassing om lineaire classificatie te verkennen",

@@ -3,7 +3,6 @@ import { LevelProgressBar } from "~/components/ui/LevelProgressBar";
 import { Legend } from "~/components/ui/Legend";
 import { cn } from "~/utils/cn";
 import { useIntlayer } from "react-intlayer";
-import { LanguageSwitch } from "~/components/ui/LanguageSwitch";
 
 interface Props {
   goalElement: ReactNode;
@@ -30,14 +29,10 @@ export default function LevelLayout({
   showNextLevelButton,
   showLegend = false,
 }: Props) {
-  const { title: title, classificationResults: classification } = useIntlayer("app");
+  const { classificationResults: classification } = useIntlayer("app");
 
   return (
     <main className="h-screen w-screen flex flex-col px-4 pt-4 overflow-hidden dark:bg-stone-900 dark:text-white">
-      <nav className="w-full h-14 flex flex-none items-center justify-between border-b z-50">
-        <h1 className="text-3xl">{title}</h1>
-        <LanguageSwitch />
-      </nav>
       <div className="flex flex-1 min-h-0 overflow-auto">
         <div className="flex flex-1 flex-col">
           <h1 className="text-xl xl:text-2xl mt-4">{goalElement}</h1>
@@ -79,7 +74,7 @@ export default function LevelLayout({
           )}
         </div>
       </div>
-      <div className="py-1 w-full flex flex-none items-center justify-center">
+      <div className="pt-1 w-full flex flex-none items-center justify-center">
         <LevelProgressBar
           level={level}
           showNextLevelButton={showNextLevelButton}

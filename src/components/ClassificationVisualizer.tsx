@@ -729,7 +729,7 @@ export const ClassificationVisualizer = ({
                 type="checkbox"
                 checked={showSeenData}
                 onChange={() => setShowSeenData((prev) => !prev)}
-                className="accent-emerald-200 dark:accent-emerald-900"
+                className="accent-emerald-200 dark:accent-emerald-800"
               />
             </div>
             <div className="flex items-center justify-between">
@@ -738,7 +738,7 @@ export const ClassificationVisualizer = ({
                 type="checkbox"
                 checked={showUnseenData}
                 onChange={() => setShowUnseenData((prev) => !prev)}
-                className="accent-emerald-200 dark:accent-emerald-900"
+                className="accent-emerald-200 dark:accent-emerald-800"
               />
             </div>
           </div>
