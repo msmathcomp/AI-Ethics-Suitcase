@@ -66,6 +66,7 @@ export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
 
   return (
     <LevelLayout
+      levelName={`${commonContent.level.value} ${level}`}
       goalElement={
         content.goals[level.toString() as keyof typeof content.goals].value
       }

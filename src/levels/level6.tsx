@@ -91,6 +91,7 @@ export default function Level6() {
 
   return (
     <LevelLayout
+      levelName={`${commonContent.level.value} ${level}`}
       goalElement={content.goal.value}
       classificationVisualizer={
         <ClassificationVisualizer

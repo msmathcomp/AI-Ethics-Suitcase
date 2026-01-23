@@ -64,6 +64,7 @@ export default function Level7() {
 
   return (
     <LevelLayout
+      levelName={`${commonContent.level.value} 7`}
       goalElement={content.goal.value}
       classificationVisualizer={
         <CurveVisualizer

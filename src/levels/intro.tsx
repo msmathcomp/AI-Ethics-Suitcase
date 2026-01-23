@@ -171,6 +171,7 @@ export default function IntroLevel() {
   return (
     <>
       <LevelLayout
+        levelName={introContent.levelName.value}
         goalElement={introContent.goal.value}
         classificationVisualizer={
           <div className="ml-10 h-full aspect-square flex items-center justify-center">

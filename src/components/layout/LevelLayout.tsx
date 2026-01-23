@@ -5,6 +5,7 @@ import { cn } from "~/utils/cn";
 import { useIntlayer } from "react-intlayer";
 
 interface Props {
+  levelName: string;
   goalElement: ReactNode;
   classificationVisualizer: ReactNode;
   instruction: string;
@@ -18,6 +19,7 @@ interface Props {
 }
 
 export default function LevelLayout({
+  levelName,
   goalElement,
   classificationVisualizer,
   instruction,
@@ -33,12 +35,13 @@ export default function LevelLayout({
 
   return (
     <main className="h-screen w-screen flex flex-col px-4 pt-4 overflow-hidden dark:bg-stone-900 dark:text-white">
+      <div className="w-full flex-col flex-none mb-2 px-4">
+        <h1 className="text-3xl font-bold mt-4">{levelName}</h1>
+        <h2 className="text-xl mt-1">{goalElement}</h2>
+      </div>
       <div className="flex flex-1 min-h-0 overflow-auto">
-        <div className="flex flex-1 flex-col">
-          <h1 className="text-xl xl:text-2xl mt-4">{goalElement}</h1>
-          <div className="w-full flex-1 relative flex items-center justify-center">
-            {classificationVisualizer}
-          </div>
+        <div className="w-full flex-1 relative flex items-center justify-center">
+          {classificationVisualizer}
         </div>
         <div className="h-full w-[320px] xl:w-[400px] flex flex-col py-3 justify-start space-y-2 overflow-hidden">
           <h2

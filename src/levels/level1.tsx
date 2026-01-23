@@ -109,6 +109,7 @@ export default function Level1() {
     level1: content,
     chart: chartContent,
     tour: tourContent,
+    common: commonContent,
   } = useIntlayer("app");
 
   const { markLevelCompleted } = useLevelData();
@@ -405,6 +406,7 @@ export default function Level1() {
   return (
     <>
       <LevelLayout
+        levelName={commonContent.level.value + " 1"}
         goalElement={content.goal.value}
         classificationVisualizer={
           <>
