@@ -1,47 +1,49 @@
-import type { ReactNode } from "react";
+import { type ReactNode } from "react";
 import { LevelProgressBar } from "~/components/ui/LevelProgressBar";
 import { Legend } from "~/components/ui/Legend";
 import { cn } from "~/utils/cn";
 import { useIntlayer } from "react-intlayer";
-import { LanguageSwitch } from "~/components/ui/LanguageSwitch";
 
 interface Props {
+  levelName: string;
   goalElement: ReactNode;
   classificationVisualizer: ReactNode;
   instruction: string;
   instructionButton: string | null;
   instructionButtonCallback?: () => void;
-  classificationResults: ReactNode;
+  classificationResults?: ReactNode;
+  showResults?: boolean;
   level: number;
   showNextLevelButton: boolean;
+  showLegend?: boolean;
 }
 
 export default function LevelLayout({
+  levelName,
   goalElement,
   classificationVisualizer,
   instruction,
   instructionButtonCallback,
   instructionButton,
-  classificationResults,
+  classificationResults = null,
+  showResults = true,
   level,
   showNextLevelButton,
+  showLegend = false,
 }: Props) {
-  const { title: title } = useIntlayer("app");
+  const { classificationResults: classification } = useIntlayer("app");
 
   return (
-    <main className="h-screen w-screen flex flex-col px-4 pt-4 overflow-hidden dark:bg-stone-900 dark:text-white">
-      <nav className="w-full h-14 flex items-center justify-between border-b z-50">
-        <h1 className="text-3xl">{title}</h1>
-        <LanguageSwitch />
-      </nav>
-      <div className="flex flex-1">
-        <div className="flex flex-1 flex-col">
-          <h1 className="text-xl xl:text-2xl mt-4">{goalElement}</h1>
-          <div className="w-full flex-1 relative flex items-center justify-center">
-            {classificationVisualizer}
-          </div>
+    <main className="h-screen w-screen flex flex-col px-4 pt-2 overflow-hidden dark:bg-stone-900 dark:text-white">
+      <div className="w-full flex-col flex-none mb-2 px-4">
+        <h1 className="text-3xl font-bold mt-4">{levelName}</h1>
+        <h2 className="text-xl mt-1">{goalElement}</h2>
+      </div>
+      <div className="flex flex-1 min-h-0 overflow-auto pt-5">
+        <div className="w-full flex-1 relative flex items-center justify-center">
+          {classificationVisualizer}
         </div>
-        <div className="h-full w-[320px] xl:w-[400px] flex flex-col py-3 justify-start">
+        <div className="h-full w-[320px] xl:w-[400px] flex flex-col py-3 justify-start space-y-2 overflow-hidden">
           <h2
             className="text-lg xl:text-xl font-medium break-words"
             id="instruction"
@@ -59,17 +61,28 @@ export default function LevelLayout({
             {instructionButton}
           </button>
 
-          <Legend />
-          {classificationResults}
+          <Legend startOpen={showLegend} />
+
+          {showResults && (
+            <div className="overflow-auto flex flex-col">
+              <div
+                className="flex justify-between w-full px-2 py-1 bg-stone-200 dark:bg-stone-700 rounded-t-md"
+              >
+                <h3 className="text-lg font-semibold text-start">{classification.title}</h3>
+              </div>
+              <div className="overflow-auto flex flex-col space-y-2 p-1 bg-stone-100 dark:bg-stone-800 rounded-b-md divide-stone-900 dark:divide-stone-500 divide-y">
+                {classificationResults}
+              </div>
+            </div>
+          )}
         </div>
       </div>
-      <div className="py-1 w-full flex items-center justify-center">
+      <div className="pt-1 w-full flex flex-none items-center justify-center">
         <LevelProgressBar
           level={level}
           showNextLevelButton={showNextLevelButton}
         />
       </div>
-      <div className="h-2 w-full" />
     </main>
   );
 }

@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import Dialog from "./Dialog";
 import ThemeSwitch from "./ThemeSwitch";
 import { useLevelData } from "~/context/LevelDataContext";
+import { LanguageSwitch } from "./LanguageSwitch";
 
 interface LevelProgressBarProps {
   level: number;
@@ -69,13 +70,16 @@ export function LevelProgressBar({
 
   return (
     <div
-      className="flex border-t w-full items-center justify-center py-2 gap-2 relative"
+      className="flex w-full items-center justify-center gap-2 relative pb-6 pt-4 rounded-t-xl bg-stone-200 dark:bg-stone-700"
       id="level-progress-bar"
     >
+      <div className="absolute left-0 top-0 px-2 py-4">
+        <LanguageSwitch />
+      </div>
       <button
         disabled={level === -1}
         onClick={() => navigate(`/level/${level - 1}`)}
-        className="flex items-center border rounded pr-2 py-1 mr-4 hover:bg-stone-200 dark:hover:bg-stone-800"
+        className="flex items-center border rounded-xl pr-5 pl-2 py-2 mr-4 hover:bg-stone-200 dark:hover:bg-stone-800 border-stone-600 dark:border-stone-400"
       >
         <ChevronLeft size={25} />
         {content.previousLevel}
@@ -103,7 +107,7 @@ export function LevelProgressBar({
             <div
               className={cn(
                 "rounded-full w-8 h-8 flex items-center justify-center",
-                isCompleted ? "bg-teal-500" : "bg-stone-300 dark:bg-stone-700 hover:bg-stone-400 dark:hover:bg-stone-600"
+                isCompleted ? "bg-teal-500" : "bg-stone-400 dark:bg-stone-600 hover:bg-stone-500"
               )}
             >
               {isCompleted && <Smile color="white" />}
@@ -116,16 +120,16 @@ export function LevelProgressBar({
         onClick={handleNextLevel}
         className={showNextLevelButton 
           ? cn(
-            "flex items-center ml-2 bg-emerald-200 hover:bg-emerald-300 dark:bg-emerald-900 hover:dark:bg-emerald-800",
-            "text-black dark:text-white rounded pl-2 py-1 border-emerald-200 dark:border-emerald-900 border",
+            "flex items-center ml-2 bg-emerald-200 hover:bg-emerald-300 dark:bg-emerald-800 hover:dark:bg-emerald-700",
+            "text-black dark:text-white rounded-xl pl-5 pr-2 py-2 border-emerald-200 dark:border-emerald-900 border ",
           )
-          : "flex items-center border rounded pl-2 py-1 mr-4 hover:bg-stone-200 dark:hover:bg-stone-800"
+          : "flex items-center border rounded-xl pl-5 pr-2 py-2 mr-4 hover:bg-stone-200 dark:hover:bg-stone-800 border-stone-600 dark:border-stone-400"
         }
       >
         {showNextLevelButton ? content.nextLevelButtonText : content.skipLevelButtonText}
         <ChevronRight size={25} />
       </button>
-      <div className="absolute right-0 top-0 flex items-center justify-center p-2">
+      <div className="absolute right-0 top-0 flex items-center justify-center px-2 py-5">
         {level !== -1 && level !== 1 && (
           <button
             id="reset-button"

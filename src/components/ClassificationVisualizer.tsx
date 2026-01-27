@@ -14,7 +14,7 @@ import {
   getAreaPolygons,
   getExtendedLinePoints,
   findIntersections,
-  findIntersectionsForDrag,
+  findIntersectionsWithSquare,
 } from "~/utils/geometry";
 import { Chart } from "./chart/Chart";
 import { ClassificationAreas } from "./chart/ClassificationAreas";
@@ -313,6 +313,7 @@ export const ClassificationVisualizer = ({
 
   // Handles mouse movement for dragging line endpoints
   const handleOverlayMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    // Early exit if not dragging or required refs/indices are missing
     if (
       !isDragging ||
       dragPointIndex === null ||
@@ -322,6 +323,7 @@ export const ClassificationVisualizer = ({
       return;
     }
 
+    // Get bounding rectangles for overlay and graph elements
     const overlayRect = overlayRef.current.getBoundingClientRect();
     const graphElement = chartContainerRef.current.querySelector(
       ".recharts-cartesian-grid"
@@ -329,39 +331,52 @@ export const ClassificationVisualizer = ({
 
     if (!graphElement) return;
 
+    const staticPointIndex = 1 - dragPointIndex;
+
     const graphRect = graphElement.getBoundingClientRect();
+    // Normalize graph coordinates to a 500x500 grid
     const normalize_y = graphRect.height / 500;
     const normalize_x = graphRect.width / 500;
 
+    const convertToGraph = (overlay: Point): Point => {
+      return {
+        x: (overlay.x + overlayRect.left - graphRect.left) / normalize_x,
+        y: 500 - (overlay.y + overlayRect.top - graphRect.top) / normalize_y,
+      };
+    };
+
+    // Calculate mouse position relative to overlay
     const mouseX = event.clientX - overlayRect.left;
     const mouseY = event.clientY - overlayRect.top;
 
-    const newOverlayX = mouseX - dragOffset.x;
-    const newOverlayY = mouseY - dragOffset.y;
-
-    const newGraphX =
-      (overlayRect.left + newOverlayX - graphRect.left) / normalize_x;
-    const newGraphY =
-      500 - (overlayRect.top + newOverlayY - graphRect.top) / normalize_y;
-
-    const newExtendedPoints = [...extendedLinePoints];
-    newExtendedPoints[dragPointIndex] = {
-      graph: { x: newGraphX, y: newGraphY },
-      overlay: { x: newOverlayX, y: newOverlayY },
+    // Calculate new raw overlay coordinates for the dragged point
+    const newRawOverlay = {
+      x: mouseX - dragOffset.x,
+      y: mouseY - dragOffset.y,
     };
+    const newRawGraph = convertToGraph(newRawOverlay);
 
-    const otherExtendedPoint = extendedLinePoints[1 - dragPointIndex];
-    const draggedPoint = newExtendedPoints[dragPointIndex];
+    // Calculate new overlay coordinates projected on the bounding square
+    const [staticPoint, draggedPoint] = getExtendedLinePoints(
+      graphToOverlayCoords,
+      [extendedLinePoints[staticPointIndex].graph, newRawGraph]
+    );
+    const newExtendedPoints = [];
+    newExtendedPoints[staticPointIndex] = staticPoint;
+    newExtendedPoints[dragPointIndex] = draggedPoint;
 
-    const dx = draggedPoint.graph.x - otherExtendedPoint.graph.x;
-    const dy = draggedPoint.graph.y - otherExtendedPoint.graph.y;
+    // Calculate direction and length between the two points
+    const dx = draggedPoint.graph.x - staticPoint.graph.x;
+    const dy = draggedPoint.graph.y - staticPoint.graph.y;
     const length = Math.sqrt(dx * dx + dy * dy);
 
     if (length === 0) return;
 
+    // Calculate unit vector for the line direction
     const unitX = dx / length;
     const unitY = dy / length;
 
+    // Extend the line by extraLength in both directions
     const extraLength = 500;
 
     const p1 = {
@@ -369,12 +384,14 @@ export const ClassificationVisualizer = ({
       y: draggedPoint.graph.y - unitY * extraLength,
     };
     const p2 = {
-      x: otherExtendedPoint.graph.x + unitX * extraLength,
-      y: otherExtendedPoint.graph.y + unitY * extraLength,
+      x: staticPoint.graph.x + unitX * extraLength,
+      y: staticPoint.graph.y + unitY * extraLength,
     };
 
-    const intersections = findIntersectionsForDrag(p1, p2);
+    // Find intersections of the extended line with the chart boundaries
+    const intersections = findIntersectionsWithSquare(p1, p2);
 
+    // If two intersections found, update the line coordinates
     if (intersections.length >= 2) {
       const newLineCoords = [
         {
@@ -470,8 +487,9 @@ export const ClassificationVisualizer = ({
       const intersections = findIntersections(p1, p2);
 
       if (intersections.length < 2) {
-        alert(content.alerts.invalidIntersection);
+        alert(content.alerts.invalidIntersections);
         setLineCoords([]);
+        setExtendedLinePoints([]);
       } else {
         setLineCoords([
           {
@@ -483,9 +501,15 @@ export const ClassificationVisualizer = ({
             overlay: graphToOverlayCoords(intersections[1]),
           },
         ]);
+        const extended = getExtendedLinePoints(
+          graphToOverlayCoords,
+          [intersections[0], intersections[1]]
+        );
+        setExtendedLinePoints(extended);
       }
     } else {
       setLineCoords([]);
+      setExtendedLinePoints([]);
     }
      
   }, [clickCoords, graphToOverlayCoords, chartReady, overlayReady]);
@@ -513,15 +537,6 @@ export const ClassificationVisualizer = ({
     const polygons = getAreaPolygons(bestLineCoords, graphToOverlayCoords);
     setBestAreaPolygons(polygons);
   }, [bestLineCoords, graphToOverlayCoords, originIsPass]);
-
-  useEffect(() => {
-    if (lineCoords.length === 2) {
-      const extended = getExtendedLinePoints(lineCoords, graphToOverlayCoords);
-      setExtendedLinePoints(extended);
-    } else {
-      setExtendedLinePoints([]);
-    }
-  }, [lineCoords, graphToOverlayCoords]);
 
   useEffect(() => {
     if (clickCoords.length === 1 && stage == 0) {
@@ -714,7 +729,7 @@ export const ClassificationVisualizer = ({
                 type="checkbox"
                 checked={showSeenData}
                 onChange={() => setShowSeenData((prev) => !prev)}
-                className="accent-emerald-200 dark:accent-emerald-900"
+                className="accent-emerald-200 dark:accent-emerald-800"
               />
             </div>
             <div className="flex items-center justify-between">
@@ -723,7 +738,7 @@ export const ClassificationVisualizer = ({
                 type="checkbox"
                 checked={showUnseenData}
                 onChange={() => setShowUnseenData((prev) => !prev)}
-                className="accent-emerald-200 dark:accent-emerald-900"
+                className="accent-emerald-200 dark:accent-emerald-800"
               />
             </div>
           </div>

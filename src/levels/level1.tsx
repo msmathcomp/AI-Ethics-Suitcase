@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { ClassificationResults } from "~/components/ui/ClassificationResults";
+import { ClassificationResultsEntry } from "~/components/ui/ClassificationResultsEntry";
 import {
   type ClassificationCounts,
   type Point,
@@ -109,6 +109,7 @@ export default function Level1() {
     level1: content,
     chart: chartContent,
     tour: tourContent,
+    common: commonContent,
   } = useIntlayer("app");
 
   const { markLevelCompleted } = useLevelData();
@@ -405,6 +406,7 @@ export default function Level1() {
   return (
     <>
       <LevelLayout
+        levelName={commonContent.level.value + " 1"}
         goalElement={content.goal.value}
         classificationVisualizer={
           <>
@@ -497,10 +499,11 @@ export default function Level1() {
         }
         instruction={instructions[stage]}
         classificationResults={
-          <ClassificationResults classificationCounts={results} />
+          <ClassificationResultsEntry classificationCounts={results} />
         }
         level={1}
         showNextLevelButton={stage === 4}
+        showLegend={true}
         instructionButton={null}
       />
 
@@ -529,6 +532,7 @@ export default function Level1() {
           tooltipContainer: {
             padding: 0,
             fontSize: "15px",
+            textAlign: "left",
           },
           spotlight: {
             backgroundColor: "rgba(255, 255, 255, 0.1)",

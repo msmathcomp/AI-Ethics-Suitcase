@@ -1,10 +1,5 @@
 {
   "title": "AI Ethiek Koffer",
-  "nav": {
-    "title": "AI Ethiek Koffer",
-    "english": "English",
-    "nederlands": "Nederlands"
-  },
   "home": {
     "title": "AI Ethiek Koffer",
     "subtitle": "Interactieve toepassing om lineaire classificatie te verkennen",
@@ -13,7 +8,8 @@
   },
   "intro": {
     "headerTitle": "Welkom bij de AI Ethiek Koffer!",
-    "goal": "Introductie: kennismaken met visualisatie met grafieken",
+    "levelName": "Introductie",
+    "goal": "Kennismaken met visualisatie met grafieken",
     "tour": {
       "0": "Welkom bij de AI Ethiek Koffer! Dit is het introductieniveau waarin je leert over de interface en de basis van visualisatie met grafieken. Je kunt deze uitleg overslaan als je al bekend bent met deze concepten.",
       "1": "Je bent nu op niveau -1, het introductieniveau. Er zijn nog 8 niveaus meer.",
@@ -60,7 +56,9 @@
     "seenData": "Bekende data",
     "unseenData": "Onbekende data",
     "alerts": {
-      "invalidIntersection": "De lijn snijdt de grenzen van de grafiek niet goed. Probeer het opnieuw."
+      "invalidBounds": "Begin en eindig buiten het grafiekgebied.",
+      "selfIntersection": "De kromme mag zichzelf niet snijden.",
+      "invalidIntersections": "De kromme moet buiten het grafiekgebied beginnen en eindigen. Probeer het opnieuw."
     }
   },
   "levelProgressBar": {
@@ -85,7 +83,7 @@
     }
   },
   "level0": {
-    "goal": "Niveau 0: Maak je eerste classifier!",
+    "goal": "Maak je eerste classifier!",
     "stages": {
       "0": "We willen eerst een eenvoudig gegevensset van 4 studenten classificeren door een lijn te tekenen die geslaagde en gezakte studenten scheidt. Klik om het eerste punt van de lijn te selecteren.",
       "1": "Klik nu op het tweede punt om de classificatielijn te tekenen.",
@@ -103,7 +101,7 @@
       "4": "Klik ten slotte in het gezakte gebied om een student toe te voegen die geslaagd is.",
       "5": "Goed gedaan! Je hebt alle soorten studenten geclassificeerd. Klik op ‘Volgende’ om verder te gaan."
     },
-    "goal": "Niveau 1: Hoe bereken je de nauwkeurigheid van een classifier?",
+    "goal": "Hoe bereken je de nauwkeurigheid van een classifier?",
     "tour": {
       "0": "We gaan nu uitleggen welke termen worden gebruikt om de nauwkeurigheid van een lineaire classifier te meten.",
       "1": "De classificatieresultaten tonen de aantallen true positives, true negatives, false positives en false negatives.",
@@ -117,10 +115,10 @@
   },
   "level2_5": {
     "goals": {
-      "2": "Niveau 2: Kun je 100% nauwkeurigheid bereiken?",
-      "3": "Niveau 3: Kun je nog steeds 100% nauwkeurigheid bereiken?",
-      "4": "Niveau 4: Probeer de hoogst mogelijke nauwkeurigheid te behalen!",
-      "5": "Niveau 5: Probeer de hoogst mogelijke nauwkeurigheid te behalen!"
+      "2": "Kun je 100% nauwkeurigheid bereiken?",
+      "3": "Kun je nog steeds 100% nauwkeurigheid bereiken?",
+      "4": "Probeer de hoogst mogelijke nauwkeurigheid te behalen!",
+      "5": "Probeer de hoogst mogelijke nauwkeurigheid te behalen!"
     },
     "stages": {
       "0": "Klik om het eerste punt van de classificatielijn te selecteren om het geslaagde van het gezakte gebied te scheiden.",
@@ -132,7 +130,7 @@
     }
   },
   "level6": {
-    "goal": "Niveau 6: Test je classifier op onbekende data!",
+    "goal": "Test je classifier op onbekende data!",
     "stages": {
       "0": "Klik om het eerste punt van de classificatielijn te selecteren om het geslaagde van het gezakte gebied te scheiden.",
       "1": "Klik nu op het tweede punt om de lijn te tekenen.",
@@ -148,7 +146,7 @@
     }
   },
   "level7": {
-    "goal": "Niveau 7: Classificeren met een kromme!",
+    "goal": "Classificeren met een kromme!",
     "stages": {
       "0": "Teken een kromme die buiten het grafiekgebied begint en eindigt.",
       "1": "Klik op een gebied om het als ‘Geslaagd’ te classificeren.",
@@ -157,6 +155,7 @@
       "4": "Schakel nu tussen bekende en onbekende data. Zie hoe de prestaties veranderen!"
     },
     "titles": {
+      "trainingPerformance": "Resultaten op bekende data",
       "unseenPerformance": "Resultaten op onbekende data"
     }
   },
@@ -183,12 +182,14 @@
       "finish": "Voltooien",
       "restart": "Opnieuw starten",
       "yes": "Ja",
-      "no": "Nee"
+      "no": "Nee",
+      "ok": "Ok"
     },
     "status": {
       "loading": "Laden...",
       "unexpectedError": "Er is een onverwachte fout opgetreden."
-    }
+    },
+    "level": "Niveau"
   },
   "classificationAreas": {
     "pass": "GESLAAGD",

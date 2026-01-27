@@ -1,10 +1,5 @@
 {
   "title": "AI Ethics Suitcase",
-  "nav": {
-    "title": "AI Ethics Suitcase",
-    "english": "English",
-    "nederlands": "Nederlands"
-  },
   "home": {
     "title": "AI Ethics Suitcase",
     "subtitle": "Interactive application for exploring linear classification",
@@ -13,7 +8,8 @@
   },
   "intro": {
     "headerTitle": "Welcome to the AI Ethics Suitcase!",
-    "goal": "Introduction: Getting familiar with visualization using charts",
+    "levelName": "Introduction",
+    "goal": "Getting familiar with visualization using charts",
     "tour": {
       "0": "Welcome to the AI Ethics Suitcase! This is the introduction level where you will learn about the interface and basics of visualization using charts. You may skip this tutorial if you are already familiar with these concepts.",
       "1": "You are currently on Level -1, which is the introduction level. There are 8 more levels.",
@@ -60,7 +56,9 @@
     "seenData": "Seen data",
     "unseenData": "Unseen data",
     "alerts": {
-      "invalidIntersection": "The line does not properly intersect the graph boundaries. Please retry."
+      "invalidBounds": "Please start and end drawing outside the graph area.",
+      "selfIntersection": "The curve cannot intersect itself.",
+      "invalidIntersections": "The curve must start and end outside the graph area. Please try again."
     }
   },
   "levelProgressBar": {
@@ -85,7 +83,7 @@
     }
   },
   "level0": {
-    "goal": "Level 0: Create your first classifier!",
+    "goal": "Create your first classifier!",
     "stages": {
       "0": "We want to classify a simple dataset of 4 students first by drawing a line that separates Pass and Fail students. To start, click to select the first point of the line.",
       "1": "Now click the second point to draw the classification line",
@@ -103,7 +101,7 @@
       "4": "Finally, click inside the fail region to add a student who has passed",
       "5": "Great! You have classified all types of students. Click next to proceed."
     },
-    "goal": "Level 1: How to calculate the accuracy of a classifier?",
+    "goal": "How to calculate the accuracy of a classifier?",
     "tour": {
       "0": "We will now explain the terms used to measure the accuracy of a linear classifier.",
       "1": "The classification results show the counts of true positives, true negatives, false positives, and false negatives.",
@@ -117,10 +115,10 @@
   },
   "level2_5": {
     "goals": {
-      "2": "Level 2: Can you achieve 100% accuracy?",
-      "3": "Level 3: Can you still achieve 100% accuracy?",
-      "4": "Level 4: Try to achieve maximum possible accuracy!",
-      "5": "Level 5: Try to achieve maximum possible accuracy!"
+      "2": "Can you achieve 100% accuracy?",
+      "3": "Can you still achieve 100% accuracy?",
+      "4": "Try to achieve maximum possible accuracy!",
+      "5": "Try to achieve maximum possible accuracy!"
     },
     "stages": {
       "0": "Click to select the first point of the classifier line to separate the pass from the fail region.",
@@ -132,7 +130,7 @@
     }
   },
   "level6": {
-    "goal": "Level 6: Test your classifier on unseen data!",
+    "goal": "Test your classifier on unseen data!",
     "stages": {
       "0": "Click to select the first point of the classifier line to separate the pass from the fail region.",
       "1": "Now click the second point to draw the classification line",
@@ -148,7 +146,7 @@
     }
   },
   "level7": {
-    "goal": "Level 7: Classifying using a curve!",
+    "goal": "Classifying using a curve!",
     "stages": {
       "0": "Start drawing a curve starting outside the graph area and ending outside the graph area",
       "1": "Click an area to classify it as Pass",
@@ -157,6 +155,7 @@
       "4": "Now toggle between seen and unseen  data. Notice how performance may differ on unseen data!"
     },
     "titles": {
+      "trainingPerformance": "Seen Data Results",
       "unseenPerformance": "Unseen Data Results"
     }
   },
@@ -183,12 +182,14 @@
       "finish": "Finish",
       "restart": "Restart",
       "yes": "Yes",
-      "no": "No"
+      "no": "No",
+      "ok": "Ok"
     },
     "status": {
       "loading": "Loading...",
       "unexpectedError": "An unexpected error occurred."
-    }
+    },
+    "level": "Level"
   },
   "classificationAreas": {
     "pass": "PASS",

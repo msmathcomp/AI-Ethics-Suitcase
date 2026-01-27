@@ -1,6 +1,6 @@
 import { ClassificationVisualizer } from "~/components/ClassificationVisualizer";
 import { useMemo, useState, useEffect } from "react";
-import { ClassificationResults } from "~/components/ui/ClassificationResults";
+import { ClassificationResultsEntry } from "~/components/ui/ClassificationResultsEntry";
 import type { ClassificationCounts, DataPoint, LevelJsonShape } from "~/types";
 import { useLevelData } from "~/context/LevelDataContext";
 import level6Json from "@/data/level6.json";
@@ -91,6 +91,7 @@ export default function Level6() {
 
   return (
     <LevelLayout
+      levelName={`${commonContent.level.value} ${level}`}
       goalElement={content.goal.value}
       classificationVisualizer={
         <ClassificationVisualizer
@@ -131,7 +132,7 @@ export default function Level6() {
       classificationResults={
         <>
           {stage >= 4 && (
-            <ClassificationResults
+            <ClassificationResultsEntry
               title={
                 stage === 6
                   ? content.titles.trainingPerformance.value
@@ -142,7 +143,7 @@ export default function Level6() {
             />
           )}
           {stage === 6 && (
-            <ClassificationResults
+            <ClassificationResultsEntry
               title={content.titles.unseenPerformance.value}
               classificationCounts={unseenResults}
               bestClassificationCounts={unseenBestResults}
@@ -150,6 +151,7 @@ export default function Level6() {
           )}
         </>
       }
+      showResults={stage >= 4}
       level={level}
       showNextLevelButton={stage === 6}
     />

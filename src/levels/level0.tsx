@@ -1,6 +1,6 @@
 import { ClassificationVisualizer } from "~/components/ClassificationVisualizer";
 import { useEffect, useState } from "react";
-import { ClassificationResults } from "~/components/ui/ClassificationResults";
+import { ClassificationResultsEntry } from "~/components/ui/ClassificationResultsEntry";
 import type { DataPoint, ClassificationCounts } from "~/types";
 import { useIntlayer } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
@@ -43,6 +43,7 @@ export default function Level0() {
 
   return (
     <LevelLayout
+      levelName={commonContent.level.value + " 0"}
       goalElement={content.goal.value}
       classificationVisualizer={
         <ClassificationVisualizer
@@ -67,11 +68,13 @@ export default function Level0() {
       instructionButtonCallback={() => setStage(4)}
       classificationResults={
         stage === 4 ? (
-          <ClassificationResults classificationCounts={results} />
+          <ClassificationResultsEntry classificationCounts={results} />
         ) : null
       }
+      showResults={stage >= 4}
       level={level}
       showNextLevelButton={stage === 4}
+      showLegend={true}
     />
   );
 }

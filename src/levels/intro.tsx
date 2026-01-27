@@ -171,6 +171,7 @@ export default function IntroLevel() {
   return (
     <>
       <LevelLayout
+        levelName={introContent.levelName.value}
         goalElement={introContent.goal.value}
         classificationVisualizer={
           <div className="ml-10 h-full aspect-square flex items-center justify-center">
@@ -222,9 +223,10 @@ export default function IntroLevel() {
         }
         instruction={introContent.headerTitle as string}
         instructionButton={null}
-        classificationResults={null}
+        showResults={false}
         level={-1}
         showNextLevelButton={showNextLevelButton}
+        showLegend={true}
       />
       <Joyride
         steps={steps}
@@ -248,6 +250,7 @@ export default function IntroLevel() {
           tooltipContainer: {
             padding: 0,
             fontSize: "15px",
+            textAlign: "left"
           },
           spotlight: {
             backgroundColor: "rgba(255, 255, 255, 0.1)",

@@ -14,7 +14,7 @@ const calculateAccuracy = (counts: ClassificationCounts): string => {
   return (((counts.TP + counts.TN) / total) * 100).toFixed(1);
 };
 
-export const ClassificationResults = ({
+export const ClassificationResultsEntry = ({
   classificationCounts,
   bestClassificationCounts,
   title,
@@ -27,12 +27,14 @@ export const ClassificationResults = ({
   const showComparison = bestClassificationCounts && bestAccuracy;
   return (
     <div
-      className="mt-5 flex flex-col items-center justify-start bg-stone-200 dark:bg-stone-700 rounded-lg py-2 px-4 gap-2"
+      className="flex flex-col items-center justify-start py-2 px-4 gap-2"
       id="classification-results"
     >
-      <h3 className="text-sm xl:text-base font-semibold text-center">
-        {title || content.title} {showComparison && content.compareSuffix}
-      </h3>
+      {title && (
+        <h3 className="text-sm xl:text-base font-semibold text-center">
+          {title}
+        </h3>
+      )}
 
       <div className="text-center">
         <div className="text-base xl:text-lg font-bold text-emerald-400 dark:text-emerald-600">
@@ -44,6 +46,10 @@ export const ClassificationResults = ({
           )}
         </div>
       </div>
+
+      <h3 className="text-sm xl:text-base font-semibold text-center">
+        {showComparison && content.compareSuffix}
+      </h3>
 
       <div className="grid grid-cols-2 gap-2 text-xs xl:text-sm xl:gap-3">
         <div className="flex items-center space-x-1">

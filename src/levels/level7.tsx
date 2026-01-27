@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
-import { ClassificationResults } from "~/components/ui/ClassificationResults";
+import { ClassificationResultsEntry } from "~/components/ui/ClassificationResultsEntry";
 import type { ClassificationCounts, DataPoint, LevelJsonShape } from "~/types";
 import { CurveVisualizer } from "~/components/CurveVisualizer";
 import { useLevelData } from "~/context/LevelDataContext";
@@ -12,7 +12,6 @@ export default function Level7() {
   const {
     level7: content,
     common: commonContent,
-    classificationResults: classifcationResultsContent,
   } = useIntlayer("app");
 
   const [results, setResults] = useState<ClassificationCounts>({
@@ -65,6 +64,7 @@ export default function Level7() {
 
   return (
     <LevelLayout
+      levelName={`${commonContent.level.value} 7`}
       goalElement={content.goal.value}
       classificationVisualizer={
         <CurveVisualizer
@@ -91,19 +91,20 @@ export default function Level7() {
       classificationResults={
         <>
           {stage >= 3 && (
-            <ClassificationResults
-              title={classifcationResultsContent.title.value}
+            <ClassificationResultsEntry
+              title={content.titles.trainingPerformance.value}
               classificationCounts={results}
             />
           )}
           {stage === 4 && (
-            <ClassificationResults
+            <ClassificationResultsEntry
               title={content.titles.unseenPerformance.value}
               classificationCounts={unseenResults}
             />
           )}
         </>
       }
+      showResults={stage >= 3}
       level={level}
       showNextLevelButton={stage === 4}
     />
