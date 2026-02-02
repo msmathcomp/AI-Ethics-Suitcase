@@ -188,7 +188,7 @@ export const CurveVisualizer = ({
   };
 
   const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
-    event.preventDefault();
+    event.stopPropagation();
     if (isDrawing || !overlayRef.current || stage === 4) return;
 
     reset();
@@ -200,7 +200,7 @@ export const CurveVisualizer = ({
   };
 
   const handleMouseMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (event.pressure === 0) return;
+    // if (event.pressure === 0) return;
     if (overlayCurve.length === 0 || !isDrawing) return;
     const overlayRect = overlayRef.current!.getBoundingClientRect();
     const x = event.clientX - overlayRect.left;
