@@ -1,4 +1,4 @@
-import { type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { LevelProgressBar } from "~/components/ui/LevelProgressBar";
 import { Legend } from "~/components/ui/Legend";
 import { cn } from "~/utils/cn";
@@ -32,6 +32,21 @@ export default function LevelLayout({
   showLegend = false,
 }: Props) {
   const { classificationResults: classification } = useIntlayer("app");
+
+  // Prevent touchmove scrolling on mobile device
+  // This is to prevent the page from "spring scrolling"
+  useEffect(() => {
+    const el = document.querySelector("main");
+    if (!el) return;
+
+    const blockTouch = (e: TouchEvent) => e.preventDefault();
+
+    el.addEventListener('touchmove', blockTouch, { passive: false });
+
+    return () => {
+      el.removeEventListener('touchmove', blockTouch);
+    };
+  }, []);
 
   return (
     <main className="h-screen w-screen flex flex-col px-4 pt-2 overflow-hidden dark:bg-stone-900 dark:text-white">

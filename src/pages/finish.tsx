@@ -5,6 +5,7 @@ import type { ClassificationCounts } from "~/types";
 import { LanguageSwitch } from "~/components/ui/LanguageSwitch";
 import ThemeSwitch from "~/components/ui/ThemeSwitch";
 import { SmileIcon } from "lucide-react";
+import { useEffect } from "react";
 
 function calculateAccuracy(counts: ClassificationCounts): number {
   const total = counts.TP + counts.TN + counts.FP + counts.FN;
@@ -48,6 +49,21 @@ export default function Finish() {
       );
     }
   }, 0);
+
+  // Prevent touchmove scrolling on mobile device
+  // This is to prevent the page from "spring scrolling"
+  useEffect(() => {
+    const el = document.querySelector("main");
+    if (!el) return;
+
+    const blockTouch = (e: TouchEvent) => e.preventDefault();
+
+    el.addEventListener('touchmove', blockTouch, { passive: false });
+
+    return () => {
+      el.removeEventListener('touchmove', blockTouch);
+    };
+  }, []);
 
   return (
     <main className="min-h-screen bg-white dark:bg-stone-900 text-black dark:text-white flex flex-col items-center justify-center gap-8 p-8">

@@ -33,7 +33,7 @@ export const CurveChart = ({
   const { chart } = useIntlayer("app");
 
   return (
-    <div className="ml-10 h-full aspect-square flex items-center justify-center z-50">
+    <div className="ml-10 h-full aspect-square flex items-center justify-center z-10">
       <ResponsiveContainer ref={chartContainerRef} height="95%" width="95%">
         <ComposedChart
           margin={{
