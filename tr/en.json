@@ -67,6 +67,7 @@
     "nextLevelButtonText": "Next Level",
     "skipLevelButtonText": "Skip Level",
     "previousLevel": "Previous Level",
+    "restartButton": "Restart",
     "restartLevel": "Restart Level",
     "restartApp": "Restart App",
     "restartDialogTitle": "Restart Application",

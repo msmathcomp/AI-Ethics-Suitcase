@@ -2,7 +2,6 @@ import { Link } from "react-router";
 import { useIntlayer } from "react-intlayer";
 import { useConfig } from "~/context/ConfigContext";
 import { LanguageSwitch } from "~/components/ui/LanguageSwitch";
-import ThemeSwitch from "~/components/ui/ThemeSwitch";
 import { useEffect } from "react";
 
 export default function Home() {
@@ -45,9 +44,6 @@ export default function Home() {
       </Link>
       <div className="fixed top-6 right-4">
         <LanguageSwitch />
-      </div>
-      <div className="fixed bottom-4">
-        <ThemeSwitch />
       </div>
     </main>
   );

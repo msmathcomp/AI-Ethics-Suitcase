@@ -4,7 +4,6 @@ import { cn } from "~/utils/cn";
 import { useIntlayer } from "react-intlayer";
 import { useEffect, useRef, useState } from "react";
 import Dialog from "./Dialog";
-import ThemeSwitch from "./ThemeSwitch";
 import { useLevelData } from "~/context/LevelDataContext";
 import { LanguageSwitch } from "./LanguageSwitch";
 
@@ -129,20 +128,24 @@ export function LevelProgressBar({
         {showNextLevelButton ? content.nextLevelButtonText : content.skipLevelButtonText}
         <ChevronRight size={25} />
       </button>
-      <div className="absolute right-0 top-0 flex items-center justify-center px-2 py-5">
+      <div className="absolute right-0 top-0 flex items-center justify-center px-2 py-4">
         {level !== -1 && level !== 1 && (
           <button
             id="reset-button"
             ref={buttonRef}
             onClick={() => setShowMenu((v) => !v)}
             className={cn(
-              "hover:bg-stone-200 dark:hover:bg-stone-800 items-center rounded p-1 ",
+              "flex flex-row items-center border rounded-xl pl-2 pr-2 py-2 mr-4",
+              "hover:bg-stone-200 dark:hover:bg-stone-800 border-stone-600 dark:border-stone-400",
             )}
           >
-            <RotateCcw size={30} />
+            {content.restartButton}
+            <RotateCcw
+              size={25}
+              className="ml-1"
+            />
           </button>
         )}
-        <ThemeSwitch />
       </div>
       <Dialog
         open={isDialogOpen}
@@ -157,7 +160,7 @@ export function LevelProgressBar({
       {showMenu && (
         <div
           ref={menuRef}
-          className="absolute right-0 bottom-14 bg-white dark:bg-stone-900 border rounded shadow-lg z-50 flex flex-col min-w-[150px]"
+          className="absolute right-0 bottom-18 bg-white dark:bg-stone-900 border rounded shadow-lg z-50 flex flex-col min-w-[150px]"
         >
           <button
             className="px-4 py-2 hover:bg-stone-200 dark:hover:bg-stone-800 text-left"
