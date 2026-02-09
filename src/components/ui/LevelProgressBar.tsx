@@ -135,7 +135,7 @@ export function LevelProgressBar({
             ref={buttonRef}
             onClick={() => setShowMenu((v) => !v)}
             className={cn(
-              "flex flex-row items-center border rounded-xl pl-2 pr-2 py-2 mr-4",
+              "flex flex-row items-center border rounded-xl px-5 py-2 mr-4",
               "hover:bg-stone-200 dark:hover:bg-stone-800 border-stone-600 dark:border-stone-400",
             )}
           >
@@ -160,7 +160,7 @@ export function LevelProgressBar({
       {showMenu && (
         <div
           ref={menuRef}
-          className="absolute right-0 bottom-18 bg-white dark:bg-stone-900 border rounded shadow-lg z-50 flex flex-col min-w-[150px]"
+          className="absolute right-3 bottom-18 bg-white dark:bg-stone-900 border rounded shadow-lg z-50 flex flex-col min-w-[150px]"
         >
           <button
             className="px-4 py-2 hover:bg-stone-200 dark:hover:bg-stone-800 text-left"

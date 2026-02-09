@@ -149,7 +149,7 @@
   "level7": {
     "goal": "Classifying using a curve!",
     "stages": {
-      "0": "Start drawing a curve starting outside the graph area and ending outside the graph area",
+      "0": "Start drawing a curve starting outside the graph area (the green zone) and ending outside the graph area",
       "1": "Click an area to classify it as Pass",
       "2": "You may create a new classifier by drawing again. When satisfied, click 'Next' to continue.",
       "3": "Complete! You can now see the classification results.",

@@ -124,7 +124,7 @@ export const ClassificationAreas = ({
   }, [areaPolygons]);
 
   return (
-    <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
+    <svg className="absolute top-0 left-0 w-full h-full pointer-events-none z-2">
       <defs>
         <pattern
           id="pass-area-pattern"

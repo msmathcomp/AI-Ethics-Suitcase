@@ -30,6 +30,15 @@ interface Props {
   modifyVisualizerData: (modifyFn: (data: VisualizerData) => VisualizerData) => void;
 }
 
+interface BoxInfo {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+  width: number;
+  height: number;
+}
+
 export const CurveVisualizer = ({
   seenData,
   unseenData,
@@ -120,17 +129,19 @@ export const CurveVisualizer = ({
     return data;
   }, [showSeenData, stage, showUnseenData, unseenData, seenData]);
 
-  const overlayToGraphCoords = useCallback((overlayPoint: Point): Point => {
-    if (!overlayRef.current || !chartContainerRef.current)
-      throw new Error("Refs not set");
+  const graphInOverlay: BoxInfo = useMemo(() => {
+    if (!chartReady || !overlayReady || !overlayRef.current || !chartContainerRef.current) {
+      return { left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0 };
+    }
+
     const overlayRect = overlayRef.current.getBoundingClientRect();
     const graphElement = chartContainerRef.current.querySelector(
       ".recharts-cartesian-grid"
     ) as SVGElement | null;
-    if (!graphElement) throw new Error("Graph element not found");
+    if (!graphElement) return { left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0 };
     const graphRect = graphElement.getBoundingClientRect();
 
-    const graphRectInOverlay = {
+    return {
       left: graphRect.left - overlayRect.left,
       top: graphRect.top - overlayRect.top,
       right: graphRect.right - overlayRect.left,
@@ -138,7 +149,10 @@ export const CurveVisualizer = ({
       width: graphRect.width,
       height: graphRect.height,
     };
+  }, [chartReady, overlayReady, overlayRef.current, chartContainerRef.current]);
 
+  const overlayToGraphCoords = useCallback((overlayPoint: Point): Point => {
+    const graphRectInOverlay = graphInOverlay;
     const normalize_x = graphRectInOverlay.width / 500;
     const normalize_y = graphRectInOverlay.height / 500;
 
@@ -147,7 +161,7 @@ export const CurveVisualizer = ({
       500 - (overlayPoint.y - graphRectInOverlay.top) / normalize_y;
 
     return { x: graphX, y: graphY };
-  }, []);
+  }, [graphInOverlay]);
 
   const graphToOverlayCoords = useCallback((graphCoords: Point): Point => {
     if (!overlayRef.current || !chartContainerRef.current)
@@ -251,18 +265,11 @@ export const CurveVisualizer = ({
 
     if (!overlayRef.current || !chartContainerRef.current) return;
 
-    const overlayRect = overlayRef.current.getBoundingClientRect();
-    const graphElement = chartContainerRef.current.querySelector(
-      ".recharts-cartesian-grid"
-    ) as SVGElement | null;
-    if (!graphElement) return;
-    const graphRect = graphElement.getBoundingClientRect();
-
     const graphBounds = {
-      left: graphRect.left - overlayRect.left,
-      top: graphRect.top - overlayRect.top,
-      right: graphRect.right - overlayRect.left,
-      bottom: graphRect.bottom - overlayRect.top,
+      left: graphInOverlay.left,
+      top: graphInOverlay.top,
+      right: graphInOverlay.right,
+      bottom: graphInOverlay.bottom,
     };
 
     // Validate start and end points
@@ -322,7 +329,7 @@ export const CurveVisualizer = ({
     ];
 
     setGraphCurve(finalCurve.map(overlayToGraphCoords));
-  }, [stage, overlayCurve, overlayToGraphCoords, isDrawing]);
+  }, [stage, overlayCurve, overlayToGraphCoords, isDrawing, graphInOverlay]);
 
   useEffect(() => {
     if (!chartReady || !overlayReady) return;  
@@ -486,6 +493,38 @@ export const CurveVisualizer = ({
           reset();
         }}
       />
+      { stage === 0 && (
+        <svg
+          className="w-full h-full absolute top-0 left-0 z-0 pointer-events-none rounded-xl"
+        >
+          <defs>
+            <pattern
+              id="diagonalStripes"
+              patternUnits="userSpaceOnUse"
+              width="10"
+              height="10"
+              patternTransform="rotate(45)"
+            >
+              <rect width="5" height="10" fill="var(--guide-fill)" />
+            </pattern>
+          </defs>
+
+          <rect
+            x="3%" // leave some margin around the area
+            y="0"
+            width="94%"
+            height="100%"
+            fill="url(#diagonalStripes)"
+          />
+          <rect
+            x={graphInOverlay.left}
+            y={graphInOverlay.top}
+            width={graphInOverlay.width}
+            height={graphInOverlay.height}
+            fill="var(--chart-bg)"
+          />
+        </svg>
+      )}
     </>
   );
 };

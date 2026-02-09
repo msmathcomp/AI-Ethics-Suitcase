@@ -149,7 +149,7 @@
   "level7": {
     "goal": "Classificeren met een kromme!",
     "stages": {
-      "0": "Teken een kromme die buiten het grafiekgebied begint en eindigt.",
+      "0": "Begin met het tekenen van een kromme die begint buiten het grafiekgebied (de groene zone) en eindigt buiten het grafiekgebied",
       "1": "Klik op een gebied om het als ‘Geslaagd’ te classificeren.",
       "2": "Je kunt een nieuwe classifier tekenen als je wilt. Tevreden? Klik op ‘Volgende’.",
       "3": "Klaar! Je kunt nu de resultaten zien.",

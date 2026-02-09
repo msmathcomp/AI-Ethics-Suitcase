@@ -13,11 +13,15 @@
 :root {
   --chart-stroke: #000000;
   --chart-fill: #ffffff;
+  --chart-bg: #ffffff;
+  --guide-fill: #e0e0e0;
 }
 
 .dark {
   --chart-stroke: #ffffff;
   --chart-fill: #000000;
+  --chart-bg: oklch(21.6% 0.006 56.043);
+  --guide-fill: oklch(26.2% 0.051 172.552);
 }
 
 .pass-area-bg {

@@ -2,26 +2,10 @@ import { Link } from "react-router";
 import { useIntlayer } from "react-intlayer";
 import { useConfig } from "~/context/ConfigContext";
 import { LanguageSwitch } from "~/components/ui/LanguageSwitch";
-import { useEffect } from "react";
 
 export default function Home() {
   const { home: content, common: commonContent } = useIntlayer("app");
   const { config, loading } = useConfig();
-
-  // Prevent touchmove scrolling on mobile device
-  // This is to prevent the page from "spring scrolling"
-  useEffect(() => {
-    const el = document.querySelector("main");
-    if (!el) return;
-
-    const blockTouch = (e: TouchEvent) => e.preventDefault();
-
-    el.addEventListener('touchmove', blockTouch, { passive: false });
-
-    return () => {
-      el.removeEventListener('touchmove', blockTouch);
-    };
-  }, []);
 
   if (loading || !config) {
     return (
