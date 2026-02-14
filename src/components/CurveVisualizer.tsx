@@ -259,6 +259,20 @@ export const CurveVisualizer = ({
     }
   }, [overlayRef.current]);
 
+  useEffect(() => {
+    const el = overlayRef.current;
+    if (!el) return;
+
+    // To prevent scroll and get better control
+    // On IPad kiosk browser lite, the page scrolls when trying to draw
+    const blockTouch = (e: TouchEvent) => e.preventDefault();
+
+    el.addEventListener('touchmove', blockTouch, { passive: false });
+
+    return () => {
+      el.removeEventListener('touchmove', blockTouch);
+    };
+  }, []);
 
   useEffect(() => {
     if (overlayCurve.length <= 1 || isDrawing !== false || stage !== 1) return;

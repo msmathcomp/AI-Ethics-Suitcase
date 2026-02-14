@@ -72,7 +72,7 @@ export function LevelProgressBar({
       className="flex w-full items-center justify-center gap-2 relative pb-6 pt-4 rounded-t-xl bg-stone-200 dark:bg-stone-700"
       id="level-progress-bar"
     >
-      <div className="absolute left-0 top-0 px-2 py-4">
+      <div className="absolute left-0 top-0 px-2 py-4 ml-4">
         <LanguageSwitch />
       </div>
       <button
