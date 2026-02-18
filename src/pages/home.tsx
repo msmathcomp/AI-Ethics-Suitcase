@@ -2,7 +2,6 @@ import { Link } from "react-router";
 import { useIntlayer } from "react-intlayer";
 import { useConfig } from "~/context/ConfigContext";
 import { LanguageSwitch } from "~/components/ui/LanguageSwitch";
-import ThemeSwitch from "~/components/ui/ThemeSwitch";
 
 export default function Home() {
   const { home: content, common: commonContent } = useIntlayer("app");
@@ -16,6 +15,7 @@ export default function Home() {
     );
   }
 
+
   return (
     <main className="min-h-screen flex flex-col items-center justify-center gap-4 dark:bg-stone-900 dark:text-white">
       <h1 className="text-4xl">{content.title}</h1>
@@ -28,9 +28,6 @@ export default function Home() {
       </Link>
       <div className="fixed top-6 right-4">
         <LanguageSwitch />
-      </div>
-      <div className="fixed bottom-4">
-        <ThemeSwitch />
       </div>
     </main>
   );

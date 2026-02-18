@@ -30,6 +30,15 @@ interface Props {
   modifyVisualizerData: (modifyFn: (data: VisualizerData) => VisualizerData) => void;
 }
 
+interface BoxInfo {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+  width: number;
+  height: number;
+}
+
 export const CurveVisualizer = ({
   seenData,
   unseenData,
@@ -120,17 +129,19 @@ export const CurveVisualizer = ({
     return data;
   }, [showSeenData, stage, showUnseenData, unseenData, seenData]);
 
-  const overlayToGraphCoords = useCallback((overlayPoint: Point): Point => {
-    if (!overlayRef.current || !chartContainerRef.current)
-      throw new Error("Refs not set");
+  const graphInOverlay: BoxInfo = useMemo(() => {
+    if (!chartReady || !overlayReady || !overlayRef.current || !chartContainerRef.current) {
+      return { left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0 };
+    }
+
     const overlayRect = overlayRef.current.getBoundingClientRect();
     const graphElement = chartContainerRef.current.querySelector(
       ".recharts-cartesian-grid"
     ) as SVGElement | null;
-    if (!graphElement) throw new Error("Graph element not found");
+    if (!graphElement) return { left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0 };
     const graphRect = graphElement.getBoundingClientRect();
 
-    const graphRectInOverlay = {
+    return {
       left: graphRect.left - overlayRect.left,
       top: graphRect.top - overlayRect.top,
       right: graphRect.right - overlayRect.left,
@@ -138,7 +149,10 @@ export const CurveVisualizer = ({
       width: graphRect.width,
       height: graphRect.height,
     };
+  }, [chartReady, overlayReady, overlayRef.current, chartContainerRef.current]);
 
+  const overlayToGraphCoords = useCallback((overlayPoint: Point): Point => {
+    const graphRectInOverlay = graphInOverlay;
     const normalize_x = graphRectInOverlay.width / 500;
     const normalize_y = graphRectInOverlay.height / 500;
 
@@ -147,7 +161,7 @@ export const CurveVisualizer = ({
       500 - (overlayPoint.y - graphRectInOverlay.top) / normalize_y;
 
     return { x: graphX, y: graphY };
-  }, []);
+  }, [graphInOverlay]);
 
   const graphToOverlayCoords = useCallback((graphCoords: Point): Point => {
     if (!overlayRef.current || !chartContainerRef.current)
@@ -200,7 +214,7 @@ export const CurveVisualizer = ({
   };
 
   const handleMouseMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (event.pressure === 0) return;
+    // if (event.pressure === 0) return;
     if (overlayCurve.length === 0 || !isDrawing) return;
     const overlayRect = overlayRef.current!.getBoundingClientRect();
     const x = event.clientX - overlayRect.left;
@@ -249,107 +263,87 @@ export const CurveVisualizer = ({
     const el = overlayRef.current;
     if (!el) return;
 
-    // Optional: If you want to prevent scroll and get better control
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const blockTouch = (e: any) => e.preventDefault();
+    // To prevent scroll and get better control
+    // On IPad kiosk browser lite, the page scrolls when trying to draw
+    const blockTouch = (e: TouchEvent) => e.preventDefault();
 
-    el.addEventListener('touchstart', blockTouch, { passive: false });
     el.addEventListener('touchmove', blockTouch, { passive: false });
 
     return () => {
-      el.removeEventListener('touchstart', blockTouch);
       el.removeEventListener('touchmove', blockTouch);
     };
   }, []);
 
-
   useEffect(() => {
-    if (overlayCurve.length > 1 && isDrawing === false && stage === 1) {
-      if (!overlayRef.current || !chartContainerRef.current) return;
+    if (overlayCurve.length <= 1 || isDrawing !== false || stage !== 1) return;
 
-      const overlayRect = overlayRef.current.getBoundingClientRect();
-      const graphElement = chartContainerRef.current.querySelector(
-        ".recharts-cartesian-grid"
-      ) as SVGElement | null;
-      if (!graphElement) return;
-      const graphRect = graphElement.getBoundingClientRect();
+    if (!overlayRef.current || !chartContainerRef.current) return;
 
-      const graphBounds = {
-        left: graphRect.left - overlayRect.left,
-        top: graphRect.top - overlayRect.top,
-        right: graphRect.right - overlayRect.left,
-        bottom: graphRect.bottom - overlayRect.top,
-      };
+    const graphBounds = {
+      left: graphInOverlay.left,
+      top: graphInOverlay.top,
+      right: graphInOverlay.right,
+      bottom: graphInOverlay.bottom,
+    };
 
-      // Validate start and end points
-      const startPoint = overlayCurve[0];
-      const endPoint = overlayCurve[overlayCurve.length - 1];
-      if (
-        isPointInBounds(startPoint, graphBounds) ||
-        isPointInBounds(endPoint, graphBounds)
-      ) {
-        // alert("Please start and end drawing outside the graph area.");
-        // reset();
-        setDialogMessage(content.alerts.invalidBounds.value);
-        setIsDialogOpen(true);
-        return;
-      }
+    // Validate start and end points
+    const startPoint = overlayCurve[0];
+    const endPoint = overlayCurve[overlayCurve.length - 1];
+    if (
+      isPointInBounds(startPoint, graphBounds) ||
+      isPointInBounds(endPoint, graphBounds)
+    ) {
+      setDialogMessage(content.alerts.invalidBounds.value);
+      setIsDialogOpen(true);
+      return;
+    }
 
-      // Validate self-intersection
-      if (checkSelfIntersection(overlayCurve)) {
-        // alert("The curve cannot intersect itself.");
-        // reset();
-        setDialogMessage(content.alerts.selfIntersection.value);
-        setIsDialogOpen(true);
-        return;
-      }
+    // Validate self-intersection
+    if (checkSelfIntersection(overlayCurve)) {
+      setDialogMessage(content.alerts.selfIntersection.value);
+      setIsDialogOpen(true);
+      return;
+    }
 
-      const intersections = getCurveIntersections(overlayCurve, graphBounds);
-      if (intersections.length !== 2) {
-        // alert(
-        //   "The curve must start and end outside the graph area. Please try again."
-        // );
-        // reset();
-        setDialogMessage(content.alerts.invalidIntersections.value);
-        setIsDialogOpen(true);
-        return;
-      }
+    const intersections = getCurveIntersections(overlayCurve, graphBounds);
+    if (intersections.length !== 2) {
+      setDialogMessage(content.alerts.invalidIntersections.value);
+      setIsDialogOpen(true);
+      return;
+    }
 
-      let startIndex = -1,
-        endIndex = -1;
-      for (let i = 0; i < overlayCurve.length - 1; i++) {
-        if (isPointInBounds(overlayCurve[i], graphBounds)) {
-          if (startIndex === -1) {
-            startIndex = i;
-          }
-          endIndex = i;
+    let startIndex = -1, endIndex = -1;
+    for (let i = 0; i < overlayCurve.length - 1; i++) {
+      if (isPointInBounds(overlayCurve[i], graphBounds)) {
+        if (startIndex === -1) {
+          startIndex = i;
         }
+        endIndex = i;
       }
+    }
 
-      if (startIndex === -1) {
-        // Curve passes through bounds but has no points inside?
-        // This can happen for very fast drawing.
-        // We can just use the intersections.
-        const finalCurve = [
-          intersections[0],
-          intersections[intersections.length - 1],
-        ];
-        const cleanedCurve = cleanSmallIntersections(finalCurve);
-        setGraphCurve(cleanedCurve.map(overlayToGraphCoords));
-        setStage(2);
-        return;
-      }
-
-      const curveInside = overlayCurve.slice(startIndex, endIndex + 1);
+    if (startIndex === -1) {
+      // Curve passes through bounds but has no points inside?
+      // This can happen for very fast drawing.
+      // We can just use the intersections.
       const finalCurve = [
         intersections[0],
-        ...curveInside,
         intersections[intersections.length - 1],
       ];
-
-      setGraphCurve(finalCurve.map(overlayToGraphCoords));
+      const cleanedCurve = cleanSmallIntersections(finalCurve);
+      setGraphCurve(cleanedCurve.map(overlayToGraphCoords));
+      return;
     }
-  }, [stage, overlayCurve, overlayToGraphCoords, isDrawing, setStage]);
+
+    const curveInside = overlayCurve.slice(startIndex, endIndex + 1);
+    const finalCurve = [
+      intersections[0],
+      ...curveInside,
+      intersections[intersections.length - 1],
+    ];
+
+    setGraphCurve(finalCurve.map(overlayToGraphCoords));
+  }, [stage, overlayCurve, overlayToGraphCoords, isDrawing, graphInOverlay]);
 
   useEffect(() => {
     if (!chartReady || !overlayReady) return;  
@@ -411,8 +405,7 @@ export const CurveVisualizer = ({
       graphCurve.length > 0 &&
       !areaColorsAssigned
     ) {
-      areaPolygonsElement.style.zIndex = "100";
-      overlayElement.style.zIndex = "51";
+      areaPolygonsElement.style.zIndex = "20";
     }
     else if (areaPolygonsElement && overlayElement && areaColorsAssigned) {
       areaPolygonsElement.style.zIndex = "5";
@@ -436,15 +429,12 @@ export const CurveVisualizer = ({
         areaColorsAssigned={areaColorsAssigned}
       />
       <div
-        className="absolute top-0 left-0 w-full h-full cursor-crosshair select-none z-50"
+        className="absolute top-0 left-0 w-full h-full cursor-crosshair select-none z-10"
         ref={overlayRef}
         onPointerDown={handleMouseDown}
         onPointerMove={handleMouseMove}
         onPointerUp={handleMouseUp}
         onPointerLeave={handleMouseUp}
-        // onTouchStart={handleMouseDown}
-        // onTouchMove={handleMouseMove}
-        onTouchEnd={handleMouseUp}
       >
         {isDrawing && overlayCurve.length > 0 && (
           <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
@@ -494,7 +484,7 @@ export const CurveVisualizer = ({
       </div>
 
       <div
-        className="w-full h-full z-9 absolute top-0 left-0 bg-transparent"
+        className="w-full h-full absolute top-0 left-0 bg-transparent"
         ref={areaPolygonsRef}
       >
         {areaPolygons.area1.overlay.length > 0 &&
@@ -517,6 +507,38 @@ export const CurveVisualizer = ({
           reset();
         }}
       />
+      { stage === 0 && (
+        <svg
+          className="w-full h-full absolute top-0 left-0 z-0 pointer-events-none rounded-xl"
+        >
+          <defs>
+            <pattern
+              id="diagonalStripes"
+              patternUnits="userSpaceOnUse"
+              width="10"
+              height="10"
+              patternTransform="rotate(45)"
+            >
+              <rect width="5" height="10" fill="var(--guide-fill)" />
+            </pattern>
+          </defs>
+
+          <rect
+            x="3%" // leave some margin around the area
+            y="0"
+            width="94%"
+            height="100%"
+            fill="url(#diagonalStripes)"
+          />
+          <rect
+            x={graphInOverlay.left}
+            y={graphInOverlay.top}
+            width={graphInOverlay.width}
+            height={graphInOverlay.height}
+            fill="var(--chart-bg)"
+          />
+        </svg>
+      )}
     </>
   );
 };
