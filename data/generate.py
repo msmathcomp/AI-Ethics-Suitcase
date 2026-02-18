@@ -9,7 +9,7 @@ import argparse
 import json
 
 from classify import find_maximum_accuracy_linear_separator, best_linear_classifier
-from classify2 import best_linear_classifier_bruteforce
+# from classify2 import best_linear_classifier_bruteforce
 
 # ----- Defaults -----
 default_params = {
@@ -144,11 +144,11 @@ def fit_classifier_2(points):
     clf = best_linear_classifier(X, y)
     return clf
 
-def fit_classifier_3(points):
-    X = np.array([[p[0], p[1]] for p in points])
-    y = np.array([1 if p[2] == "Pass" else 0 for p in points])
-    clf = best_linear_classifier_bruteforce(X, y)
-    return clf
+# def fit_classifier_3(points):
+#     X = np.array([[p[0], p[1]] for p in points])
+#     y = np.array([1 if p[2] == "Pass" else 0 for p in points])
+#     clf = best_linear_classifier_bruteforce(X, y)
+#     return clf
 
 def get_boundary_segment(clf):
     # Decision boundary: coef[0]*x + coef[1]*y + intercept = 0
