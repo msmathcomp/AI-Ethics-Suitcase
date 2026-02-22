@@ -12,7 +12,7 @@ interface LevelProgressBarProps {
   showNextLevelButton: boolean;
 }
 
-const TOTAL_LEVELS = 9;
+const TOTAL_LEVELS = 10;
 
 export function LevelProgressBar({
   level,
@@ -60,7 +60,7 @@ export function LevelProgressBar({
   };
 
   const handleNextLevel = () => {
-    if (level === 7) {
+    if (level === 8) {
       navigate("/finish");
       return;
     }
