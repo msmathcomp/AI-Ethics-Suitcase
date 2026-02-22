@@ -11,6 +11,7 @@ import type { ClassificationCounts, ClickCoordinates, Point } from "~/types";
 export interface LevelData {
   stage: number;
   completed: boolean;
+  resetCount: number;
   user?: ClassificationCounts;
   best?: ClassificationCounts;
   unseen?: ClassificationCounts;
@@ -155,7 +156,12 @@ export function LevelDataProvider({
   const resetLevelData = useCallback((level: number) => {
     setDataByLevel((prev) => {
       const newMap = new Map(prev);
-      newMap.delete(level);
+      const oldResetCount = newMap.get(level)?.resetCount || 0;
+      const resetData: LevelData = {
+        ...defaultLevelData,
+        resetCount: oldResetCount + 1,
+      };
+      newMap.set(level, resetData);
       return newMap;
     });
   }, []);
@@ -190,6 +196,7 @@ export function LevelDataProvider({
 const defaultLevelData: LevelData = {
   stage: 0,
   completed: false,
+  resetCount: 0,
   visualizerData: defaultVisualizerData,
 }
 

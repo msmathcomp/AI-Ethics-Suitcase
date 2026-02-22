@@ -194,7 +194,7 @@ else:
     test_points = None
 clf, acc = fit_classifier(points)
 boundary_segment = get_boundary_segment(clf)
-origin_pass = bool(classify_origin(clf))
+origin_pass = not bool(classify_origin(clf))
 
 # Prepare save object
 save_obj = {

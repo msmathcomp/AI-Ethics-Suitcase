@@ -12,6 +12,7 @@ interface Props {
   instructionButton: string | null;
   instructionButtonCallback?: () => void;
   classificationResults?: ReactNode;
+  extraElement?: ReactNode;
   showResults?: boolean;
   level: number;
   showNextLevelButton: boolean;
@@ -26,6 +27,7 @@ export default function LevelLayout({
   instructionButtonCallback,
   instructionButton,
   classificationResults = null,
+  extraElement = null,
   showResults = true,
   level,
   showNextLevelButton,
@@ -39,6 +41,12 @@ export default function LevelLayout({
         <h1 className="text-3xl font-bold mt-4">{levelName}</h1>
         <h2 className="text-xl mt-1">{goalElement}</h2>
       </div>
+      { extraElement !== null && (
+        <div className="w-full mb-2 px-4">
+          {/* Extra element can be used to show something like a timer bar or a hint button below the goal and above the visualizer */}
+          {extraElement}
+        </div>
+      )}
       <div className="flex flex-1 min-h-0 overflow-auto pt-5">
         <div className="w-full flex-1 relative flex items-center justify-center">
           {classificationVisualizer}

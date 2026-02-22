@@ -5,6 +5,7 @@ import type { ClassificationCounts, LevelJsonShape } from "~/types";
 import { useLevelData } from "~/context/LevelDataContext";
 import { useIntlayer } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
+import TimerBar from "~/components/ui/TimerBar";
 
 export default function Level6() {
   const level = 8;
@@ -15,6 +16,7 @@ export default function Level6() {
   } = useIntlayer("app");
 
   const {
+    dataByLevel,
     getStage,
     setStage: setStageByLevel,
     recordLevelResult,
@@ -27,6 +29,7 @@ export default function Level6() {
   const setStage = (newStage: number | ((old: number) => number)) => {
     setStageByLevel(level, typeof newStage === "number" ? newStage : newStage(stage));
   };
+  const resetCount = useMemo(() => dataByLevel.get(level)?.resetCount || 0, [dataByLevel, level]);
 
   const [results, setResults] = useState<ClassificationCounts>({
     TP: 0,
@@ -55,17 +58,18 @@ export default function Level6() {
     });
 
   // Choose a random dataset from the freeplay folder
-  const levelJson: LevelJsonShape = useMemo(() => {
+  const updateLevelJson = () => {
     const modules = import.meta.glob('/data/freeplay/*.json', {
       eager: true,
     });
 
     const values = Object.values(modules);
     const random = values[Math.floor(Math.random() * values.length)];
-    const data = (random as any).default;
+    const data = (random as { default: LevelJsonShape }).default;
 
     return data;
-  }, []);
+  };
+  const levelJson: LevelJsonShape = useMemo(updateLevelJson, [ resetCount ]);
 
   useEffect(() => {
     if (stage === 4 && results.TP + results.TN + results.FP + results.FN > 0) {
@@ -118,7 +122,7 @@ export default function Level6() {
           }
           bestClassifier={{
             line: levelJson.best,
-            originIsPass: levelJson.originIsPass,
+            originIsPass: !levelJson.originIsPass,
           }}
         />
       }
@@ -158,6 +162,16 @@ export default function Level6() {
             />
           )}
         </>
+      }
+      extraElement={
+        <TimerBar
+          maximumTime={30}
+          onFinish={() => {
+          }}
+          resetKey={resetCount}
+          pause={stage > 3}
+          className="h-2"
+        />
       }
       showResults={stage >= 4}
       level={level}
