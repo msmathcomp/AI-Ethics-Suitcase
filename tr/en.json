@@ -160,6 +160,27 @@
       "unseenPerformance": "Unseen Data Results"
     }
   },
+  "levelfreeplay": {
+    "goal": "Try to beat the best classifier under a time limit!",
+    "stages": {
+      "0": "Click to select the first point of the classifier line to separate the pass from the fail region.",
+      "1": "Now click the second point to draw the classification line",
+      "2": "Drag the black circles to adjust the line, then click one of the regions to classify as Pass",
+      "3": "Adjust your classifier by rotating the line or creating a new one.",
+      "4": "Complete! You can now see the classification results.",
+      "5": "Compare your classifier with the best classifier.",
+      "6": "You can now toggle between already seen data and the unseen data."
+    },
+    "titles": {
+      "trainingPerformance": "Seen Data Results",
+      "unseenPerformance": "Unseen Data Results"
+    },
+    "tutorialDialog": {
+      "title": "Welcome to the Free Play Level!",
+      "message": "In this level, you can freely experiment with the classifier and try to beat the best classifier found by AI. You can also compare performance on seen and unseen data. There is no right or wrong answer here, just have fun exploring!"
+    },
+    "timeExpired": "Time's up!"
+  },
   "levelPage": {
     "invalidLevel": "Invalid level"
   },

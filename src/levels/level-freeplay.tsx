@@ -6,11 +6,13 @@ import { useLevelData } from "~/context/LevelDataContext";
 import { useIntlayer } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
 import TimerBar from "~/components/ui/TimerBar";
+import Dialog from "~/components/ui/Dialog";
+import { cn } from "~/utils/cn";
 
-export default function Level6() {
+export default function LevelFreeplay() {
   const level = 8;
   const {
-    level6: content,
+    levelfreeplay: content,
     common: commonContent,
     classificationResults: classifcationResultsContent,
   } = useIntlayer("app");
@@ -23,6 +25,7 @@ export default function Level6() {
     getVisualizerData,
     modifyVisualizerData,
     markLevelCompleted,
+    resetLevelData,
   } = useLevelData();
 
   const stage = getStage(level);
@@ -57,6 +60,9 @@ export default function Level6() {
       FN: 0,
     });
 
+  const [isTutorialDialogOpen, setIsTutorialDialogOpen] = useState(true);
+  const [showTimerExpired, setShowTimerExpired] = useState(false);
+
   // Choose a random dataset from the freeplay folder
   const updateLevelJson = () => {
     const modules = import.meta.glob('/data/freeplay/*.json', {
@@ -70,6 +76,14 @@ export default function Level6() {
     return data;
   };
   const levelJson: LevelJsonShape = useMemo(updateLevelJson, [ resetCount ]);
+
+  useEffect(() => {
+    resetLevelData(level);
+    setResults({ TP: 0, TN: 0, FP: 0, FN: 0 });
+    setBestResults({ TP: 0, TN: 0, FP: 0, FN: 0 });
+    setUnseenResults({ TP: 0, TN: 0, FP: 0, FN: 0 });
+    setUnseenBestResults({ TP: 0, TN: 0, FP: 0, FN: 0 });
+  }, []);
 
   useEffect(() => {
     if (stage === 4 && results.TP + results.TN + results.FP + results.FN > 0) {
@@ -124,6 +138,7 @@ export default function Level6() {
             line: levelJson.best,
             originIsPass: !levelJson.originIsPass,
           }}
+          canModify={stage < 3}
         />
       }
       instruction={
@@ -164,14 +179,38 @@ export default function Level6() {
         </>
       }
       extraElement={
-        <TimerBar
-          maximumTime={30}
-          onFinish={() => {
-          }}
-          resetKey={resetCount}
-          pause={stage > 3}
-          className="h-2"
-        />
+        <>
+          <div>
+            <TimerBar
+              key={`timer-${level}`}
+              maximumTime={30}
+              onFinish={() => {
+                if (stage < 3) setStage(3);
+                setShowTimerExpired(true);
+              }}
+              resetKey={resetCount}
+              pause={stage > 3 || isTutorialDialogOpen}
+              className="h-2"
+            />
+            <div 
+              className={cn(
+                "text-red-500 font-bold mt-2",
+                !showTimerExpired && "opacity-0"
+              )}
+            >
+              {content.timeExpired.value}
+            </div>
+          </div>
+          <Dialog
+            key={`tutorial-dialog-${level}`}
+            choice={false}
+            open={isTutorialDialogOpen}
+            message={content.tutorialDialog.message.value}
+            onYes={() => {
+              setIsTutorialDialogOpen(false);
+            }}
+          />
+        </>
       }
       showResults={stage >= 4}
       level={level}

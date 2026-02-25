@@ -42,7 +42,7 @@ export default function LevelLayout({
         <h2 className="text-xl mt-1">{goalElement}</h2>
       </div>
       { extraElement !== null && (
-        <div className="w-full mb-2 px-4">
+        <div className="w-full px-4">
           {/* Extra element can be used to show something like a timer bar or a hint button below the goal and above the visualizer */}
           {extraElement}
         </div>
