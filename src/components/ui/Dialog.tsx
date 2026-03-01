@@ -21,7 +21,7 @@ export default function Dialog({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-lg bg-opacity-50 z-50">
-      <div className="bg-white dark:bg-stone-900 rounded shadow-lg p-6 min-w-[300px] border-black dark:border-white border">
+      <div className="bg-white dark:bg-stone-900 rounded shadow-lg p-6 min-w-[300px] border-black dark:border-white border max-w-[80%]">
         {title && <h2 className="text-lg font-semibold mb-2">{title}</h2>}
         {message && <p className="mb-4">{message}</p>}
         <div className="flex justify-end gap-2">

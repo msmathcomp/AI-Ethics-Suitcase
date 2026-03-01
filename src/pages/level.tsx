@@ -5,6 +5,7 @@ import Level1 from "~/levels/level1";
 import Level2_5 from "~/levels/level2-5";
 import Level7 from "~/levels/level7";
 import Level6 from "~/levels/level6";
+import FreeplayLevel from "~/levels/level-freeplay";
 import { useIntlayer } from "react-intlayer";
 
 export default function LevelPage() {
@@ -12,7 +13,7 @@ export default function LevelPage() {
   const { levelPage: content } = useIntlayer("app");
   const level = Number(levelParam);
 
-  if (isNaN(level) || level < -1 || level > 7) {
+  if (isNaN(level) || level < -1 || level > 8) {
     return <div>{content.invalidLevel}</div>;
   }
 
@@ -28,6 +29,8 @@ export default function LevelPage() {
     return <Level6 />;
   } else if (level === 7) {
     return <Level7 />;
+  } else if (level === 8) {
+    return <FreeplayLevel />;
   }
 
   return <div>{content.invalidLevel}</div>;

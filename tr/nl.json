@@ -160,6 +160,27 @@
       "unseenPerformance": "Resultaten op onbekende data"
     }
   },
+  "levelfreeplay": {
+    "goal": "Probeer de beste classifier te verslaan binnen een tijdslimiet!",
+    "stages": {
+      "0": "Klik om het eerste punt van de classifierlijn te selecteren om het geslaagde van het gezakte gebied te scheiden.",
+      "1": "Klik nu op het tweede punt om de classificatielijn te tekenen",
+      "2": "Sleep de zwarte cirkels om de lijn aan te passen, klik daarna op een van de gebieden om als Geslaagd te classificeren",
+      "3": "Pas je classifier aan door de lijn te draaien of een nieuwe te maken.",
+      "4": "Voltooid! Je kunt nu de classificatieresultaten zien.",
+      "5": "Vergelijk je classifier met de beste classifier.",
+      "6": "Je kunt nu wisselen tussen reeds bekeken data en de onzichtbare data."
+    },
+    "titles": {
+      "trainingPerformance": "Resultaten Bekeken Data",
+      "unseenPerformance": "Resultaten Onzichtbare Data"
+    },
+    "tutorialDialog": {
+      "title": "Welkom bij het Vrij Spelen Niveau!",
+      "message": "In dit niveau kun je vrij experimenteren met de classifier en proberen de beste classifier die door AI is gevonden te verslaan. Je kunt ook prestaties vergelijken op bekeken en onzichtbare data. Er is hier geen goed of fout antwoord, heb gewoon plezier met ontdekken!"
+    },
+    "timeExpired": "Tijd is verstreken!"
+  },
   "levelPage": {
     "invalidLevel": "Ongeldig niveau"
   },

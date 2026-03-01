@@ -40,6 +40,7 @@ interface Props {
     line: Point[];
     originIsPass: boolean;
   };
+  canModify?: boolean;
 }
 
 // Main component definition
@@ -55,6 +56,7 @@ export const ClassificationVisualizer = ({
   setUnseenBestResults,
   modifyVisualizerData,
   bestClassifier,
+  canModify = true,
 }: Props) => {
 
   // Chart and overlay refs for DOM access
@@ -243,7 +245,7 @@ export const ClassificationVisualizer = ({
   // TODO: FIX this
   // Handles user click on overlay to set line endpoints
   const handleOverlayClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (isDragging || dragJustEnded || stage >= 5) {
+    if (isDragging || dragJustEnded || stage >= 5 || !canModify) {
       return;
     }
 
@@ -295,7 +297,7 @@ export const ClassificationVisualizer = ({
     pointIndex: number
   ) => {
     event.stopPropagation();
-    if (!overlayRef.current) return;
+    if (!overlayRef.current || !canModify) return;
 
     const overlayRect = overlayRef.current.getBoundingClientRect();
     const mouseX = event.clientX - overlayRect.left;
@@ -706,9 +708,10 @@ export const ClassificationVisualizer = ({
         {areaColorsAssigned && (
           <button
             className="border rounded px-2 py-1"
-            onClick={() =>
+            onClick={() => {
+              if (!canModify) return;
               setOriginIsPass((prev) => (prev !== null ? !prev : null))
-            }
+            }}
             disabled={[5, 6].includes(stage) && showBestLine}
           >
             {content.flipButton}

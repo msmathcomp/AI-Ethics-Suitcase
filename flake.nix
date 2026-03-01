@@ -19,6 +19,11 @@
           packages = with pkgs; [
             nodejs_25
             pnpm
+            (python3.withPackages (ps: with ps; [
+              matplotlib
+              scikit-learn
+              numpy
+            ]))
           ];
 
           shellHook = ''

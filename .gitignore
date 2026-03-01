@@ -31,3 +31,7 @@ data/.venv/
 
 # nix
 .direnv
+
+# python
+__pycache__/
+*.pyc
