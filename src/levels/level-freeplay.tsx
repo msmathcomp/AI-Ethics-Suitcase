@@ -136,7 +136,7 @@ export default function LevelFreeplay() {
           }
           bestClassifier={{
             line: levelJson.best,
-            originIsPass: !levelJson.originIsPass,
+            originIsPass: levelJson.originIsPass,
           }}
           canModify={stage < 3}
         />

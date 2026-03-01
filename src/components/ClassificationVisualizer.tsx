@@ -40,7 +40,7 @@ interface Props {
     line: Point[];
     originIsPass: boolean;
   };
-  canModify: boolean | undefined;
+  canModify?: boolean;
 }
 
 // Main component definition
