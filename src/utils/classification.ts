@@ -1,6 +1,7 @@
 import type { DataPoint, ClickCoordinates, ClassificationResult, ClassificationCounts } from '~/types';
 import { sameSide } from './geometry';
 
+// Classifies a single data point as TP, TN, FP, FN or null based on its position relative to a reference line and corner.
 export const getPointClassification = (
   point: DataPoint,
   lineCoords: ClickCoordinates[],
@@ -24,6 +25,7 @@ export const getPointClassification = (
   return null;
 };
 
+// Aggregates classification counts (TP, TN, FP, FN) for a dataset using getPointClassification.
 export const getClassificationCounts = (
   data: DataPoint[],
   lineCoords: ClickCoordinates[],

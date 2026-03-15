@@ -25,7 +25,6 @@ export default function LevelFreeplay() {
     getVisualizerData,
     modifyVisualizerData,
     markLevelCompleted,
-    resetLevelData,
   } = useLevelData();
 
   const stage = getStage(level);
@@ -78,12 +77,14 @@ export default function LevelFreeplay() {
   const levelJson: LevelJsonShape = useMemo(updateLevelJson, [ resetCount ]);
 
   useEffect(() => {
-    resetLevelData(level);
     setResults({ TP: 0, TN: 0, FP: 0, FN: 0 });
     setBestResults({ TP: 0, TN: 0, FP: 0, FN: 0 });
     setUnseenResults({ TP: 0, TN: 0, FP: 0, FN: 0 });
     setUnseenBestResults({ TP: 0, TN: 0, FP: 0, FN: 0 });
-  }, []);
+
+    setShowTimerExpired(false);
+    setStage(0);
+  }, [resetCount]);
 
   useEffect(() => {
     if (stage === 4 && results.TP + results.TN + results.FP + results.FN > 0) {
@@ -138,7 +139,7 @@ export default function LevelFreeplay() {
             line: levelJson.best,
             originIsPass: levelJson.originIsPass,
           }}
-          canModify={stage < 3}
+          canModify={stage < 4}
         />
       }
       instruction={
@@ -185,7 +186,7 @@ export default function LevelFreeplay() {
               key={`timer-${level}`}
               maximumTime={30}
               onFinish={() => {
-                if (stage < 3) setStage(3);
+                if (stage < 4) setStage(4);
                 setShowTimerExpired(true);
               }}
               resetKey={resetCount}

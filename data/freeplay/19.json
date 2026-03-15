@@ -1,0 +1,517 @@
+{
+  "data": [
+    {
+      "study_time": 469.48552601210537,
+      "screen_time": 22.974495195356713,
+      "type": "Pass"
+    },
+    {
+      "study_time": 220.92058207943705,
+      "screen_time": 189.52442836012528,
+      "type": "Pass"
+    },
+    {
+      "study_time": 72.06607882055329,
+      "screen_time": 178.1130016323832,
+      "type": "Fail"
+    },
+    {
+      "study_time": 342.5887322666591,
+      "screen_time": 382.0308043675454,
+      "type": "Fail"
+    },
+    {
+      "study_time": 109.96902513072644,
+      "screen_time": 210.55661596695185,
+      "type": "Fail"
+    },
+    {
+      "study_time": 248.04630039599607,
+      "screen_time": 251.92129762027835,
+      "type": "Pass"
+    },
+    {
+      "study_time": 211.03590258905692,
+      "screen_time": 169.57083479415218,
+      "type": "Pass"
+    },
+    {
+      "study_time": 168.56034148623024,
+      "screen_time": 204.4108429850815,
+      "type": "Fail"
+    },
+    {
+      "study_time": 267.75635193655364,
+      "screen_time": 231.58063606324288,
+      "type": "Fail"
+    },
+    {
+      "study_time": 316.5537894848027,
+      "screen_time": 274.39021241970767,
+      "type": "Pass"
+    },
+    {
+      "study_time": 326.28154337557066,
+      "screen_time": 280.54749935218257,
+      "type": "Pass"
+    },
+    {
+      "study_time": 300.54193925858465,
+      "screen_time": 354.85982509052826,
+      "type": "Fail"
+    },
+    {
+      "study_time": 340.28442572714636,
+      "screen_time": 335.3499560457004,
+      "type": "Pass"
+    },
+    {
+      "study_time": 313.7892896263313,
+      "screen_time": 179.63044993647685,
+      "type": "Fail"
+    },
+    {
+      "study_time": 244.33642054495843,
+      "screen_time": 214.36868212789346,
+      "type": "Fail"
+    },
+    {
+      "study_time": 247.8008501517348,
+      "screen_time": 289.38224211235365,
+      "type": "Fail"
+    },
+    {
+      "study_time": 188.2382208129368,
+      "screen_time": 349.0816313457338,
+      "type": "Fail"
+    },
+    {
+      "study_time": 153.25668515133736,
+      "screen_time": 261.1844523489305,
+      "type": "Fail"
+    },
+    {
+      "study_time": 145.34005180803337,
+      "screen_time": 236.88269471567597,
+      "type": "Fail"
+    },
+    {
+      "study_time": 157.40733639982716,
+      "screen_time": 240.38476523352145,
+      "type": "Fail"
+    },
+    {
+      "study_time": 366.5657568733976,
+      "screen_time": 135.3145874294889,
+      "type": "Pass"
+    },
+    {
+      "study_time": 131.37046631129942,
+      "screen_time": 257.86685956484126,
+      "type": "Fail"
+    },
+    {
+      "study_time": 235.14003574859004,
+      "screen_time": 203.19526311871675,
+      "type": "Fail"
+    },
+    {
+      "study_time": 259.61365629778857,
+      "screen_time": 274.1174525643335,
+      "type": "Fail"
+    },
+    {
+      "study_time": 263.3413648532328,
+      "screen_time": 280.568436107111,
+      "type": "Fail"
+    },
+    {
+      "study_time": 262.6734634873971,
+      "screen_time": 260.7024326030947,
+      "type": "Fail"
+    },
+    {
+      "study_time": 367.06688148556054,
+      "screen_time": 264.66674938751584,
+      "type": "Pass"
+    },
+    {
+      "study_time": 304.51911428190573,
+      "screen_time": 249.46797660263906,
+      "type": "Fail"
+    },
+    {
+      "study_time": 295.4102825165539,
+      "screen_time": 336.72364419289653,
+      "type": "Fail"
+    },
+    {
+      "study_time": 167.08267634343304,
+      "screen_time": 237.63308244718797,
+      "type": "Pass"
+    },
+    {
+      "study_time": 227.31189846264311,
+      "screen_time": 268.63268392530773,
+      "type": "Fail"
+    },
+    {
+      "study_time": 274.00864617574365,
+      "screen_time": 233.59051585464206,
+      "type": "Fail"
+    },
+    {
+      "study_time": 368.9232208686424,
+      "screen_time": 289.12733135182464,
+      "type": "Pass"
+    },
+    {
+      "study_time": 254.29499055510394,
+      "screen_time": 130.47645647415422,
+      "type": "Pass"
+    },
+    {
+      "study_time": 270.9877437529112,
+      "screen_time": 186.0307588025248,
+      "type": "Fail"
+    },
+    {
+      "study_time": 184.4618311523653,
+      "screen_time": 464.4150071089325,
+      "type": "Fail"
+    },
+    {
+      "study_time": 211.2354271336388,
+      "screen_time": 273.0967518055182,
+      "type": "Fail"
+    },
+    {
+      "study_time": 133.42220177927345,
+      "screen_time": 206.78790376698828,
+      "type": "Fail"
+    },
+    {
+      "study_time": 212.25730029822364,
+      "screen_time": 307.656507813577,
+      "type": "Fail"
+    },
+    {
+      "study_time": 281.3935318339282,
+      "screen_time": 192.1185956803928,
+      "type": "Fail"
+    },
+    {
+      "study_time": 288.5305329686254,
+      "screen_time": 293.1874687127097,
+      "type": "Fail"
+    },
+    {
+      "study_time": 145.3762853521374,
+      "screen_time": 286.27163966688147,
+      "type": "Fail"
+    },
+    {
+      "study_time": 290.74611300582256,
+      "screen_time": 374.1324137049289,
+      "type": "Fail"
+    },
+    {
+      "study_time": 210.2228911811625,
+      "screen_time": 152.67998071953917,
+      "type": "Pass"
+    },
+    {
+      "study_time": 302.1956470123546,
+      "screen_time": 297.1433571010547,
+      "type": "Pass"
+    },
+    {
+      "study_time": 283.83083631130904,
+      "screen_time": 262.10090211162856,
+      "type": "Fail"
+    },
+    {
+      "study_time": 202.24805453269448,
+      "screen_time": 211.46706419204367,
+      "type": "Fail"
+    },
+    {
+      "study_time": 336.4716954943296,
+      "screen_time": 373.28770731502834,
+      "type": "Fail"
+    },
+    {
+      "study_time": 335.49219490029475,
+      "screen_time": 267.6805769409176,
+      "type": "Fail"
+    },
+    {
+      "study_time": 354.96255662055916,
+      "screen_time": 324.96513782392867,
+      "type": "Pass"
+    }
+  ],
+  "best": [
+    {
+      "x": 166.46511664646872,
+      "y": 0
+    },
+    {
+      "x": 500,
+      "y": 458.2609256096195
+    }
+  ],
+  "originIsPass": true,
+  "testData": [
+    {
+      "study_time": 69.36428598145355,
+      "screen_time": 373.7434450411319,
+      "type": "Pass"
+    },
+    {
+      "study_time": 69.12391357332748,
+      "screen_time": 43.19379379440774,
+      "type": "Fail"
+    },
+    {
+      "study_time": 95.4182435091156,
+      "screen_time": 212.8217208455874,
+      "type": "Fail"
+    },
+    {
+      "study_time": 214.8568899348974,
+      "screen_time": 211.1606350299864,
+      "type": "Fail"
+    },
+    {
+      "study_time": 333.5495627173223,
+      "screen_time": 373.1037866232645,
+      "type": "Fail"
+    },
+    {
+      "study_time": 371.31326113367425,
+      "screen_time": 355.71909529554813,
+      "type": "Fail"
+    },
+    {
+      "study_time": 415.06119422090524,
+      "screen_time": 310.1281431953153,
+      "type": "Pass"
+    },
+    {
+      "study_time": 226.94783987928938,
+      "screen_time": 202.65467841910254,
+      "type": "Pass"
+    },
+    {
+      "study_time": 274.3455581797395,
+      "screen_time": 115.55257321533682,
+      "type": "Pass"
+    },
+    {
+      "study_time": 225.5102232669492,
+      "screen_time": 196.78450451793088,
+      "type": "Fail"
+    },
+    {
+      "study_time": 181.24097375201745,
+      "screen_time": 202.76350749531878,
+      "type": "Fail"
+    },
+    {
+      "study_time": 245.7745269347073,
+      "screen_time": 253.1662539740063,
+      "type": "Fail"
+    },
+    {
+      "study_time": 417.94081192373085,
+      "screen_time": 455.75776665320586,
+      "type": "Fail"
+    },
+    {
+      "study_time": 250.09295164043016,
+      "screen_time": 257.29533845700877,
+      "type": "Pass"
+    },
+    {
+      "study_time": 394.08694795787346,
+      "screen_time": 133.75122007394378,
+      "type": "Pass"
+    },
+    {
+      "study_time": 184.84086357448606,
+      "screen_time": 250.12578599359563,
+      "type": "Fail"
+    },
+    {
+      "study_time": 209.92150609039317,
+      "screen_time": 288.24355761891684,
+      "type": "Fail"
+    },
+    {
+      "study_time": 32.43207929209106,
+      "screen_time": 377.12765114060164,
+      "type": "Fail"
+    },
+    {
+      "study_time": 243.66626804076225,
+      "screen_time": 315.0044180007119,
+      "type": "Fail"
+    },
+    {
+      "study_time": 291.22433210664593,
+      "screen_time": 142.60808636381037,
+      "type": "Pass"
+    },
+    {
+      "study_time": 242.82892366137864,
+      "screen_time": 225.25029247758133,
+      "type": "Fail"
+    },
+    {
+      "study_time": 207.84587332106753,
+      "screen_time": 131.3779363176664,
+      "type": "Pass"
+    },
+    {
+      "study_time": 211.60441450682163,
+      "screen_time": 215.95560314035365,
+      "type": "Fail"
+    },
+    {
+      "study_time": 363.790465866026,
+      "screen_time": 112.40518853834703,
+      "type": "Pass"
+    },
+    {
+      "study_time": 358.94398098835603,
+      "screen_time": 217.24552998759054,
+      "type": "Pass"
+    },
+    {
+      "study_time": 331.10481000039584,
+      "screen_time": 256.56528312073704,
+      "type": "Pass"
+    },
+    {
+      "study_time": 188.4527189121275,
+      "screen_time": 485.8801040012903,
+      "type": "Fail"
+    },
+    {
+      "study_time": 286.08268599519545,
+      "screen_time": 331.5763422905193,
+      "type": "Fail"
+    },
+    {
+      "study_time": 178.79772313735705,
+      "screen_time": 302.1975616361165,
+      "type": "Fail"
+    },
+    {
+      "study_time": 221.80530107068034,
+      "screen_time": 339.6714900420268,
+      "type": "Fail"
+    },
+    {
+      "study_time": 242.181147366297,
+      "screen_time": 104.73444112824714,
+      "type": "Pass"
+    },
+    {
+      "study_time": 282.12029430181775,
+      "screen_time": 196.3618446650824,
+      "type": "Fail"
+    },
+    {
+      "study_time": 304.4549226713273,
+      "screen_time": 196.9537117807943,
+      "type": "Fail"
+    },
+    {
+      "study_time": 317.7842008298555,
+      "screen_time": 362.80663119871804,
+      "type": "Fail"
+    },
+    {
+      "study_time": 250.60261639671242,
+      "screen_time": 314.55464462359123,
+      "type": "Fail"
+    },
+    {
+      "study_time": 212.38848120747613,
+      "screen_time": 267.93764108209837,
+      "type": "Fail"
+    },
+    {
+      "study_time": 89.76897221388248,
+      "screen_time": 191.82828456268052,
+      "type": "Fail"
+    },
+    {
+      "study_time": 179.24362076203533,
+      "screen_time": 67.07736168660415,
+      "type": "Pass"
+    },
+    {
+      "study_time": 197.28124475830822,
+      "screen_time": 249.69260387164985,
+      "type": "Fail"
+    },
+    {
+      "study_time": 377.65701359466067,
+      "screen_time": 275.20705727389714,
+      "type": "Pass"
+    },
+    {
+      "study_time": 439.7874841102173,
+      "screen_time": 264.3289134288182,
+      "type": "Pass"
+    },
+    {
+      "study_time": 184.9330017537331,
+      "screen_time": 307.0302543161601,
+      "type": "Fail"
+    },
+    {
+      "study_time": 270.7468637531715,
+      "screen_time": 228.7329212135058,
+      "type": "Pass"
+    },
+    {
+      "study_time": 196.51411012365529,
+      "screen_time": 342.6424558013953,
+      "type": "Fail"
+    },
+    {
+      "study_time": 246.66618859818712,
+      "screen_time": 276.87311511219843,
+      "type": "Fail"
+    },
+    {
+      "study_time": 196.3103287382543,
+      "screen_time": 321.41549768505524,
+      "type": "Fail"
+    },
+    {
+      "study_time": 282.09375913177223,
+      "screen_time": 231.24168497149736,
+      "type": "Pass"
+    },
+    {
+      "study_time": 165.1092603159688,
+      "screen_time": 295.98218107815137,
+      "type": "Fail"
+    },
+    {
+      "study_time": 407.8671157577321,
+      "screen_time": 297.0946968106359,
+      "type": "Pass"
+    },
+    {
+      "study_time": 172.8128116140229,
+      "screen_time": 249.7554687199758,
+      "type": "Fail"
+    }
+  ]
+}

@@ -166,7 +166,6 @@ export const ClassificationVisualizer = ({
   // Used to prevent immediate click after drag
   const [dragJustEnded, setDragJustEnded] = useState(false);
   // Whether the origin area is classified as pass
-  // const [originIsPass, setOriginIsPass] = useState<boolean | null>(null);
   const originIsPass = visualizerData.originIsPass;
   const setOriginIsPass = (newValue: boolean | null | ((old: boolean | null) => boolean | null)) => {
     modifyVisualizerData((data) => ({
@@ -611,13 +610,22 @@ export const ClassificationVisualizer = ({
         setUnseenBestResults(bestUnseenClassificationCounts);
       }
     }
+    else if (stage < 5 && bestLineCoords.length >= 2) {
+      // Clear best classifier line and results when going back to stage 4 or earlier
+      setBestLineCoords([]);
+      if (setBestResults) {
+        setBestResults({ TP: 0, TN: 0, FP: 0, FN: 0 });
+      }
+      if (setUnseenBestResults) {
+        setUnseenBestResults({ TP: 0, TN: 0, FP: 0, FN: 0 });
+      }
+    }
   }, [
     stage,
     bestLineCoords,
     bestClassifier,
     seenData,
     graphToOverlayCoords,
-    originIsPass,
     setBestResults,
     setUnseenBestResults,
     unseenData,

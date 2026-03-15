@@ -107,15 +107,18 @@ def find_best_fit(points):
                 c = y1 - m * x1
 
                 correct = 0
+                origin_side = m*0 - 0 + c
 
                 for (study_time, screen_time, point_type) in points:
-                    # check if the points is on the same side as the origin
-                    # and check if the point is correctly classified
-                    sameSideOrigin = (m * 0 + c) * (m * study_time + c) >= 0
+                    point_side = m*study_time - screen_time + c
+                    sameSideOrigin = origin_side * point_side >= 0
+
                     if sameSideOrigin == originIsPass:
-                        if point_type == "Pass": correct += 1
-                    else :
-                        if point_type == "Fail": correct += 1
+                        if point_type == "Pass":
+                            correct += 1
+                    else:
+                        if point_type == "Fail":
+                            correct += 1
 
                 accuracy = correct / len(points)
                 if accuracy > best[0]:
@@ -151,37 +154,42 @@ def fit_classifier_2(points):
 #     return clf
 
 def get_boundary_segment(clf):
-    # Decision boundary: coef[0]*x + coef[1]*y + intercept = 0
     w = clf.coef_[0]
     b = clf.intercept_[0]
+    EPS = 1e-9
+
     seg_points = []
-    # Intersect with box edges
     edges = [
-        ((0, 0), (500, 0)),
-        ((500, 0), (500, 500)),
-        ((500, 500), (0, 500)),
-        ((0, 500), (0, 0)),
+        ((0,0),(500,0)),
+        ((500,0),(500,500)),
+        ((500,500),(0,500)),
+        ((0,500),(0,0))
     ]
-    for (x1, y1), (x2, y2) in edges:
-        if x1 == x2:  # vertical
+
+    for (x1,y1),(x2,y2) in edges:
+
+        if abs(x1-x2) < EPS:  # vertical
             x = x1
-            if w[1] != 0:
-                y = -(w[0] * x + b) / w[1]
+            if abs(w[1]) > EPS:
+                y = -(w[0]*x + b)/w[1]
                 if 0 <= y <= 500:
-                    seg_points.append((x, y))
+                    seg_points.append((x,y))
+
         else:  # horizontal
             y = y1
-            if w[0] != 0:
-                x = -(w[1] * y + b) / w[0]
+            if abs(w[0]) > EPS:
+                x = -(w[1]*y + b)/w[0]
                 if 0 <= x <= 500:
-                    seg_points.append((x, y))
-    # Return at most 2 points
+                    seg_points.append((x,y))
+
     return seg_points[:2]
 
-
-def classify_origin(clf):
-    return clf.predict([[0, 0]])[0] == 1
-
+def classify_reference_corner(clf: svm.SVC):
+    # Reference corner is (500, 0) because that's how the code is structured in 
+    # src/utils/classification.ts
+    # TODO: Clean this mess up, have a single source of truth and unify the logic with the reference corner
+    corner = [500, 0]
+    return clf.predict([corner])[0] == 1
 
 # ----- Main -----
 points = generate_points(args.samples, **params)
@@ -194,7 +202,7 @@ else:
     test_points = None
 clf, acc = fit_classifier(points)
 boundary_segment = get_boundary_segment(clf)
-origin_pass = not bool(classify_origin(clf))
+origin_pass = bool(classify_reference_corner(clf))
 
 # Prepare save object
 save_obj = {
@@ -341,7 +349,7 @@ def on_close(event):
     final_points = generate_points(args.samples, **final_params)
     final_clf, acc = fit_classifier(final_points)
     final_segment = get_boundary_segment(final_clf)
-    final_origin = bool(classify_origin(final_clf))
+    final_origin = bool(classify_reference_corner(final_clf))
     final_obj = {
         "data": [
             {
