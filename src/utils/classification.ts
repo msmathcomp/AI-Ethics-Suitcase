@@ -1,20 +1,20 @@
 import type { DataPoint, ClickCoordinates, ClassificationResult, ClassificationCounts } from '~/types';
 import { sameSide } from './geometry';
 
-// Classifies a single data point as TP, TN, FP, FN or null based on its position relative to a reference line and corner.
+// Classifies a single data point as TP, TN, FP, FN or null based on its position relative to a reference line and origin.
 export const getPointClassification = (
   point: DataPoint,
   lineCoords: ClickCoordinates[],
-  refCornerIsPass: boolean | null,
+  originIsPass: boolean | null,
   areaColorsAssigned: boolean
 ): ClassificationResult | null => {
-  if (!areaColorsAssigned || lineCoords.length !== 2 || refCornerIsPass === null) {
+  if (!areaColorsAssigned || lineCoords.length !== 2 || originIsPass === null) {
     return null;
   }
 
-  const pointIsOnRefCornerSide = sameSide({ x: point.study_time, y: point.screen_time }, { x: 500, y: 0 }, lineCoords);
+  const pointIsOnRefCornerSide = sameSide({ x: point.study_time, y: point.screen_time }, { x: 0, y: 0 }, lineCoords);
 
-  const classifiedAsPass = pointIsOnRefCornerSide ? refCornerIsPass : !refCornerIsPass;
+  const classifiedAsPass = pointIsOnRefCornerSide ? originIsPass : !originIsPass;
 
   const actuallyPass = point.type === "Pass";
 
@@ -29,7 +29,7 @@ export const getPointClassification = (
 export const getClassificationCounts = (
   data: DataPoint[],
   lineCoords: ClickCoordinates[],
-  refCornerIsPass: boolean | null,
+  originIsPass: boolean | null,
   areaColorsAssigned: boolean
 ): ClassificationCounts => {
   const counts = { TP: 0, TN: 0, FP: 0, FN: 0 };
@@ -38,7 +38,7 @@ export const getClassificationCounts = (
     const classification = getPointClassification(
       point,
       lineCoords,
-      refCornerIsPass,
+      originIsPass,
       areaColorsAssigned
     );
     if (classification) {

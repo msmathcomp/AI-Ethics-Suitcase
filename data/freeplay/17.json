@@ -261,7 +261,7 @@
       "y": 500
     }
   ],
-  "originIsPass": true,
+  "originIsPass": false,
   "testData": [
     {
       "study_time": 32.74935972665355,

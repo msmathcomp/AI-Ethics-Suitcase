@@ -15,6 +15,8 @@ import {
   getExtendedLinePoints,
   findIntersections,
   findIntersectionsWithSquare,
+  sameSide,
+  getLineNormal,
 } from "~/utils/geometry";
 import { Chart } from "./chart/Chart";
 import { ClassificationAreas } from "./chart/ClassificationAreas";
@@ -70,9 +72,27 @@ export const ClassificationVisualizer = ({
     
   // State for current classifier line endpoints
   const [lineCoords, setLineCoords] = useState<ClickCoordinates[]>([]);
+
+  const lineNormal = useMemo(() => {
+    if (lineCoords.length !== 2) return undefined;
+    return getLineNormal(lineCoords[0].graph, lineCoords[1].graph);
+  }, [lineCoords]);
     
   // State for best classifier line endpoints
   const [bestLineCoords, setBestLineCoords] = useState<ClickCoordinates[]>([]);
+
+  // If the classifier chose the area1, based on the provided information
+  const bestArea1Selected = useMemo(() => {
+    if (bestLineCoords.length !== 2 || bestClassifier.originIsPass === undefined) {
+      return undefined;
+    }
+
+    const bestLineNormal = getLineNormal(bestLineCoords[0].graph, bestLineCoords[1].graph);
+
+    const same = sameSide({ x: 0, y: 0 }, bestLineNormal, bestLineCoords);
+
+    return bestClassifier.originIsPass ? same : !same;
+  }, [bestLineCoords, bestClassifier.originIsPass]);
 
   // State for user click coordinates (used to define line)
   const clickCoords = useMemo(() => {
@@ -166,13 +186,22 @@ export const ClassificationVisualizer = ({
   // Used to prevent immediate click after drag
   const [dragJustEnded, setDragJustEnded] = useState(false);
   // Whether the origin area is classified as pass
-  const originIsPass = visualizerData.originIsPass;
-  const setOriginIsPass = (newValue: boolean | null | ((old: boolean | null) => boolean | null)) => {
+  const area1Selected = visualizerData.area1Selected;
+  const setArea1Selected = (newValue: boolean | null | ((old: boolean | null) => boolean | null)) => {
     modifyVisualizerData((data) => ({
       ...data,
-      originIsPass: typeof newValue === "function" ? newValue(data.originIsPass) : newValue,
+      area1Selected: typeof newValue === "function" ? newValue(data.area1Selected) : newValue,
     }));
   };
+  const originIsPass = useMemo(() => {
+    if (area1Selected === null || !lineNormal) {
+      return null;
+    }
+
+    const pass = sameSide({ x: 0, y: 0 }, lineNormal, lineCoords);
+    
+    return area1Selected ? pass : !pass;
+  }, [area1Selected, lineNormal]);
 
   // Memoized data points to display (seen/unseen)
   const data = useMemo(() => {
@@ -196,10 +225,10 @@ export const ClassificationVisualizer = ({
     return getClassificationCounts(
       seenData,
       lineCoords,
-      originIsPass,
+      area1Selected,
       areaColorsAssigned
     );
-  }, [seenData, lineCoords, originIsPass, areaColorsAssigned]);
+  }, [seenData, lineCoords, area1Selected, areaColorsAssigned]);
 
   // Memoized classification counts for unseen data
   const unseenClassificationCounts = useMemo(() => {
@@ -209,10 +238,10 @@ export const ClassificationVisualizer = ({
     return getClassificationCounts(
       unseenData,
       lineCoords,
-      originIsPass ?? null,
+      area1Selected ?? null,
       areaColorsAssigned
     );
-  }, [unseenData, lineCoords, originIsPass, areaColorsAssigned]);
+  }, [unseenData, lineCoords, area1Selected, areaColorsAssigned]);
 
   // Converts graph coordinates to overlay coordinates
   const graphToOverlayCoords = useCallback((graphCoords: Point): Point => {
@@ -271,7 +300,7 @@ export const ClassificationVisualizer = ({
 
     if (clickCoords.length == 2 || clickCoords.length == 0) {
       setAreaColorsAssigned(false);
-      setOriginIsPass(null);
+      setArea1Selected(null);
 
       setClickCoords([
         {
@@ -357,11 +386,12 @@ export const ClassificationVisualizer = ({
     };
     const newRawGraph = convertToGraph(newRawOverlay);
 
-    // Calculate new overlay coordinates projected on the bounding square
+    // Calculate new overlay coordinates projected on the bounding square, preserving the line direction
     const [staticPoint, draggedPoint] = getExtendedLinePoints(
       graphToOverlayCoords,
       [extendedLinePoints[staticPointIndex].graph, newRawGraph]
     );
+
     const newExtendedPoints = [];
     newExtendedPoints[staticPointIndex] = staticPoint;
     newExtendedPoints[dragPointIndex] = draggedPoint;
@@ -381,16 +411,21 @@ export const ClassificationVisualizer = ({
     const extraLength = 500;
 
     const p1 = {
-      x: draggedPoint.graph.x - unitX * extraLength,
-      y: draggedPoint.graph.y - unitY * extraLength,
-    };
-    const p2 = {
       x: staticPoint.graph.x + unitX * extraLength,
       y: staticPoint.graph.y + unitY * extraLength,
     };
+    const p2 = {
+      x: draggedPoint.graph.x - unitX * extraLength,
+      y: draggedPoint.graph.y - unitY * extraLength,
+    };
 
-    // Find intersections of the extended line with the chart boundaries
-    const intersections = findIntersectionsWithSquare(p1, p2);
+    // Find intersections of the extended line with the chart boundaries, preserving the line direction
+    let intersections: Point[] = [];
+    if (staticPointIndex === 0) {
+      intersections = findIntersectionsWithSquare(p1, p2);
+    } else {
+      intersections = findIntersectionsWithSquare(p2, p1);
+    }
 
     // If two intersections found, update the line coordinates
     if (intersections.length >= 2) {
@@ -427,15 +462,13 @@ export const ClassificationVisualizer = ({
   // Handles area selection (pass/fail) by user
   const handleAreaSelection = (
     event: React.MouseEvent<SVGPolygonElement>,
-    originIsPass: boolean
+    isArea1: boolean
   ) => {
     event.stopPropagation();
 
     if (areaColorsAssigned) return;
 
-    // Since area1 is always pass and area2 is always fail,
-    // we set area1IsRed to true (pass areas are red)
-    setOriginIsPass(originIsPass);
+    setArea1Selected(isArea1);
     setAreaColorsAssigned(true);
   };
 
@@ -494,11 +527,11 @@ export const ClassificationVisualizer = ({
       } else {
         setLineCoords([
           {
-            graph: intersections[0],
+            graph: intersections[1],
             overlay: graphToOverlayCoords(intersections[0]),
           },
           {
-            graph: intersections[1],
+            graph: intersections[0],
             overlay: graphToOverlayCoords(intersections[1]),
           },
         ]);
@@ -525,7 +558,7 @@ export const ClassificationVisualizer = ({
     }
     const polygons = getAreaPolygons(lineCoords, graphToOverlayCoords);
     setAreaPolygons(polygons);
-  }, [lineCoords, graphToOverlayCoords, originIsPass]);
+  }, [lineCoords, graphToOverlayCoords, area1Selected]);
 
   useEffect(() => {
     if (bestLineCoords.length < 2) {
@@ -537,7 +570,7 @@ export const ClassificationVisualizer = ({
     }
     const polygons = getAreaPolygons(bestLineCoords, graphToOverlayCoords);
     setBestAreaPolygons(polygons);
-  }, [bestLineCoords, graphToOverlayCoords, originIsPass]);
+  }, [bestLineCoords, graphToOverlayCoords, area1Selected]);
 
   useEffect(() => {
     if (clickCoords.length === 1 && stage == 0) {
@@ -718,7 +751,7 @@ export const ClassificationVisualizer = ({
             className="border rounded px-2 py-1"
             onClick={() => {
               if (!canModify) return;
-              setOriginIsPass((prev) => (prev !== null ? !prev : null))
+              setArea1Selected((prev) => (prev !== null ? !prev : null))
             }}
             disabled={[5, 6].includes(stage) && showBestLine}
           >
@@ -778,7 +811,7 @@ export const ClassificationVisualizer = ({
           stage < 5 && (
             <ClassificationAreas
               areaPolygons={areaPolygons}
-              originIsPass={originIsPass}
+              area1Selected={area1Selected}
               areaColorsAssigned={areaColorsAssigned}
               onAreaSelection={handleAreaSelection}
             />
@@ -791,7 +824,7 @@ export const ClassificationVisualizer = ({
           bestAreaPolygons.area2.overlay.length > 0 && (
             <ClassificationAreas
               areaPolygons={bestAreaPolygons}
-              originIsPass={bestClassifier.originIsPass}
+              area1Selected={bestArea1Selected ?? null}
               areaColorsAssigned={true}
               onAreaSelection={() => {}}
             />
@@ -804,7 +837,7 @@ export const ClassificationVisualizer = ({
           areaPolygons.area2.overlay.length > 0 && (
             <ClassificationAreas
               areaPolygons={areaPolygons}
-              originIsPass={originIsPass}
+              area1Selected={area1Selected}
               areaColorsAssigned={areaColorsAssigned}
               onAreaSelection={() => {}} // No area selection in stage 5+
             />

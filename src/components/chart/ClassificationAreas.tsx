@@ -5,7 +5,7 @@ import { useIntlayer } from "react-intlayer";
 interface Props {
   areaPolygons: AreaPolygons;
   areaColorsAssigned: boolean;
-  originIsPass: boolean | null;
+  area1Selected: boolean | null;
   onAreaSelection: (
     event: React.MouseEvent<SVGPolygonElement>,
     originIsPass: boolean
@@ -17,7 +17,7 @@ const AREA_SELECT = "rgb(156 163 175)";
 export const ClassificationAreas = ({
   areaPolygons,
   areaColorsAssigned,
-  originIsPass,
+  area1Selected: originIsPass,
   onAreaSelection,
 }: Props) => {
   const { classificationAreas: content } = useIntlayer("app");
