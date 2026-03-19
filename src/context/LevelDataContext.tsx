@@ -26,7 +26,7 @@ export interface VisualizerData {
   showBestLine?: boolean;
   showSeenData: boolean;
   showUnseenData: boolean;
-  originIsPass: boolean | null;
+  area1Selected: boolean | null;
 }
 
 const defaultVisualizerData: VisualizerData = {
@@ -34,7 +34,7 @@ const defaultVisualizerData: VisualizerData = {
   showBestLine: false,
   showSeenData: true,
   showUnseenData: false,
-  originIsPass: null,
+  area1Selected: null,
 };
 
 interface LevelDataContextValue {

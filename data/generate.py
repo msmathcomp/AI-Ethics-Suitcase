@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
-from sklearn.linear_model import LogisticRegression
 from sklearn import svm
 import random
 import sys
@@ -86,102 +85,50 @@ def generate_points(
 def equality(a, b):
     return abs(a - b) < 1e-6  # Use a small epsilon for floating point comparison
 
-def find_best_fit(points):
-    boundary = []
-    for i in np.arange(0, 501, 10):
-        for j in np.arange(0, 501, 10):
-            if equality(i, 0) or equality(j, 0) or equality(i, 500) or equality(j, 500):
-                boundary.append((i, j))
-
-    best = [0]
-
-    print(len(boundary), "boundary points")
-    
-    for (x1, y1) in boundary:
-        for (x2, y2) in boundary:
-            if equality(x1, x2) or equality(y1, y2):
-                continue
-            
-            for originIsPass in [True, False]:
-                m = (y2 - y1) / (x2 - x1)
-                c = y1 - m * x1
-
-                correct = 0
-
-                for (study_time, screen_time, point_type) in points:
-                    # check if the points is on the same side as the origin
-                    # and check if the point is correctly classified
-                    sameSideOrigin = (m * 0 + c) * (m * study_time + c) >= 0
-                    if sameSideOrigin == originIsPass:
-                        if point_type == "Pass": correct += 1
-                    else :
-                        if point_type == "Fail": correct += 1
-
-                accuracy = correct / len(points)
-                if accuracy > best[0]:
-                    best = [accuracy, (x1, y1), (x2, y2), originIsPass, m, c]
-    return best
-
-
-
 def fit_classifier(points):
     X = np.array([[p[0], p[1]] for p in points])
     y = np.array([1 if p[2] == "Pass" else 0 for p in points])
+    
+    # Using SVM with linear kernel for better boundary extraction
     # clf = LogisticRegression(solver="liblinear", max_iter=10000)
     clf = svm.SVC(kernel='linear', C=1.0)
     clf.fit(X, y)
     acc = clf.score(X, y)
     return clf, acc
-    # print(points)
-    # res = find_maximum_accuracy_linear_separator(points)
-    # return res
-    
-
-def fit_classifier_2(points):
-    X = np.array([[p[0], p[1]] for p in points])
-    y = np.array([1 if p[2] == "Pass" else 0 for p in points])
-
-    clf = best_linear_classifier(X, y)
-    return clf
-
-# def fit_classifier_3(points):
-#     X = np.array([[p[0], p[1]] for p in points])
-#     y = np.array([1 if p[2] == "Pass" else 0 for p in points])
-#     clf = best_linear_classifier_bruteforce(X, y)
-#     return clf
 
 def get_boundary_segment(clf):
-    # Decision boundary: coef[0]*x + coef[1]*y + intercept = 0
     w = clf.coef_[0]
     b = clf.intercept_[0]
+    EPS = 1e-9
+
     seg_points = []
-    # Intersect with box edges
     edges = [
-        ((0, 0), (500, 0)),
-        ((500, 0), (500, 500)),
-        ((500, 500), (0, 500)),
-        ((0, 500), (0, 0)),
+        ((0,0),(500,0)),
+        ((500,0),(500,500)),
+        ((500,500),(0,500)),
+        ((0,500),(0,0))
     ]
-    for (x1, y1), (x2, y2) in edges:
-        if x1 == x2:  # vertical
+
+    for (x1,y1),(x2,y2) in edges:
+
+        if abs(x1-x2) < EPS:  # vertical
             x = x1
-            if w[1] != 0:
-                y = -(w[0] * x + b) / w[1]
+            if abs(w[1]) > EPS:
+                y = -(w[0]*x + b)/w[1]
                 if 0 <= y <= 500:
-                    seg_points.append((x, y))
+                    seg_points.append((x,y))
+
         else:  # horizontal
             y = y1
-            if w[0] != 0:
-                x = -(w[1] * y + b) / w[0]
+            if abs(w[0]) > EPS:
+                x = -(w[1]*y + b)/w[0]
                 if 0 <= x <= 500:
-                    seg_points.append((x, y))
-    # Return at most 2 points
+                    seg_points.append((x,y))
+
     return seg_points[:2]
 
-
-def classify_origin(clf):
+def classify_origin(clf: svm.SVC):
     return clf.predict([[0, 0]])[0] == 1
-
 
 # ----- Main -----
 points = generate_points(args.samples, **params)
@@ -194,7 +141,7 @@ else:
     test_points = None
 clf, acc = fit_classifier(points)
 boundary_segment = get_boundary_segment(clf)
-origin_pass = not bool(classify_origin(clf))
+origin_pass = bool(classify_origin(clf))
 
 # Prepare save object
 save_obj = {
@@ -233,11 +180,7 @@ y_vals = np.linspace(0, 500, 100)
 XX, YY = np.meshgrid(x_vals, y_vals)
 Z = clf.predict(np.c_[XX.ravel(), YY.ravel()]).reshape(XX.shape)
 ax.contour(XX, YY, Z, levels=[0.5], linewidths=2, colors="blue")
-# best = find_best_fit(points)
-# # show the line y = best[4] * x + best[5]
-# x_line = np.array([0, 500])
-# y_line = best[4] * x_line + best[5]
-# ax.plot(x_line, y_line, color="blue", linewidth=2)
+
 ax.set_xlim(0, 500)
 ax.set_ylim(0, 500)
 ax.set_title(f"Sample Size: {args.samples} | Accuracy: {acc:.2f}")
@@ -313,11 +256,6 @@ def update(val):
     XX, YY = np.meshgrid(x_vals, y_vals)
     Z = new_clf.predict(np.c_[XX.ravel(), YY.ravel()]).reshape(XX.shape)
     ax.contour(XX, YY, Z, levels=[0.5], linewidths=2, colors="blue")
-
-    # best = find_best_fit(new_points)
-    # x_line = np.array([0, 500])
-    # y_line = best[4] * x_line + best[5]
-    # ax.plot(x_line, y_line, color="blue", linewidth=2)
 
     ax.set_title(f"Sample Size: {args.samples} | Accuracy: {acc:.2f}")
     fig.canvas.draw_idle()

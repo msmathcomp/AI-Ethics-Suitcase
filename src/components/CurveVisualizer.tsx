@@ -79,11 +79,11 @@ export const CurveVisualizer = ({
     area2: { graph: [], overlay: [] },
   });
 
-  const originIsPass = visualizerData.originIsPass;
+  const originIsPass = visualizerData.area1Selected;
   const setOriginIsPass = (newValue: boolean | null | ((old: boolean | null) => boolean | null)) => {
     modifyVisualizerData((data) => ({
       ...data,
-      originIsPass: typeof newValue === "function" ? newValue(data.originIsPass) : newValue,
+      area1Selected: typeof newValue === "function" ? newValue(data.area1Selected) : newValue,
     }));
   };
 
@@ -491,7 +491,7 @@ export const CurveVisualizer = ({
           areaPolygons.area2.overlay.length > 0 && (
             <ClassificationAreas
               areaPolygons={areaPolygons}
-              originIsPass={originIsPass}
+              area1Selected={originIsPass}
               areaColorsAssigned={areaColorsAssigned}
               onAreaSelection={handleAreaSelection}
             />

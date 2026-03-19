@@ -1,9 +1,11 @@
 import type { Point, ClickCoordinates, AreaPolygons } from "~/types";
 
+// Returns polygons for two areas split by a line, including both graph and overlay coordinates.
 export const getAreaPolygons = (
   lineCoords: ClickCoordinates[],
   graphToOverlayCoords: (point: Point) => Point
 ): AreaPolygons => {
+  // Early return if line coordinates are invalid
   if (lineCoords.length !== 2)
     return {
       area1: {
@@ -13,33 +15,38 @@ export const getAreaPolygons = (
       area2: { graph: [], overlay: [] },
     };
 
+  // Extract endpoints of the line and define the line normal
   const [p1, p2] = lineCoords.map((coord) => coord.graph);
-  const refCorner = { x: 500, y: 0 };
+  const lineNormal = getLineNormal(p1, p2);
 
-  const cornersExceptRefCorner = [
+  // List of corners
+  const corners = [
     { x: 0, y: 0 },
+    { x: 500, y: 0 },
     { x: 500, y: 500 },
     { x: 0, y: 500 },
   ];
 
-  const createPolygon = (hasRefCorner: boolean): Point[] => {
+  // Helper to build a polygon for one area
+  const createPolygon = (towardsNormal: boolean): Point[] => {
     const polygon: Point[] = [];
 
+    // Add line endpoints
     polygon.push(p1, p2);
 
-    if (hasRefCorner) {
-      polygon.push(refCorner);
-    }
-
-    for (const corner of cornersExceptRefCorner) {
-      if (sameSide(corner, refCorner, lineCoords) === hasRefCorner) {
+    // Add corners that are on the same side as the reference corner
+    for (const corner of corners) {
+      if (sameSide(corner, lineNormal, lineCoords) === towardsNormal &&
+          !onLine(corner, lineCoords)) {
         polygon.push(corner);
       }
     }
 
+    // Calculate centroid for sorting points in polygon order
     const centroidX = polygon.reduce((sum, p) => sum + p.x, 0) / polygon.length;
     const centroidY = polygon.reduce((sum, p) => sum + p.y, 0) / polygon.length;
 
+    // Sort points by angle from centroid to ensure correct polygon shape
     return polygon.sort((a, b) => {
       const angleA = Math.atan2(a.y - centroidY, a.x - centroidX);
       const angleB = Math.atan2(b.y - centroidY, b.x - centroidX);
@@ -48,9 +55,11 @@ export const getAreaPolygons = (
   };
 
   try {
+    // Build polygons for both areas
     const area1 = createPolygon(true);
     const area2 = createPolygon(false);
 
+    // Map graph coordinates to overlay coordinates
     const area1OverlayCoords = area1.map((coord) =>
       graphToOverlayCoords(coord)
     );
@@ -58,6 +67,7 @@ export const getAreaPolygons = (
       graphToOverlayCoords(coord)
     );
 
+    // Return both areas with graph and overlay coordinates
     return {
       area1: {
         graph: area1, // area1 is always the pass area
@@ -69,6 +79,7 @@ export const getAreaPolygons = (
       }, // area2 is always the fail area
     };
   } catch (error) {
+    // Handle errors in coordinate conversion
     console.error("Error converting coordinates:", error);
     return {
       area1: { graph: [], overlay: [] },
@@ -77,6 +88,7 @@ export const getAreaPolygons = (
   }
 };
 
+// Extends a line segment to the bounding box and returns overlay coordinates for the endpoints.
 export const getExtendedLinePoints = (
   graphToOverlayCoords: (point: Point) => Point,
   lineCoords: [Point, Point],
@@ -116,6 +128,7 @@ export const getExtendedLinePoints = (
   }
 };
 
+// Finds intersection points of a line segment with the edges of a 500x500 square.
 export const findIntersections = (point1: Point, point2: Point): Point[] => {
   const intersections: Point[] = [];
   const dx = point2.x - point1.x;
@@ -170,6 +183,7 @@ export const findIntersections = (point1: Point, point2: Point): Point[] => {
   return uniqueIntersections;
 };
 
+// Finds intersection points of a line segment with a custom square defined by two corners.
 export const findIntersectionsWithSquare = (
   point1: Point,
   point2: Point,
@@ -231,6 +245,12 @@ export const findIntersectionsWithSquare = (
     .sort((a, b) => paramT(a) - paramT(b));
 };
 
+export function cross(lineA: Point, lineB: Point, p: Point): number {
+  return (lineB.x - lineA.x) * (p.y - lineA.y) -
+         (lineB.y - lineA.y) * (p.x - lineA.x);
+}
+
+// Returns true if points a and b are on the same side of the given line.
 export function sameSide(
   a: Point,
   b: Point,
@@ -239,14 +259,26 @@ export function sameSide(
   if (line.length !== 2) return false;
 
   const [p1, p2] = line.map((coord) => coord.graph);
-  const side1 =
-    (p2.x - p1.x) * (a.y - p1.y) - (p2.y - p1.y) * (a.x - p1.x) >= 0;
-  const side2 =
-    (p2.x - p1.x) * (b.y - p1.y) - (p2.y - p1.y) * (b.x - p1.x) >= 0;
+  const side1Cross = cross(p1, p2, a);
+  const side2Cross = cross(p1, p2, b);
 
-  return side1 === side2;
+  return side1Cross * side2Cross >= 0;
 }
 
+// Returns true if point p is on the line defined by the given coordinates.
+export function onLine(
+  p: Point,
+  line: ClickCoordinates[],
+): boolean {
+  if (line.length !== 2) return false;
+
+  const [p1, p2] = line.map((coord) => coord.graph);
+  const crossProduct = cross(p1, p2, p);
+
+  return crossProduct === 0;
+}
+
+// Converts graph coordinates to overlay coordinates using DOM element references.
 export function graphToOverlayCoords(
   overlayRef: React.RefObject<HTMLDivElement | null>,
   chartContainerRef: React.RefObject<HTMLDivElement | null>,
@@ -273,4 +305,19 @@ export function graphToOverlayCoords(
     graphRect.top + (500 - point.y) * normalize_y - overlayRect.top;
 
   return { x: overlayX, y: overlayY };
+}
+
+// Returns the normal of a line, not normalized, starting at point p1
+export function getLineNormal(p1: Point, p2: Point): Point {
+  const dx = p2.x - p1.x;
+  const dy = p2.y - p1.y;
+  const nx = -dy;
+  const ny = dx;
+
+  const mag = Math.sqrt(nx * nx + ny * ny);
+  if (mag === 0) return { x: 0, y: 0 };
+
+  const length = 50;
+  
+  return { x: p1.x + nx * length / mag, y: p1.y + ny * length / mag };
 }

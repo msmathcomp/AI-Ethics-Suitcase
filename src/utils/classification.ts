@@ -1,19 +1,31 @@
 import type { DataPoint, ClickCoordinates, ClassificationResult, ClassificationCounts } from '~/types';
-import { sameSide } from './geometry';
+import { getLineNormal, onLine, sameSide } from './geometry';
 
+// Classifies a single data point as TP, TN, FP, FN or null based on its position relative to a reference line and origin.
 export const getPointClassification = (
   point: DataPoint,
   lineCoords: ClickCoordinates[],
-  refCornerIsPass: boolean | null,
+  originIsPass: boolean | null,
   areaColorsAssigned: boolean
 ): ClassificationResult | null => {
-  if (!areaColorsAssigned || lineCoords.length !== 2 || refCornerIsPass === null) {
+  if (!areaColorsAssigned || lineCoords.length !== 2 || originIsPass === null) {
     return null;
   }
 
-  const pointIsOnRefCornerSide = sameSide({ x: point.study_time, y: point.screen_time }, { x: 500, y: 0 }, lineCoords);
+  const p = { x: point.study_time, y: point.screen_time };
 
-  const classifiedAsPass = pointIsOnRefCornerSide ? refCornerIsPass : !refCornerIsPass;
+  // Determine if the point is on the same side of the line as the origin 
+  // If the origin is on the line, use the line normal to determine sides instead
+  let pointIsOnOriginSide: boolean;
+  if (onLine({ x: 0, y: 0 }, lineCoords)) {
+    const lineNormal = getLineNormal(lineCoords[0].graph, lineCoords[1].graph);
+    pointIsOnOriginSide = sameSide(lineNormal, p, lineCoords);
+  } 
+  else {
+    pointIsOnOriginSide = sameSide(p, { x: 0, y: 0 }, lineCoords)
+  }
+
+  const classifiedAsPass = pointIsOnOriginSide ? originIsPass : !originIsPass;
 
   const actuallyPass = point.type === "Pass";
 
@@ -24,10 +36,11 @@ export const getPointClassification = (
   return null;
 };
 
+// Aggregates classification counts (TP, TN, FP, FN) for a dataset using getPointClassification.
 export const getClassificationCounts = (
   data: DataPoint[],
   lineCoords: ClickCoordinates[],
-  refCornerIsPass: boolean | null,
+  originIsPass: boolean | null,
   areaColorsAssigned: boolean
 ): ClassificationCounts => {
   const counts = { TP: 0, TN: 0, FP: 0, FN: 0 };
@@ -36,7 +49,7 @@ export const getClassificationCounts = (
     const classification = getPointClassification(
       point,
       lineCoords,
-      refCornerIsPass,
+      originIsPass,
       areaColorsAssigned
     );
     if (classification) {
