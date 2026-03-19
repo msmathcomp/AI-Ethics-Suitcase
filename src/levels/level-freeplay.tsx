@@ -25,6 +25,7 @@ export default function LevelFreeplay() {
     getVisualizerData,
     modifyVisualizerData,
     markLevelCompleted,
+    resetLevelData,
   } = useLevelData();
 
   const stage = getStage(level);
@@ -75,6 +76,10 @@ export default function LevelFreeplay() {
     return data;
   };
   const levelJson: LevelJsonShape = useMemo(updateLevelJson, [ resetCount ]);
+
+  useEffect(() => {
+    resetLevelData(level);
+  }, []);
 
   useEffect(() => {
     setResults({ TP: 0, TN: 0, FP: 0, FN: 0 });

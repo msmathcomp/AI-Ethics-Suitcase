@@ -17,7 +17,7 @@ export const getAreaPolygons = (
 
   // Extract endpoints of the line and define the line normal
   const [p1, p2] = lineCoords.map((coord) => coord.graph);
-  const lineNormal = { x: p2.y - p1.y, y: p1.x - p2.x };
+  const lineNormal = getLineNormal(p1, p2);
 
   // List of corners
   const corners = [
@@ -36,7 +36,8 @@ export const getAreaPolygons = (
 
     // Add corners that are on the same side as the reference corner
     for (const corner of corners) {
-      if (sameSide(corner, lineNormal, lineCoords) === towardsNormal) {
+      if (sameSide(corner, lineNormal, lineCoords) === towardsNormal &&
+          !onLine(corner, lineCoords)) {
         polygon.push(corner);
       }
     }
@@ -264,6 +265,19 @@ export function sameSide(
   return side1Cross * side2Cross >= 0;
 }
 
+// Returns true if point p is on the line defined by the given coordinates.
+export function onLine(
+  p: Point,
+  line: ClickCoordinates[],
+): boolean {
+  if (line.length !== 2) return false;
+
+  const [p1, p2] = line.map((coord) => coord.graph);
+  const crossProduct = cross(p1, p2, p);
+
+  return crossProduct === 0;
+}
+
 // Converts graph coordinates to overlay coordinates using DOM element references.
 export function graphToOverlayCoords(
   overlayRef: React.RefObject<HTMLDivElement | null>,
@@ -293,10 +307,17 @@ export function graphToOverlayCoords(
   return { x: overlayX, y: overlayY };
 }
 
-// Returns the normal of a line, not normalized
+// Returns the normal of a line, not normalized, starting at point p1
 export function getLineNormal(p1: Point, p2: Point): Point {
   const dx = p2.x - p1.x;
   const dy = p2.y - p1.y;
+  const nx = -dy;
+  const ny = dx;
+
+  const mag = Math.sqrt(nx * nx + ny * ny);
+  if (mag === 0) return { x: 0, y: 0 };
+
+  const length = 50;
   
-  return { x: dy, y: -dx };
+  return { x: p1.x + nx * length / mag, y: p1.y + ny * length / mag };
 }

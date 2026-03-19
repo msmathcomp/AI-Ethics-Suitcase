@@ -17,7 +17,7 @@ const AREA_SELECT = "rgb(156 163 175)";
 export const ClassificationAreas = ({
   areaPolygons,
   areaColorsAssigned,
-  area1Selected: originIsPass,
+  area1Selected,
   onAreaSelection,
 }: Props) => {
   const { classificationAreas: content } = useIntlayer("app");
@@ -161,7 +161,7 @@ export const ClassificationAreas = ({
           .join(" ")}
         fill={
           areaColorsAssigned
-            ? originIsPass
+            ? area1Selected
               ? "url(#pass-area-pattern)"
               : "url(#fail-area-pattern)"
             : AREA_SELECT
@@ -182,7 +182,7 @@ export const ClassificationAreas = ({
           .join(" ")}
         fill={
           areaColorsAssigned
-            ? originIsPass
+            ? area1Selected
               ? "url(#fail-area-pattern)"
               : "url(#pass-area-pattern)"
             : AREA_SELECT
@@ -197,7 +197,7 @@ export const ClassificationAreas = ({
         onClick={(e) => onAreaSelection(e, false)}
       />
 
-      {areaColorsAssigned && originIsPass !== null && labelPositions && (
+      {areaColorsAssigned && area1Selected !== null && labelPositions && (
         <>
           {labelPositions.area1 && (
             <text
@@ -211,7 +211,7 @@ export const ClassificationAreas = ({
               }
               style={{ pointerEvents: "none" }}
             >
-              {originIsPass ? content.pass : content.fail}
+              {area1Selected ? content.pass : content.fail}
             </text>
           )}
           {labelPositions.area2 && (
@@ -226,7 +226,7 @@ export const ClassificationAreas = ({
               }
               style={{ pointerEvents: "none" }}
             >
-              {originIsPass ? content.fail : content.pass}
+              {area1Selected ? content.fail : content.pass}
             </text>
           )}
         </>

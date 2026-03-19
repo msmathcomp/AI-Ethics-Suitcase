@@ -763,7 +763,7 @@
       "y": 500.0
     }
   ],
-  "originIsPass": true,
+  "originIsPass": false,
   "params": {
     "meanX": 300.0,
     "stdX": 124.99230769230769,

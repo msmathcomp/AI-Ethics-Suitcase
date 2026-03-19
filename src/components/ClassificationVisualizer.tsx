@@ -225,7 +225,7 @@ export const ClassificationVisualizer = ({
     return getClassificationCounts(
       seenData,
       lineCoords,
-      area1Selected,
+      originIsPass,
       areaColorsAssigned
     );
   }, [seenData, lineCoords, area1Selected, areaColorsAssigned]);
@@ -238,7 +238,7 @@ export const ClassificationVisualizer = ({
     return getClassificationCounts(
       unseenData,
       lineCoords,
-      area1Selected ?? null,
+      originIsPass,
       areaColorsAssigned
     );
   }, [unseenData, lineCoords, area1Selected, areaColorsAssigned]);
@@ -253,7 +253,6 @@ export const ClassificationVisualizer = ({
     ) as SVGElement | null;
 
     if (!graphElement) {
-      console.log("chartContainerRef: ", chartContainerRef.current);
       throw new Error("Graph element not found");
     }
 
