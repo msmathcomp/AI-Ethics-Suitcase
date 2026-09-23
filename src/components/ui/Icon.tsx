@@ -21,9 +21,9 @@ export default function Icon({ type }: { type: "pass" | "fail" }) {
       height="28"
       opacity="0.7"
       stroke="#9C92AC"
-      stroke-width="4"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
       {icon}
     </svg>

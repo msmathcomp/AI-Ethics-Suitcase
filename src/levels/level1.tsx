@@ -482,7 +482,7 @@ export default function Level1() {
                 <ClassificationAreas
                   areaPolygons={areaPolygons}
                   areaColorsAssigned={true}
-                  area1Selected={true}
+                  area1Selected={false}
                   onAreaSelection={() => {}}
                 />
               )}
