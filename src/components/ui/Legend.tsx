@@ -1,6 +1,7 @@
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { useState } from "react";
 import { useIntlayer } from "react-intlayer";
+import Icon from "./Icon";
 
 interface LegendProps {
   startOpen?: boolean;
@@ -42,11 +43,15 @@ export const Legend = ({
             <h4 className="font-medium mb-2">{content.classification.title}</h4>
             <div className="flex flex-col space-y-2">
               <div className="flex items-center space-x-2">
-                <div className="w-6 h-6 pass-area-bg bg-stone-200 dark:bg-stone-800"></div>
+                <div className="w-6 h-6">
+                  <Icon type="pass" />
+                </div>
                 <span className="text-sm">{content.classification.pass}</span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="w-6 h-6 fail-area-bg bg-stone-200 dark:bg-stone-800"></div>
+                <div className="w-6 h-6">
+                  <Icon type="fail" />
+                </div>
                 <span className="text-sm">{content.classification.fail}</span>
               </div>
               <div className="flex items-center space-x-2">
