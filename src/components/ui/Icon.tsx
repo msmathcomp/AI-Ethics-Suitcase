@@ -1,5 +1,5 @@
 export default function Icon({ type }: { type: "pass" | "fail" }) {
-  var icon: JSX.Element;
+  let icon: JSX.Element;
 
   switch (type) {
     case "pass":
