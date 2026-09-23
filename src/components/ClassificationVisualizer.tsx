@@ -9,7 +9,7 @@ import type {
   DataPoint,
   ClassificationCounts,
 } from "~/types";
-import { getClassificationCounts } from "~/utils/classification";
+import { calculateAccuracy, getClassificationCounts } from "~/utils/classification";
 import {
   getAreaPolygons,
   getExtendedLinePoints,
@@ -268,6 +268,22 @@ export const ClassificationVisualizer = ({
 
     return { x: overlayX, y: overlayY };
   }, []);
+
+  // Automatically assign classes when line is drawn
+  useEffect(() => {
+    if (lineCoords.length < 2) return; // don't run when loading or selecting first point
+
+    // We need to count score of both ways of classifying to see which is better.
+    // check if the origin is on the side of the line the computed normal is pointing to:
+    const originOnNormalSide = sameSide({ x: 0, y: 0 }, lineNormal!, lineCoords);
+    const passAccuracy = calculateAccuracy(getClassificationCounts(seenData, lineCoords, originOnNormalSide, true)); // if we label area1 as pass
+    const failAccuracy = calculateAccuracy(getClassificationCounts(seenData, lineCoords, !originOnNormalSide, true)); // if we label area1 as fail
+
+    // decide and assign areas
+    const area1ShouldBePass = passAccuracy >= failAccuracy
+    setArea1Selected(area1ShouldBePass);
+    setAreaColorsAssigned(true);
+  }, [lineCoords]);
 
   // TODO: FIX this
   // Handles user click on overlay to set line endpoints

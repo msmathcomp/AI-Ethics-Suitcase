@@ -1,6 +1,7 @@
 import type { ClassificationCounts } from "~/types";
 import { useIntlayer } from "react-intlayer";
 import { Frown, Smile } from "lucide-react";
+import { calculateAccuracy } from "~/utils/classification";
 
 interface Props {
   classificationCounts: ClassificationCounts;
@@ -8,10 +9,8 @@ interface Props {
   title?: string;
 }
 
-const calculateAccuracy = (counts: ClassificationCounts): string => {
-  const total = counts.TP + counts.TN + counts.FP + counts.FN;
-  if (total === 0) return "0";
-  return (((counts.TP + counts.TN) / total) * 100).toFixed(1);
+const formatAccuracy = (counts: ClassificationCounts): string => {
+  return (calculateAccuracy(counts) * 100).toFixed(1);
 };
 
 export const ClassificationResultsEntry = ({
@@ -20,9 +19,9 @@ export const ClassificationResultsEntry = ({
   title,
 }: Props) => {
   const { classificationResults: content } = useIntlayer("app");
-  const accuracy = calculateAccuracy(classificationCounts);
+  const accuracy = formatAccuracy(classificationCounts);
   const bestAccuracy = bestClassificationCounts
-    ? calculateAccuracy(bestClassificationCounts)
+    ? formatAccuracy(bestClassificationCounts)
     : null;
   const showComparison = bestClassificationCounts && bestAccuracy;
   return (
