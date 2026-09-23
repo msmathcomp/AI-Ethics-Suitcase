@@ -59,3 +59,14 @@ export const getClassificationCounts = (
 
   return counts;
 };
+
+/**
+ * Calculates classification accuracy based on correctness counts.
+ * @param counts the classification counts
+ * @returns the accuracy as a percentage between 0 and 1
+ */
+export const calculateAccuracy = (counts: ClassificationCounts): number => {
+  const total = counts.TP + counts.TN + counts.FP + counts.FN;
+  if (total === 0) return 0;
+  return (counts.TP + counts.TN) / total;
+};
