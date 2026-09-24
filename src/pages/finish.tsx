@@ -5,6 +5,7 @@ import type { ClassificationCounts } from "~/types";
 import { LanguageSwitch } from "~/components/ui/LanguageSwitch";
 import ThemeSwitch from "~/components/ui/ThemeSwitch";
 import { SmileIcon } from "lucide-react";
+import { Button } from "~/components/ui/Button";
 
 function calculateAccuracy(counts: ClassificationCounts): number {
   const total = counts.TP + counts.TN + counts.FP + counts.FN;
@@ -138,14 +139,31 @@ export default function Finish() {
         </table>
       </div>
 
-      <Link to="/">
-        <button
-          onClick={reset}
-          className="cursor-pointer rounded-lg border border-stone-900 dark:border-0 dark:bg-stone-700 p-3 font-semibold hover:bg-stone-200 dark:hover:bg-stone-600 transition-colors"
-        >
-          {content.restart}
-        </button>
-      </Link>
+      <div className="flex gap-4">
+        <Link to="/home">
+          <Button buttonType="secondary">
+            {content.backToHome}
+          </Button>
+        </Link>
+
+        <Link to="/level/8">
+          <Button buttonType="primary">
+            {content.freeplayAgain}
+          </Button>
+        </Link>
+
+        <Link to="/">
+          <Button
+            onClick={reset}
+            buttonType="secondary"
+            className="opacity-50"
+          >
+            {content.restart}
+          </Button>
+        </Link>
+      </div>
+
+
 
       <div className="flex justify-between absolute bottom-4 w-full px-8">
         <LanguageSwitch />

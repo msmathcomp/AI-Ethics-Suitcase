@@ -198,7 +198,9 @@
   },
   "finish": {
     "title": "Gefeliciteerd!",
-    "restart": "Opnieuw starten",
+    "backToHome": "Terug naar Home",
+    "freeplayAgain": "Opnieuw naar Vrij spel",
+    "restart": "Resetten",
     "table": {
       "level": "Niveau",
       "yourAccuracy": "Jouw nauwkeurigheid",

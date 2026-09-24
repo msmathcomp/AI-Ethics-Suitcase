@@ -198,6 +198,8 @@
   },
   "finish": {
     "title": "Congratulations!",
+    "backToHome": "Back to Home",
+    "freeplayAgain": "Free Play again",
     "restart": "Restart",
     "table": {
       "level": "Level",
