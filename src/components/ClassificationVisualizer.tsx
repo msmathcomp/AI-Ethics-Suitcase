@@ -628,10 +628,10 @@ export const ClassificationVisualizer = ({
     if (clickCoords.length === 1 && stage == 0) {
       setStage(1);
     } else if (clickCoords.length === 2 && stage == 1) {
-      setStage(2);
-    } else if (areaColorsAssigned && stage == 2) {
+      setStage(3); // skip stage 2, since colors are automatically assigned
+    } /* else if (areaColorsAssigned && stage == 2) {
       setStage(3);
-    }
+    } */
   }, [clickCoords, stage, setStage, areaColorsAssigned]);
 
   useEffect(() => {

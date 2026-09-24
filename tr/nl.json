@@ -88,8 +88,7 @@
     "stages": {
       "0": "We willen eerst een eenvoudig gegevensset van 4 studenten classificeren door een lijn te tekenen die geslaagde en gezakte studenten scheidt. Klik om het eerste punt van de lijn te selecteren.",
       "1": "Klik nu op het tweede punt om de classificatielijn te tekenen.",
-      "2": "Versleep de zwarte cirkels om de lijn aan te passen, en klik vervolgens op een gebied om het als ‘Geslaagd’ te classificeren.",
-      "3": "Pas je classifier aan door de lijn te draaien of een nieuwe te tekenen (door 2 punten te klikken). Tevreden? Klik dan op ‘Volgende’ om verder te gaan.",
+      "3": "Pas je classifier aan door de zwarte cirkels te verslepen of een nieuwe lijn te tekenen. Tevreden? Klik dan op ‘Volgende’ om verder te gaan.",
       "4": "Klaar! Je kunt nu de classificatieresultaten zien. In het volgende niveau leer je nieuwe termen en hoe je de prestaties van een classifier kunt meten."
     }
   },
@@ -124,8 +123,7 @@
     "stages": {
       "0": "Klik om het eerste punt van de classificatielijn te selecteren om het geslaagde van het gezakte gebied te scheiden.",
       "1": "Klik nu op het tweede punt om de lijn te tekenen.",
-      "2": "Versleep de zwarte cirkels om de lijn aan te passen, en klik vervolgens op een gebied om het als ‘Geslaagd’ te classificeren.",
-      "3": "Pas je classifier aan door te draaien of opnieuw te tekenen. Tevreden? Klik dan op ‘Volgende’.",
+      "3": "Pas je classifier aan door de zwarte cirkels te verslepen of een nieuwe lijn te tekenen. Tevreden? Klik dan op ‘Volgende’.",
       "4": "Klaar! Je kunt nu de resultaten zien. Vergelijk jouw classifier met de beste classifier die door AI is gevonden.",
       "5": "Vergelijk jouw classifier met de beste classifier. Beide resultaten worden naast elkaar getoond."
     }
@@ -135,8 +133,7 @@
     "stages": {
       "0": "Klik om het eerste punt van de classificatielijn te selecteren om het geslaagde van het gezakte gebied te scheiden.",
       "1": "Klik nu op het tweede punt om de lijn te tekenen.",
-      "2": "Versleep de zwarte cirkels om de lijn aan te passen, en klik vervolgens op een gebied om het als ‘Geslaagd’ te classificeren.",
-      "3": "Pas je classifier aan door te draaien of opnieuw te tekenen. Tevreden? Klik dan op ‘Volgende’.",
+      "3": "Pas je classifier aan door de zwarte cirkels te verslepen of een nieuwe lijn te tekenen. Tevreden? Klik dan op ‘Volgende’.",
       "4": "Klaar! Je kunt nu de resultaten zien en jouw classifier vergelijken met de beste AI-classifier.",
       "5": "Vergelijk jouw classifier met de beste classifier. Beide resultaten worden naast elkaar getoond.",
       "6": "Schakel nu tussen bekende en onbekende data. Merk op hoe de prestaties kunnen verschillen op onbekende data!"
@@ -166,7 +163,7 @@
       "0": "Klik om het eerste punt van de classifierlijn te selecteren om het geslaagde van het gezakte gebied te scheiden.",
       "1": "Klik nu op het tweede punt om de classificatielijn te tekenen",
       "2": "Sleep de zwarte cirkels om de lijn aan te passen, klik daarna op een van de gebieden om als Geslaagd te classificeren",
-      "3": "Pas je classifier aan door de lijn te draaien of een nieuwe te maken.",
+      "3": "Pas je classifier aan door de zwarte cirkels te verslepen of een nieuwe lijn te tekenen.",
       "4": "Voltooid! Je kunt nu de classificatieresultaten zien.",
       "5": "Vergelijk je classifier met de beste classifier.",
       "6": "Je kunt nu wisselen tussen reeds bekeken data en de onzichtbare data."
