@@ -3,7 +3,7 @@ export default function Icon({ type }: { type: "pass" | "fail" }) {
 
   switch (type) {
     case "pass":
-      icon = <path d="M4 12.5L9.5 17.5L20 6.5" />;
+      icon = <path fill="none" d="M4 12.5L9.5 17.5L20 6.5" />;
       break;
     case "fail":
       icon = (

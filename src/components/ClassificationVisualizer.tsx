@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
 // ClassificationVisualizer: Interactive chart for visualizing and manipulating classification boundaries
 // Handles user input, area selection, and classifier evaluation stages
 
@@ -25,6 +25,8 @@ import Toggle from "./ui/Toggle";
 import { useIntlayer } from "react-intlayer";
 import { cn } from "~/utils/cn";
 import { type VisualizerData } from "~/context/LevelDataContext";
+
+type PositionEvent = Pick<React.MouseEvent, "clientX" | "clientY">
 
 // Props for ClassificationVisualizer
 interface Props {
@@ -287,7 +289,7 @@ export const ClassificationVisualizer = ({
 
   // TODO: FIX this
   // Handles user click on overlay to set line endpoints
-  const handleOverlayClick = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleOverlayClick = (event: PositionEvent) => {
     if (isDragging || dragJustEnded || stage >= 5 || !canModify) {
       return;
     }
@@ -357,7 +359,7 @@ export const ClassificationVisualizer = ({
   };
 
   // Handles mouse movement for dragging line endpoints
-  const handleOverlayMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleOverlayMouseMove = (event: PositionEvent) => {
     // Early exit if not dragging or required refs/indices are missing
     if (
       !isDragging ||
@@ -461,7 +463,8 @@ export const ClassificationVisualizer = ({
   };
 
   // Handles mouse up event to finish dragging
-  const handleOverlayMouseUp = () => {
+  // both on extension handles, and within the graph
+  const handleOverlayMouseUp = (event: PositionEvent) => {
       if (isDragging) {
         setIsDragging(false);
         setDragPointIndex(null);
@@ -472,7 +475,41 @@ export const ClassificationVisualizer = ({
           setDragJustEnded(false);
         }, 300);
       }
-    };
+    
+    // for dragging to draw a line:
+    if (!awayFromMouseDown(event)) return;
+    // it was a drag, so we also need to place a point at the end position.
+    handleOverlayClick(event);
+  };
+  
+  const [mouseDownPosition, setMouseDownPosition] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
+  function awayFromMouseDown({ clientX, clientY }: PositionEvent): boolean {
+    // compare current position with start position
+    const dx = clientX - mouseDownPosition.x;
+    const dy = clientY - mouseDownPosition.y;
+    const distance = Math.hypot(dx, dy);
+    // drag smaller than 5px means it was probably a normal click
+    // and thus the mouseDown handler already placed a point
+    return distance > 5;
+  }
+
+  // Handles mouse down event to start dragging
+  const handleOverlayMouseDown = (event: PositionEvent) => {
+    // simulate a "click", so that the first point gets placed where drag starts
+    // this also handles normal clicking behaviour.
+    handleOverlayClick(event);
+
+    // store mouse down position to distinguish between click and drag on pointerup
+    setMouseDownPosition({ x: event.clientX, y: event.clientY });
+  }
+
+  // Handles touch end for dragging on mobile
+  const handleOverlayTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
+    const positionEvent: PositionEvent = event.changedTouches[0];
+
+    if (!awayFromMouseDown(positionEvent)) return; // it was a click, point was already placed
+    handleOverlayClick(positionEvent); // otherwise simulate click with touch position
+  }
 
   // Handles area selection (pass/fail) by user
   const handleAreaSelection = (
@@ -728,9 +765,10 @@ export const ClassificationVisualizer = ({
       <div
         className="w-full h-full absolute top-0 left-0 cursor-crosshair bg-transparent z-10"
         ref={overlayRef}
-        onClick={handleOverlayClick}
         onPointerMove={handleOverlayMouseMove}
-        onPointerUp={handleOverlayMouseUp}
+        onPointerDown={handleOverlayMouseDown} // place point immediately on click or start of drag 
+        onPointerUp={handleOverlayMouseUp} // place point at end of drag
+        onTouchEnd={handleOverlayTouchEnd} // place point at end of drag on mobile
       >
         {areaColorsAssigned && (
           <ExtendedLinePoints
