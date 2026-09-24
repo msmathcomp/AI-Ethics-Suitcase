@@ -123,7 +123,7 @@ export default function LevelFreeplay() {
 
   return (
     <LevelLayout
-      levelName={`${commonContent.level.value} ${level}`}
+      levelName={content.levelName.value}
       goalElement={content.goal.value}
       classificationVisualizer={
         <ClassificationVisualizer
@@ -208,13 +208,11 @@ export default function LevelFreeplay() {
             </div>
           </div>
           <Dialog
-            key={`tutorial-dialog-${level}`}
+            key={level}
             choice={false}
             open={isTutorialDialogOpen}
             message={content.tutorialDialog.message.value}
-            onYes={() => {
-              setIsTutorialDialogOpen(false);
-            }}
+            onYes={() => setIsTutorialDialogOpen(false)}
           />
         </>
       }

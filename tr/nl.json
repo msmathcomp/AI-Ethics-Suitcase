@@ -3,8 +3,13 @@
   "home": {
     "title": "AI Ethiek Koffer",
     "subtitle": "Interactieve toepassing om lineaire classificatie te verkennen",
-    "getStarted": "Start",
-    "description": "Interactief spel met 9 niveaus over ethische AI-concepten. Ga door de verschillende niveaus door eenvoudige lineaire classificaties te bouwen om studenten die slagen of zakken te onderscheiden op basis van hun studie- en vrije tijd."
+    "description": "Interactief spel met 9 niveaus over ethische AI-concepten. Ga door de verschillende niveaus door eenvoudige lineaire classificaties te bouwen om studenten die slagen of zakken te onderscheiden op basis van hun studie- en vrije tijd.",
+    "menuButtons": {
+      "tutorial": "Introductie",
+      "levels": "Niveau's",
+      "overfitting": "Overfitten",
+      "freeplay": "Vrij spel"
+    }
   },
   "intro": {
     "headerTitle": "Welkom bij de AI Ethiek Koffer!",
@@ -66,7 +71,11 @@
     "introLabel": "Intro",
     "nextLevelButtonText": "Volgend niveau",
     "skipLevelButtonText": "Niveau overslaan",
+    "endTutorial": "Introductie afronden",
     "previousLevel": "Vorig niveau",
+    "home": "Home",
+    "backToHome": "Terug naar Home",
+    "finish": "Voltooien",
     "restartButton": "Opnieuw starten",
     "restartLevel": "Niveau opnieuw starten",
     "restartApp": "App opnieuw starten",
@@ -144,6 +153,7 @@
     }
   },
   "level7": {
+    "levelName": "Overfitten",
     "goal": "Classificeren met een kromme!",
     "stages": {
       "0": "Begin met het tekenen van een kromme die begint buiten het grafiekgebied (de groene zone) en eindigt buiten het grafiekgebied",
@@ -155,9 +165,14 @@
     "titles": {
       "trainingPerformance": "Resultaten op bekende data",
       "unseenPerformance": "Resultaten op onbekende data"
+    },
+    "tutorialDialog": {
+      "title": "Welkom bij het Overfitten-niveau!",
+      "message": "In dit niveau kun je onderzoeken wat er gebeurt als je een vrije kromme als classifier gebruikt, in plaats van slechts een lijn. Je kunt vergelijken hoe je kromme en de lijn die door AI is gevonden, scoren op bekeken en onzichtbare data."
     }
   },
   "levelfreeplay": {
+    "levelName": "Vrij spel",
     "goal": "Probeer de beste classifier te verslaan binnen een tijdslimiet!",
     "stages": {
       "0": "Klik om het eerste punt van de classifierlijn te selecteren om het geslaagde van het gezakte gebied te scheiden.",
@@ -183,7 +198,9 @@
   },
   "finish": {
     "title": "Gefeliciteerd!",
-    "restart": "Opnieuw starten",
+    "backToHome": "Terug naar Home",
+    "freeplayAgain": "Opnieuw naar Vrij spel",
+    "restart": "Resetten",
     "table": {
       "level": "Niveau",
       "yourAccuracy": "Jouw nauwkeurigheid",

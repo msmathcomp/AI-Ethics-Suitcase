@@ -1,18 +1,19 @@
-import { ChevronLeft, ChevronRight, Meh, Smile, RotateCcw } from "lucide-react";
+import { ChevronLeft, ChevronRight, RotateCcw, Home } from "lucide-react";
 import { Link, useNavigate } from "react-router";
-import { cn } from "~/utils/cn";
 import { useIntlayer } from "react-intlayer";
 import { useEffect, useRef, useState } from "react";
 import Dialog from "./Dialog";
 import { useLevelData } from "~/context/LevelDataContext";
 import { LanguageSwitch } from "./LanguageSwitch";
+import { Button } from "./Button";
+import { SmileIcon } from "./SmileIcon";
 
 interface LevelProgressBarProps {
   level: number;
   showNextLevelButton: boolean;
 }
 
-const TOTAL_LEVELS = 10;
+const TOTAL_LEVELS = 8;
 
 export function LevelProgressBar({
   level,
@@ -60,6 +61,7 @@ export function LevelProgressBar({
   };
 
   const handleNextLevel = () => {
+    if ([-1, 6, 7].includes(level)) return navigate("/home");
     if (level === 8) {
       navigate("/finish");
       return;
@@ -67,86 +69,71 @@ export function LevelProgressBar({
     navigate(`/level/${level + 1}`);
   };
 
+  // don't show previous/next buttons on levels 7 and 8
+  const showBackButton = ![7, 8].includes(level);
+
   return (
     <div
       className="flex w-full items-center justify-between gap-2 relative pb-6 pt-4 px-4 rounded-t-xl bg-stone-200 dark:bg-stone-700"
       id="level-progress-bar"
     >
-      <div>
+      <div className="flex gap-4">
+        <Link to="/home">
+          <Button>
+            <Home /> {content.home}
+          </Button>
+        </Link>
         <LanguageSwitch />
       </div>
-      <div className="flex items-center justify-center">
-        <button
-          disabled={level === -1}
-          onClick={() => navigate(`/level/${level - 1}`)}
-          className="flex items-center border rounded-xl pr-5 pl-2 py-2 mr-4 hover:bg-stone-200 dark:hover:bg-stone-800 border-stone-600 dark:border-stone-400"
-        >
-          <ChevronLeft size={25} />
-          {content.previousLevel}
-        </button>
-        {[...Array(TOTAL_LEVELS)].map((_, index) => {
-          const isCompleted = isLevelCompleted(index - 1);
-          if (index === level + 1) {
+      <div className="flex items-center justify-center gap-4">
+        {showBackButton && (
+          <Button
+            disabled={level === -1}
+            onClick={() => {
+              if (level === 0) navigate("/tutorial");
+              else navigate(`/level/${level - 1}`);
+            }}
+          >
+            <ChevronLeft size={25} />
+            {content.previousLevel}
+          </Button>
+        )}
+        <div className="flex gap-1">
+          {[...Array(TOTAL_LEVELS)].map((_, index) => {
+            const isCompleted = isLevelCompleted(index - 1);
+            if (index === level + 1)
+              return <SmileIcon key={index} state="inProgress" />;
             return (
-              <div
-                key={`level-button-${index}`}
-                className={cn(
-                  "rounded-full w-8 h-8 flex items-center justify-center",
-                  "bg-indigo-500"
-                )}
+              <Link
+                to={index === 0 ? "/tutorial" : `/level/${index - 1}`}
+                key={index}
               >
-                <Meh color="white" />
-              </div>
+                <SmileIcon state={isCompleted ? "complete" : "incomplete"} />
+              </Link>
             );
-          }
-          return (
-            <Link
-              to={`/level/${index - 1}`}
-              key={`level-button-${index}`}
-            >
-              <div
-                className={cn(
-                  "rounded-full w-8 h-8 flex items-center justify-center",
-                  isCompleted ? "bg-teal-500" : "bg-stone-400 dark:bg-stone-600 hover:bg-stone-500"
-                )}
-              >
-                {isCompleted && <Smile color="white" />}
-              </div>
-            </Link>
-          );
-        })}
-        <button
+          })}
+        </div>
+        <Button
           id="next-level-button"
           onClick={handleNextLevel}
-          className={showNextLevelButton 
-            ? cn(
-              "flex items-center ml-4 bg-emerald-200 hover:bg-emerald-300 dark:bg-emerald-800 hover:dark:bg-emerald-700",
-              "text-black dark:text-white rounded-xl pl-5 pr-2 py-2 border-emerald-200 dark:border-emerald-900 border ",
-            )
-            : "flex items-center border rounded-xl pl-5 pr-2 py-2 ml-4 hover:bg-stone-200 dark:hover:bg-stone-800 border-stone-600 dark:border-stone-400"
-          }
+          buttonType={showNextLevelButton ? "primary" : "secondary"}
         >
-          {showNextLevelButton ? content.nextLevelButtonText : content.skipLevelButtonText}
+          {(() => {
+            if (!showNextLevelButton) return content.skipLevelButtonText;
+            if (level === -1) return content.endTutorial;
+            if (level === 7) return content.backToHome;
+            if (level === 8) return content.finish;
+            return content.nextLevelButtonText;
+          })()}
           <ChevronRight size={25} />
-        </button>
+        </Button>
       </div>
       <div className="flex items-center justify-center">
         {level !== -1 && level !== 1 && (
-          <button
-            id="reset-button"
-            ref={buttonRef}
-            onClick={() => setShowMenu((v) => !v)}
-            className={cn(
-              "flex flex-row items-center border rounded-xl px-5 py-2",
-              "hover:bg-stone-200 dark:hover:bg-stone-800 border-stone-600 dark:border-stone-400",
-            )}
-          >
+          <Button ref={buttonRef} onClick={() => setShowMenu((v) => !v)}>
             {content.restartButton}
-            <RotateCcw
-              size={25}
-              className="ml-1"
-            />
-          </button>
+            <RotateCcw />
+          </Button>
         )}
       </div>
       <Dialog
