@@ -123,7 +123,7 @@ export default function LevelFreeplay() {
 
   return (
     <LevelLayout
-      levelName={`${commonContent.level.value} ${level}`}
+      levelName={content.levelName.value}
       goalElement={content.goal.value}
       classificationVisualizer={
         <ClassificationVisualizer

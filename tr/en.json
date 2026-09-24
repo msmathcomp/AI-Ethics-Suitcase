@@ -3,8 +3,13 @@
   "home": {
     "title": "AI Ethics Suitcase",
     "subtitle": "Interactive application for exploring linear classification",
-    "getStarted": "Get Started",
-    "description": "Interactive game consisting of 9 levels around ethical AI concepts. Progress through different levels by building simple linear classifiers to classify students who pass or fail an exam based on their study and leisure time hours."
+    "description": "Interactive game consisting of 9 levels around ethical AI concepts. Progress through different levels by building simple linear classifiers to classify students who pass or fail an exam based on their study and leisure time hours.",
+    "menuButtons": {
+      "tutorial": "Tutorial",
+      "levels": "Levels",
+      "overfitting": "Overfitting",
+      "freeplay": "Free play"
+    }
   },
   "intro": {
     "headerTitle": "Welcome to the AI Ethics Suitcase!",
@@ -66,7 +71,11 @@
     "introLabel": "Intro",
     "nextLevelButtonText": "Next Level",
     "skipLevelButtonText": "Skip Level",
+    "endTutorial": "End Tutorial",
     "previousLevel": "Previous Level",
+    "home": "Home",
+    "backToHome": "Back to Home",
+    "finish": "Finish",
     "restartButton": "Restart",
     "restartLevel": "Restart Level",
     "restartApp": "Restart App",
@@ -144,6 +153,7 @@
     }
   },
   "level7": {
+    "levelName": "Overfitting",
     "goal": "Classifying using a curve!",
     "stages": {
       "0": "Start drawing a curve starting outside the graph area (the green zone) and ending outside the graph area",
@@ -158,6 +168,7 @@
     }
   },
   "levelfreeplay": {
+    "levelName": "Free play",
     "goal": "Try to beat the best classifier under a time limit!",
     "stages": {
       "0": "Click to select the first point of the classifier line to separate the pass from the fail region.",
