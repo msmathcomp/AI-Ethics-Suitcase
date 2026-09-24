@@ -165,6 +165,10 @@
     "titles": {
       "trainingPerformance": "Resultaten op bekende data",
       "unseenPerformance": "Resultaten op onbekende data"
+    },
+    "tutorialDialog": {
+      "title": "Welkom bij het Overfitten-niveau!",
+      "message": "In dit niveau kun je onderzoeken wat er gebeurt als je een vrije kromme als classifier gebruikt, in plaats van slechts een lijn. Je kunt vergelijken hoe je kromme en de lijn die door AI is gevonden, scoren op bekeken en onzichtbare data."
     }
   },
   "levelfreeplay": {

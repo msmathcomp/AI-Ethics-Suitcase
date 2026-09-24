@@ -6,6 +6,7 @@ import { useLevelData } from "~/context/LevelDataContext";
 import level7Json from "@/data/level7.json";
 import { useIntlayer } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
+import Dialog from "~/components/ui/Dialog";
 
 export default function Level7() {
   const level = 7;
@@ -45,6 +46,8 @@ export default function Level7() {
   const setStage = (newStage: number | ((old: number) => number)) => {
     setStageByLevel(level, typeof newStage === "number" ? newStage : newStage(stage));
   };
+
+  const [isTutorialDialogOpen, setIsTutorialDialogOpen] = useState(true);
 
   useEffect(() => {
     if (stage === 3 && results.TP + results.TN + results.FP + results.FN > 0) {
@@ -103,6 +106,15 @@ export default function Level7() {
             />
           )}
         </>
+      }
+      extraElement={
+        <Dialog
+          key={level}
+          choice={false}
+          open={isTutorialDialogOpen}
+          message={content.tutorialDialog.message.value}
+          onYes={() => setIsTutorialDialogOpen(false)}
+        />
       }
       showResults={stage >= 3}
       level={level}

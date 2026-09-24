@@ -165,6 +165,10 @@
     "titles": {
       "trainingPerformance": "Seen Data Results",
       "unseenPerformance": "Unseen Data Results"
+    },
+    "tutorialDialog": {
+      "title": "Welcome to the Overfitting Level!",
+      "message": "In this level, you can experiment what happens when you use a freeform curve as a classifier, instead of a straight line. You can compare the performance of your curve and the line found by AI, on seen and unseen data."
     }
   },
   "levelfreeplay": {
