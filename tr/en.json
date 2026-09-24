@@ -88,8 +88,7 @@
     "stages": {
       "0": "We want to classify a simple dataset of 4 students first by drawing a line that separates Pass and Fail students. To start, click to select the first point of the line.",
       "1": "Now click the second point to draw the classification line",
-      "2": "Drag the black circles to adjust the line, then click one of the regions to classify as Pass",
-      "3": "Adjust your classifier by rotating the line or creating a new one (by clicking 2 points). When satisfied, click 'Next' to continue.",
+      "3": "Adjust your classifier by dragging the black circles or drawing a new line. When satisfied, click 'Next' to continue.",
       "4": "Complete! You can now see the classification results. In the next level we will introduce the new terms and how to estimate the performance of a classifier."
     }
   },
@@ -124,8 +123,7 @@
     "stages": {
       "0": "Click to select the first point of the classifier line to separate the pass from the fail region.",
       "1": "Now click the second point to draw the classification line",
-      "2": "Drag the black circles to adjust the line, then click one of the regions to classify as Pass",
-      "3": "Adjust your classifier by rotating the line or creating a new one. When satisfied, click 'Next' to continue.",
+      "3": "Adjust your classifier by dragging the black circles or drawing a new line. When satisfied, click 'Next' to continue.",
       "4": "Complete! You can now see the classification results. You can compare your classifier with the best classifier found by AI.",
       "5": "Compare your classifier with the best classifier. Both results are shown side by side."
     }
@@ -135,8 +133,7 @@
     "stages": {
       "0": "Click to select the first point of the classifier line to separate the pass from the fail region.",
       "1": "Now click the second point to draw the classification line",
-      "2": "Drag the black circles to adjust the line, then click one of the regions to classify as Pass",
-      "3": "Adjust your classifier by rotating the line or creating a new one. When satisfied, click 'Next' to continue.",
+      "3": "Adjust your classifier by dragging the black circles or drawing a new line. When satisfied, click 'Next' to continue.",
       "4": "Complete! You can now see the classification results. You can compare your classifier with the best classifier found by AI.",
       "5": "Compare your classifier with the best classifier. Both results are shown side by side.",
       "6": "Now toggle between already seen data and the unseen data. Notice how performance may differ on unseen data!"
@@ -166,7 +163,7 @@
       "0": "Click to select the first point of the classifier line to separate the pass from the fail region.",
       "1": "Now click the second point to draw the classification line",
       "2": "Drag the black circles to adjust the line, then click one of the regions to classify as Pass",
-      "3": "Adjust your classifier by rotating the line or creating a new one.",
+      "3": "Adjust your classifier by dragging the black circles or drawing a new line.",
       "4": "Complete! You can now see the classification results.",
       "5": "Compare your classifier with the best classifier.",
       "6": "You can now toggle between already seen data and the unseen data."
