@@ -19,6 +19,7 @@ import { CurveChart } from "./chart/ChartCurve";
 import { useIntlayer } from "react-intlayer";
 import type { VisualizerData } from "~/context/LevelDataContext";
 import Dialog from "./ui/Dialog";
+import { calculateAccuracy } from "~/utils/classification";
 
 interface Props {
   seenData: DataPoint[];
@@ -346,30 +347,30 @@ export const CurveVisualizer = ({
   useEffect(() => {
     if (!chartReady || !overlayReady) return;  
 
-    if (graphCurve.length > 1) {
-      const polygons = getAreaPolygons(
-        graphCurve.map((p) => ({ graph: p, overlay: graphToOverlayCoords(p) })),
-        graphToOverlayCoords
-      );
-      setAreaPolygons(polygons);
-    } else {
-      setAreaPolygons({
+    // hide area selection if there's no curve
+    if (graphCurve.length < 2) return setAreaPolygons({
         area1: { graph: [], overlay: [] },
         area2: { graph: [], overlay: [] },
       });
-    }
-  }, [stage, graphCurve, graphToOverlayCoords, chartReady, overlayReady]);
+    
+    // create area selection polygons
+    const polygons = getAreaPolygons(
+      graphCurve.map((p) => ({ graph: p, overlay: graphToOverlayCoords(p) })),
+      graphToOverlayCoords
+    );
+    setAreaPolygons(polygons);
 
-  const handleAreaSelection = (
-    event: React.MouseEvent<SVGPolygonElement>,
-    isArea1: boolean
-  ) => {
-    event.stopPropagation();
-    if (areaColorsAssigned) return;
-    setOriginIsPass(isArea1);
+    // automatically assign pass/fail areas
+    // decide best assignment
+    const passAccuracy = calculateAccuracy(getClassificationCounts_Curve(seenData, polygons, true));
+    const failAccuracy = calculateAccuracy(getClassificationCounts_Curve(seenData, polygons, false));
+    const originShouldBePass = passAccuracy >= failAccuracy;
+
+    // assign classes
+    setOriginIsPass(originShouldBePass);
     setAreaColorsAssigned(true);
-    setStage(2);
-  };
+    if (stage === 1) setStage(2);
+  }, [stage, graphCurve, graphToOverlayCoords, chartReady, overlayReady]);
 
   useEffect(() => {
     if (stage >= 3 && areaColorsAssigned) {
@@ -491,7 +492,7 @@ export const CurveVisualizer = ({
               areaPolygons={areaPolygons}
               area1Selected={originIsPass}
               areaColorsAssigned={areaColorsAssigned}
-              onAreaSelection={handleAreaSelection}
+              onAreaSelection={() => {}}
             />
           )}
       </div>
