@@ -4,6 +4,7 @@ import type {
   DataPoint,
   AreaPolygons,
   ClassificationCounts,
+  PositionEvent,
 } from "~/types";
 import {
   checkSelfIntersection,
@@ -18,6 +19,7 @@ import { CurveChart } from "./chart/ChartCurve";
 import { useIntlayer } from "react-intlayer";
 import type { VisualizerData } from "~/context/LevelDataContext";
 import Dialog from "./ui/Dialog";
+import { calculateAccuracy } from "~/utils/classification";
 
 interface Props {
   seenData: DataPoint[];
@@ -188,6 +190,14 @@ export const CurveVisualizer = ({
     return { x: overlayX, y: overlayY };
   }, []);
 
+  const eventToOverlayCoords = (event: PositionEvent): { x: number, y: number } => {
+    if (!overlayRef.current) return { x: -Infinity, y: -Infinity };
+    const overlayRect = overlayRef.current.getBoundingClientRect();
+    const x = event.clientX - overlayRect.left;
+    const y = event.clientY - overlayRect.top;
+    return { x, y };
+  }
+
   const reset = () => {
     setOverlayCurve([]);
     setGraphCurve([]);
@@ -201,25 +211,30 @@ export const CurveVisualizer = ({
     setStage(0);
   };
 
+  const showDrawingAlert = (message: string) => {
+      setDialogMessage(message);
+      setIsDialogOpen(true);
+  }
+
   const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     if (isDrawing || !overlayRef.current || stage === 4) return;
 
+    // prevent starting to draw outside of bounds
+    const overlayCoords = eventToOverlayCoords(event);
+    if (isPointInBounds(overlayCoords, graphInOverlay))
+      return showDrawingAlert(content.alerts.invalidBounds.value);
+
+    // begin curve at point
     reset();
     setIsDrawing(true);
-    const overlayRect = overlayRef.current.getBoundingClientRect();
-    const x = event.clientX - overlayRect.left;
-    const y = event.clientY - overlayRect.top;
-    setOverlayCurve([{ x, y }]);
+    setOverlayCurve([overlayCoords]);
   };
 
   const handleMouseMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    // if (event.pressure === 0) return;
-    if (overlayCurve.length === 0 || !isDrawing) return;
-    const overlayRect = overlayRef.current!.getBoundingClientRect();
-    const x = event.clientX - overlayRect.left;
-    const y = event.clientY - overlayRect.top;
-    setOverlayCurve((prev) => [...prev, { x, y }]);
+    if (!overlayRef.current || overlayCurve.length === 0 || !isDrawing) return;
+    const overlayCoords = eventToOverlayCoords(event);
+    setOverlayCurve((prev) => [...prev, overlayCoords]);
   };
 
   const handleMouseUp = () => {
@@ -279,42 +294,26 @@ export const CurveVisualizer = ({
 
     if (!overlayRef.current || !chartContainerRef.current) return;
 
-    const graphBounds = {
-      left: graphInOverlay.left,
-      top: graphInOverlay.top,
-      right: graphInOverlay.right,
-      bottom: graphInOverlay.bottom,
-    };
-
     // Validate start and end points
     const startPoint = overlayCurve[0];
     const endPoint = overlayCurve[overlayCurve.length - 1];
     if (
-      isPointInBounds(startPoint, graphBounds) ||
-      isPointInBounds(endPoint, graphBounds)
-    ) {
-      setDialogMessage(content.alerts.invalidBounds.value);
-      setIsDialogOpen(true);
-      return;
-    }
+      isPointInBounds(startPoint, graphInOverlay) ||
+      isPointInBounds(endPoint, graphInOverlay)
+    )
+      return showDrawingAlert(content.alerts.invalidBounds.value);
 
     // Validate self-intersection
-    if (checkSelfIntersection(overlayCurve)) {
-      setDialogMessage(content.alerts.selfIntersection.value);
-      setIsDialogOpen(true);
-      return;
-    }
+    if (checkSelfIntersection(overlayCurve))
+      return showDrawingAlert(content.alerts.selfIntersection.value);
 
-    const intersections = getCurveIntersections(overlayCurve, graphBounds);
-    if (intersections.length !== 2) {
-      setDialogMessage(content.alerts.invalidIntersections.value);
-      setIsDialogOpen(true);
-      return;
-    }
+    const intersections = getCurveIntersections(overlayCurve, graphInOverlay);
+    if (intersections.length !== 2)
+      return showDrawingAlert(content.alerts.invalidIntersections.value);
 
     let startIndex = -1, endIndex = -1;
     for (let i = 0; i < overlayCurve.length - 1; i++) {
-      if (isPointInBounds(overlayCurve[i], graphBounds)) {
+      if (isPointInBounds(overlayCurve[i], graphInOverlay)) {
         if (startIndex === -1) {
           startIndex = i;
         }
@@ -348,30 +347,30 @@ export const CurveVisualizer = ({
   useEffect(() => {
     if (!chartReady || !overlayReady) return;  
 
-    if (graphCurve.length > 1) {
-      const polygons = getAreaPolygons(
-        graphCurve.map((p) => ({ graph: p, overlay: graphToOverlayCoords(p) })),
-        graphToOverlayCoords
-      );
-      setAreaPolygons(polygons);
-    } else {
-      setAreaPolygons({
+    // hide area selection if there's no curve
+    if (graphCurve.length < 2) return setAreaPolygons({
         area1: { graph: [], overlay: [] },
         area2: { graph: [], overlay: [] },
       });
-    }
-  }, [stage, graphCurve, graphToOverlayCoords, chartReady, overlayReady]);
+    
+    // create area selection polygons
+    const polygons = getAreaPolygons(
+      graphCurve.map((p) => ({ graph: p, overlay: graphToOverlayCoords(p) })),
+      graphToOverlayCoords
+    );
+    setAreaPolygons(polygons);
 
-  const handleAreaSelection = (
-    event: React.MouseEvent<SVGPolygonElement>,
-    isArea1: boolean
-  ) => {
-    event.stopPropagation();
-    if (areaColorsAssigned) return;
-    setOriginIsPass(isArea1);
+    // automatically assign pass/fail areas
+    // decide best assignment
+    const passAccuracy = calculateAccuracy(getClassificationCounts_Curve(seenData, polygons, true));
+    const failAccuracy = calculateAccuracy(getClassificationCounts_Curve(seenData, polygons, false));
+    const originShouldBePass = passAccuracy >= failAccuracy;
+
+    // assign classes
+    setOriginIsPass(originShouldBePass);
     setAreaColorsAssigned(true);
-    setStage(2);
-  };
+    if (stage === 1) setStage(2);
+  }, [stage, graphCurve, graphToOverlayCoords, chartReady, overlayReady]);
 
   useEffect(() => {
     if (stage >= 3 && areaColorsAssigned) {
@@ -493,7 +492,7 @@ export const CurveVisualizer = ({
               areaPolygons={areaPolygons}
               area1Selected={originIsPass}
               areaColorsAssigned={areaColorsAssigned}
-              onAreaSelection={handleAreaSelection}
+              onAreaSelection={() => {}}
             />
           )}
       </div>

@@ -8,6 +8,7 @@ import type {
   Point,
   DataPoint,
   ClassificationCounts,
+  PositionEvent,
 } from "~/types";
 import { calculateAccuracy, getClassificationCounts } from "~/utils/classification";
 import {
@@ -25,8 +26,6 @@ import Toggle from "./ui/Toggle";
 import { useIntlayer } from "react-intlayer";
 import { cn } from "~/utils/cn";
 import { type VisualizerData } from "~/context/LevelDataContext";
-
-type PositionEvent = Pick<React.MouseEvent, "clientX" | "clientY">
 
 // Props for ClassificationVisualizer
 interface Props {
