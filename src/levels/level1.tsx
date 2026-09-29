@@ -26,6 +26,15 @@ import { getPointClassification } from "~/utils/classification";
 import { cn } from "~/utils/cn";
 import { useLevelData } from "~/context/LevelDataContext";
 
+const LINE_COORDS = [
+  { graph: { x: 250, y: 0 }, overlay: { x: 250, y: 0 } },
+  { graph: { x: 250, y: 500 }, overlay: { x: 250, y: 500 } },
+];
+
+const classifyPoint = (point: DataPoint) => {
+  return getPointClassification(point, LINE_COORDS, false, true);
+}
+
 const CustomDotLevel1 = ({
   cx,
   cy,
@@ -40,15 +49,7 @@ const CustomDotLevel1 = ({
   let fillColor = "transparent";
   let IconComponent = null;
 
-  const classificationResult = getPointClassification(
-    payload,
-    [
-      { graph: { x: 250, y: 0 }, overlay: { x: 250, y: 0 } },
-      { graph: { x: 250, y: 500 }, overlay: { x: 250, y: 500 } },
-    ],
-    true,
-    true
-  );
+  const classificationResult = classifyPoint(payload);
 
   switch (classificationResult) {
     case "TP":
@@ -125,17 +126,7 @@ export default function Level1() {
   const results: ClassificationCounts = useMemo(
     () =>
       data
-        .map((p) =>
-          getPointClassification(
-            p,
-            [
-              { graph: { x: 250, y: 0 }, overlay: { x: 250, y: 0 } },
-              { graph: { x: 250, y: 500 }, overlay: { x: 250, y: 500 } },
-            ],
-            true,
-            true
-          )
-        )
+        .map(classifyPoint)
         .reduce(
           (acc, curr) => {
             acc[curr!] += 1;
@@ -252,50 +243,25 @@ export default function Level1() {
   }, [graphRef, chartContainerRef]);
 
   useEffect(() => {
-    const classificationResults = data.map((p) =>
-      getPointClassification(
-        p,
-        [
-          { graph: { x: 250, y: 0 }, overlay: { x: 250, y: 0 } },
-          { graph: { x: 250, y: 500 }, overlay: { x: 250, y: 500 } },
-        ],
-        true,
-        true
-      )
-    );
-    if (stage === 0 && classificationResults.includes("TP")) {
-      setDisableClick(true);
-      setTimeout(() => {
-        setStage(1);
-        setStepIndex(3);
-        setRun(true);
-        setDisableClick(false);
-      }, 700);
-    } else if (stage === 1 && classificationResults.includes("TN")) {
-      setDisableClick(true);
-      setTimeout(() => {
-        setStage(2);
-        setRun(true);
-        setStepIndex(4);
-        setDisableClick(false);
-      }, 700);
-    } else if (stage === 2 && classificationResults.includes("FP")) {
-      setDisableClick(true);
-      setStage(3);
-      setTimeout(() => {
-        setRun(true);
-        setStepIndex(5);
-        setDisableClick(false); 
-      }, 700);
-    } else if (stage === 3 && classificationResults.includes("FN")) {
-      setDisableClick(true);
-      setTimeout(() => {
-        setStage(4);
-        setRun(true);
-        setStepIndex(6);
-        setDisableClick(false);
-      }, 700);
-    }
+    const classificationResults = data.map(classifyPoint);
+    
+    const stageConditions = [
+      classificationResults.includes("TP"),
+      classificationResults.includes("TN"),
+      classificationResults.includes("FP"),
+      classificationResults.includes("FN")
+    ];
+
+    if (stage < 0 || stage > 3) return;
+
+    if (!stageConditions[stage]) return;
+    setDisableClick(true);
+    setTimeout(() => {
+      setStage(stage + 1);
+      setStepIndex(stage + 3);
+      setRun(true);
+      setDisableClick(false);
+    }, 700);
   }, [data, stage]);
 
   const handleJoyrideCallback = useCallback(
