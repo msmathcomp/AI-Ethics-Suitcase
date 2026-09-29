@@ -572,7 +572,8 @@ export const ClassificationVisualizer = ({
       const intersections = findIntersections(p1, p2);
 
       if (intersections.length < 2) {
-        alert(content.alerts.invalidIntersections);
+        // line was drawn outside of graph
+        // no need to notify user
         setLineCoords([]);
         setExtendedLinePoints([]);
       } else {
