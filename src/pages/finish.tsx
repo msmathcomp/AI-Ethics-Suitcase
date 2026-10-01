@@ -1,23 +1,21 @@
 import { Link } from "react-router";
 import { useIntlayer } from "react-intlayer";
 import { useLevelData } from "~/context/LevelDataContext";
-import type { ClassificationCounts } from "~/types";
 import { LanguageSwitch } from "~/components/ui/LanguageSwitch";
 import { SmileIcon } from "lucide-react";
 import { Button } from "~/components/ui/Button";
+import { calculateAccuracy } from "~/utils/classification";
 
-function calculateAccuracy(counts: ClassificationCounts): number {
-  const total = counts.TP + counts.TN + counts.FP + counts.FN;
-  if (total === 0) return 0;
-  return ((counts.TP + counts.TN) / total) * 100;
+function formatAccuracy(accuracy: number): string {
+  return (accuracy * 100).toFixed(1);
 }
 
 export default function Finish() {
   const { finish: content } = useIntlayer("app");
-  const { dataByLevel: resultsByLevel, reset: reset } = useLevelData();
+  const { dataByLevel: resultsByLevel } = useLevelData();
 
-  // Calculate total score (sum of accuracies for levels 2-7)
-  const levels = [2, 3, 4, 5, 6, 7];
+  // Calculate total score (weighted sum of accuracies for levels 2-6)
+  const levels = [2, 3, 4, 5, 6];
   const levelResults = levels.map((level) => {
     const result = resultsByLevel.get(level);
     return {
@@ -29,24 +27,24 @@ export default function Finish() {
   });
 
   const totalScore = levelResults.reduce((sum, result) => {
-    if ((result.level === 2 || result.level === 3) && result.bestAccuracy) {
-      return sum + 10 * (result.yourAccuracy / result.bestAccuracy!);
-    } else if (
-      (result.level === 4 || result.level === 5) &&
-      result.bestAccuracy
-    ) {
+    // levels 2 and 3 each count 15% -> 30%
+    if ((result.level === 2 || result.level === 3) && result.bestAccuracy)
+      return sum + 15 * (result.yourAccuracy / result.bestAccuracy!);
+
+    // levels 4 and 5 each count 20% -> 40%
+    if ((result.level === 4 || result.level === 5) && result.bestAccuracy)
       return sum + 20 * (result.yourAccuracy / result.bestAccuracy!);
-    } else if (result.level === 6 && result.bestAccuracy) {
+
+    // level 6 counts 30%
+    if (result.level === 6 && result.bestAccuracy)
       return (
         sum +
-        10 * (result.yourAccuracy / result.bestAccuracy!) +
-        result.unseenAccuracy! / 10
+        15 * (result.yourAccuracy / result.bestAccuracy!) +
+        15 * result.unseenAccuracy!
       );
-    } else {
-      return (
-        sum + result.yourAccuracy * 0.05 + (result.unseenAccuracy ?? 0) * 0.15
-      );
-    }
+
+    // introduction levels don't contribute to score
+    return sum;
   }, 0);
 
   return (
@@ -120,16 +118,16 @@ export default function Finish() {
                   {content.table.level} {result.level}
                 </td>
                 <td className="border border-gray-300 px-4 py-3">
-                  {result.yourAccuracy.toFixed(1)}%
+                  {formatAccuracy(result.yourAccuracy)}%
                 </td>
                 <td className="border border-gray-300 px-4 py-3">
                   {result.bestAccuracy !== null
-                    ? `${result.bestAccuracy.toFixed(1)}%`
+                    ? `${formatAccuracy(result.bestAccuracy)}%`
                     : content.table.NA}
                 </td>
                 <td className="border border-gray-300 px-4 py-3">
                   {result.unseenAccuracy !== null
-                    ? `${result.unseenAccuracy.toFixed(1)}%`
+                    ? `${formatAccuracy(result.unseenAccuracy)}%`
                     : content.table.NA}
                 </td>
               </tr>
@@ -142,22 +140,6 @@ export default function Finish() {
         <Link to="/home">
           <Button buttonType="secondary">
             {content.backToHome}
-          </Button>
-        </Link>
-
-        <Link to="/level/8">
-          <Button buttonType="primary">
-            {content.freeplayAgain}
-          </Button>
-        </Link>
-
-        <Link to="/">
-          <Button
-            onClick={reset}
-            buttonType="secondary"
-            className="opacity-50"
-          >
-            {content.restart}
           </Button>
         </Link>
       </div>

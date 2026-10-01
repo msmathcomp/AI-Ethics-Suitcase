@@ -76,6 +76,7 @@
     "home": "Home",
     "backToHome": "Back to Home",
     "finish": "Finish",
+    "freeplayAgain": "Free Play again",
     "restartButton": "Restart",
     "restartLevel": "Restart Level",
     "restartApp": "Restart App",
@@ -199,7 +200,6 @@
   "finish": {
     "title": "Congratulations!",
     "backToHome": "Back to Home",
-    "freeplayAgain": "Free Play again",
     "restart": "Restart",
     "table": {
       "level": "Level",

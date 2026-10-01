@@ -37,7 +37,7 @@ export default function Home() {
 
       <div className="grid grid-cols-2 w-[80vw] gap-8 mt-12">
         {[
-          { title: content.menuButtons.tutorial, link: "/tutorial", completed: isLevelCompleted(-1) },
+          { title: content.menuButtons.tutorial, link: "/level/-1", completed: isLevelCompleted(-1) },
           { title: content.menuButtons.levels, link: "/level/" + config.startLevel, completed: centralLevelsCompleted },
           { title: content.menuButtons.overfitting, link: "/level/7", completed: isLevelCompleted(7) },
           { title: content.menuButtons.freeplay, link: "/level/8", completed: isLevelCompleted(8) },

@@ -4,7 +4,6 @@ import { HashRouter, Route, Routes, Navigate } from "react-router";
 import Home from "./pages/home.tsx";
 import { useConfig } from "./context/ConfigContext.tsx";
 import { useIntlayer } from "react-intlayer";
-import Tutorial from "./pages/tutorial.tsx";
 
 export default function Router() {
   const { common: commonContent } = useIntlayer("app");
@@ -32,7 +31,6 @@ export default function Router() {
           }
         />
         <Route path="/home" element={<Home />} />
-        <Route path="/tutorial" element={<Tutorial />} />
         <Route path="/level/:level" element={<Level />} />
         <Route path="/finish" element={<Finish />} />
         <Route path="*" element={<Navigate to="/" replace />} />
