@@ -76,6 +76,7 @@
     "home": "Home",
     "backToHome": "Terug naar Home",
     "finish": "Voltooien",
+    "freeplayAgain": "Opnieuw naar Vrij spel",
     "restartButton": "Opnieuw starten",
     "restartLevel": "Niveau opnieuw starten",
     "restartApp": "App opnieuw starten",
@@ -199,7 +200,6 @@
   "finish": {
     "title": "Gefeliciteerd!",
     "backToHome": "Terug naar Home",
-    "freeplayAgain": "Opnieuw naar Vrij spel",
     "restart": "Resetten",
     "table": {
       "level": "Niveau",

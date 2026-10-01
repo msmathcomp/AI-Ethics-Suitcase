@@ -13,7 +13,9 @@ interface LevelProgressBarProps {
   showNextLevelButton: boolean;
 }
 
-const TOTAL_LEVELS = 8;
+const INTRODUCTION_LEVELS = [-1, 0, 1];
+const CAMPAIGN_LEVELS = [2, 3, 4, 5, 6];
+const BONUS_LEVELS = [7, 8];
 
 export function LevelProgressBar({
   level,
@@ -61,17 +63,24 @@ export function LevelProgressBar({
   };
 
   const handleNextLevel = () => {
-    if ([-1, 6, 7].includes(level)) return navigate("/home");
-    if (level === 8) {
-      navigate("/finish");
-      return;
-    }
+    // return home after introduction and overfitting, or when skipping free play
+    if ([1, 7].includes(level) || (level === 8 && !showNextLevelButton)) return navigate("/home");
+    // return to results screen after main levels
+    if (level === 6) return navigate("/finish");
+    // free play again after free play
+    if (level === 8) return resetLevelData(level);
+
+    // otherwise continue to next level
     navigate(`/level/${level + 1}`);
   };
 
-  // don't show previous/next buttons on levels 7 and 8
-  const showBackButton = ![7, 8].includes(level);
+  // don't show previous button and level circles on bonus levels
+  const showLevelControls = !BONUS_LEVELS.includes(level);
 
+  let shownLevels: number[] = [];
+  if (INTRODUCTION_LEVELS.includes(level)) shownLevels = INTRODUCTION_LEVELS;
+  if (CAMPAIGN_LEVELS.includes(level)) shownLevels = CAMPAIGN_LEVELS;
+  
   return (
     <div
       className="flex w-full items-center justify-between gap-2 relative pb-6 pt-4 px-4 rounded-t-xl bg-stone-200 dark:bg-stone-700"
@@ -85,34 +94,34 @@ export function LevelProgressBar({
         </Link>
         <LanguageSwitch />
       </div>
+
       <div className="flex items-center justify-center gap-4">
-        {showBackButton && (
+        {showLevelControls && (
           <Button
-            disabled={level === -1}
+            disabled={level === -1 || level === 2}
             onClick={() => {
-              if (level === 0) navigate("/tutorial");
-              else navigate(`/level/${level - 1}`);
+              navigate(`/level/${level - 1}`);
             }}
           >
             <ChevronLeft size={25} />
             {content.previousLevel}
           </Button>
         )}
-        <div className="flex gap-1">
-          {[...Array(TOTAL_LEVELS)].map((_, index) => {
-            const isCompleted = isLevelCompleted(index - 1);
-            if (index === level + 1)
-              return <SmileIcon key={index} state="inProgress" />;
-            return (
-              <Link
-                to={index === 0 ? "/tutorial" : `/level/${index - 1}`}
-                key={index}
-              >
-                <SmileIcon state={isCompleted ? "complete" : "incomplete"} />
-              </Link>
-            );
-          })}
-        </div>
+        {showLevelControls && (
+          <div className="flex gap-1">
+            {shownLevels.map((levelNumber) => {
+              const isCompleted = isLevelCompleted(levelNumber);
+              if (levelNumber === level)
+                return <SmileIcon key={levelNumber} state="inProgress" />;
+              return (
+                <Link to={`/level/${levelNumber}`} key={levelNumber}>
+                  <SmileIcon state={isCompleted ? "complete" : "incomplete"} />
+                </Link>
+              );
+            })}
+          </div>
+        )}
+
         <Button
           id="next-level-button"
           onClick={handleNextLevel}
@@ -120,21 +129,21 @@ export function LevelProgressBar({
         >
           {(() => {
             if (!showNextLevelButton) return content.skipLevelButtonText;
-            if (level === -1) return content.endTutorial;
+            if (level === 1) return content.endTutorial;
+            if (level === 6) return content.finish;
             if (level === 7) return content.backToHome;
-            if (level === 8) return content.finish;
+            if (level === 8) return content.freeplayAgain;
             return content.nextLevelButtonText;
           })()}
-          <ChevronRight size={25} />
+          {(level === 8 && showNextLevelButton) ? <RotateCcw size={25} /> : <ChevronRight size={25} />}
         </Button>
       </div>
+
       <div className="flex items-center justify-center">
-        {level !== -1 && level !== 1 && (
-          <Button ref={buttonRef} onClick={() => setShowMenu((v) => !v)}>
-            {content.restartButton}
-            <RotateCcw />
-          </Button>
-        )}
+        <Button ref={buttonRef} onClick={() => setShowMenu((v) => !v)}>
+          {content.restartButton}
+          <RotateCcw />
+        </Button>
       </div>
       <Dialog
         open={isDialogOpen}
