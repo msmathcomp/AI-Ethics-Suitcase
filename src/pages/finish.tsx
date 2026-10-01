@@ -3,7 +3,6 @@ import { useIntlayer } from "react-intlayer";
 import { useLevelData } from "~/context/LevelDataContext";
 import type { ClassificationCounts } from "~/types";
 import { LanguageSwitch } from "~/components/ui/LanguageSwitch";
-import ThemeSwitch from "~/components/ui/ThemeSwitch";
 import { SmileIcon } from "lucide-react";
 import { Button } from "~/components/ui/Button";
 
@@ -165,9 +164,8 @@ export default function Finish() {
 
 
 
-      <div className="flex justify-between absolute bottom-4 w-full px-8">
+      <div className="absolute bottom-4 left-4">
         <LanguageSwitch />
-        <ThemeSwitch />
       </div>
     </main>
   );

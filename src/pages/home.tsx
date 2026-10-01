@@ -5,7 +5,6 @@ import { LanguageSwitch } from "~/components/ui/LanguageSwitch";
 import { Button } from "~/components/ui/Button";
 import { useLevelData } from "~/context/LevelDataContext";
 import { SmileIcon } from "~/components/ui/SmileIcon";
-import { cn } from "~/utils/cn";
 import { RotateCcw } from "lucide-react";
 
 export default function Home() {
@@ -35,9 +34,8 @@ export default function Home() {
     <main className="min-h-screen flex flex-col items-center justify-center gap-4 dark:bg-stone-900 dark:text-white p-8">
       <h1 className="text-4xl">{content.title}</h1>
       <h2 className="text-2xl text-stone-600 dark:text-stone-400">{content.subtitle}</h2>
-      <p className="max-w-xl text-center">{content.description}</p>
 
-      <div className="grid grid-cols-2 w-[80vw] gap-8 mt-16">
+      <div className="grid grid-cols-2 w-[80vw] gap-8 mt-12">
         {[
           { title: content.menuButtons.tutorial, link: "/tutorial", completed: isLevelCompleted(-1) },
           { title: content.menuButtons.levels, link: "/level/" + config.startLevel, completed: centralLevelsCompleted },
@@ -48,7 +46,7 @@ export default function Home() {
 
           return <Link key={index} to={link}>
             <Button
-              className={cn("p-16 w-full hover:animate-none justify-center gap-16", completed && "animate-pulse")}
+              className="p-16 w-full hover:animate-none justify-center gap-16"
               buttonType={completed ? "primary" : "secondary"}
             >
               <SmileIcon state={completed ? "complete" : (next ? "inProgress" : "incomplete")} />
