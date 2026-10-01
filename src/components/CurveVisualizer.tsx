@@ -447,16 +447,6 @@ export const CurveVisualizer = ({
         )}
 
         <div className="flex flex-col absolute top-3 left-0 z-20 gap-2 text-xs w-24 xl:text-sm xl:w-32">
-          {areaColorsAssigned && (
-            <button
-              className="border rounded px-2 py-1"
-              onClick={() =>
-                setOriginIsPass((prev) => (prev !== null ? !prev : null))
-              }
-            >
-              {content.flipButton}
-            </button>
-          )}
           {stage === 4 && (
             <div className="border rounded p-1 space-y-2">
               <div className="flex items-center justify-between">
