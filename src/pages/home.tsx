@@ -12,14 +12,17 @@ export default function Home() {
   const { config, loading } = useConfig();
 
   const { isLevelCompleted, reset } = useLevelData();
-  const centralLevelsCompleted = [0, 1, 2, 3, 4, 5, 6].reduce((previous, current) => previous && isLevelCompleted(current), true);
+
+  const allCompleted = (levels: number[]): boolean => levels.reduce((previous, current) => previous && isLevelCompleted(current), true);
+  const tutorialCompleted = allCompleted([-1, 0, 1]);
+  const centralLevelsCompleted = allCompleted([2, 3, 4, 5, 6]);
 
   // check next advised menu option
   let nextOption: number | undefined;
-  if (!isLevelCompleted(-1)) nextOption = 0;
+  if (!tutorialCompleted) nextOption = 0;
   else if (!centralLevelsCompleted) nextOption = 1;
-  else if (!isLevelCompleted(6)) nextOption = 2;
-  else if (!isLevelCompleted(8)) nextOption = 8;
+  else if (!isLevelCompleted(7)) nextOption = 2;
+  else if (!isLevelCompleted(8)) nextOption = 3;
 
   if (loading || !config) {
     return (
