@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
+import { cn } from "~/utils/cn";
 
 interface TimerBarProps extends React.HTMLAttributes<HTMLDivElement> {
   maximumTime: number; // seconds
   pause?: boolean;
   onFinish?: () => void;
-  className?: string;
-  style?: React.CSSProperties;
   resetKey: number;
 }
 
@@ -14,53 +13,59 @@ export default function TimerBar({
   pause = false,
   onFinish,
   className = "",
-  style,
   resetKey,
   ...rest
 }: TimerBarProps) {
-  const [elapsed, setElapsed] = useState(0);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const elapsed = useRef(0);
+  const onFinishRef = useRef(onFinish);
+  const coverRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => { onFinishRef.current = onFinish });
+
+  // reset
   useEffect(() => {
-    setElapsed(0);
+    elapsed.current = 0;
   }, [resetKey]);
 
   useEffect(() => {
-    if (elapsed >= maximumTime) {
-      if (onFinish) onFinish();
-      return;
+    // update progress
+    const render = () => {
+      if (!coverRef.current) return;
+      const remaining = maximumTime <= 0 ? 1 : Math.min(elapsed.current / maximumTime);
+      coverRef.current.style.width = `${remaining * 100}%`;
     }
-    if (pause) {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      return;
-    }
-    intervalRef.current = setInterval(() => {
-      setElapsed((prev) => {
-        if (prev + 0.1 >= maximumTime) {
-          clearInterval(intervalRef.current!);
-          return maximumTime;
-        }
-        return prev + 0.1;
-      });
-    }, 100);
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [elapsed, maximumTime, onFinish]);
+    render();
 
-  const progress = Math.max(0, 1 - elapsed / maximumTime);
+    if (pause || elapsed.current >= maximumTime) return;
+    
+    let requestHandle: number;
+    let lastTimestamp = performance.now();
+
+    // run tick function every animation frame
+    const tick = (timestamp: number) => {
+      elapsed.current = Math.min(maximumTime, elapsed.current + (timestamp - lastTimestamp) / 1000);
+      lastTimestamp = timestamp;
+      render();
+      // call finish callback when finished
+      if (elapsed.current >= maximumTime) return onFinishRef.current?.();
+      // request next frame
+      requestHandle = requestAnimationFrame(tick);
+    }
+    // kickstart requestAnimationFrame loop
+    tick(lastTimestamp);
+
+    // return cleanup function so the loop stops
+    return () => cancelAnimationFrame(requestHandle);
+  }, [pause, maximumTime, resetKey]);
 
   return (
     <div
-      className={`relative w-full bg-gray-200 rounded overflow-hidden ${className}`}
-      style={style}
+      className={cn("relative w-full bg-gray-200 rounded overflow-hidden", className)}
       {...rest}
     >
       <div
-        className="absolute right-0 h-full transition-all duration-100 z-10 bg-gray-200"
-        style={{
-          width: `${(1 - progress) * 100}%`,
-        }}
+        ref={coverRef}
+        className="absolute right-0 h-full z-10 bg-gray-200"
       />
       <div 
         className="absolute h-full w-full"
