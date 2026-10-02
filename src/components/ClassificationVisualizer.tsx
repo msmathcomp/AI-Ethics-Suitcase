@@ -186,6 +186,24 @@ export const ClassificationVisualizer = ({
   const [dragOffset, setDragOffset] = useState<Point>({ x: 0, y: 0 });
   // Used to prevent immediate click after drag
   const [dragJustEnded, setDragJustEnded] = useState(false);
+
+  const endDrag = () => {
+    setIsDragging(false);
+    setDragPointIndex(null);
+    setDragOffset({ x: 0, y: 0 });
+    setDragJustEnded(true);
+    
+    setTimeout(() => {
+      setDragJustEnded(false);
+    }, 300);
+  }
+  // end drag when canModify changes to false during drag
+  // used in freeplay level to stop drag when timer runs out
+  useEffect(() => {
+    if (canModify === false) endDrag();
+  }, [canModify]);
+
+
   // Whether the origin area is classified as pass
   const area1Selected = visualizerData.area1Selected;
   const setArea1Selected = (newValue: boolean | null | ((old: boolean | null) => boolean | null)) => {
@@ -464,16 +482,7 @@ export const ClassificationVisualizer = ({
   // Handles mouse up event to finish dragging
   // both on extension handles, and within the graph
   const handleOverlayMouseUp = (event: PositionEvent) => {
-      if (isDragging) {
-        setIsDragging(false);
-        setDragPointIndex(null);
-        setDragOffset({ x: 0, y: 0 });
-        setDragJustEnded(true);
-
-        setTimeout(() => {
-          setDragJustEnded(false);
-        }, 300);
-      }
+    if (isDragging) endDrag();
     
     // for dragging to draw a line:
     if (!awayFromMouseDown(event)) return;
