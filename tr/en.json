@@ -190,7 +190,12 @@
     },
     "tutorialDialog": {
       "title": "Welcome to the Free Play Level!",
-      "message": "In this level, you can freely experiment with the classifier and try to beat the best classifier found by AI. You can also compare performance on seen and unseen data. There is no right or wrong answer here, just have fun exploring!"
+      "message": "In this level, you can freely experiment with the classifier and try to beat the best classifier found by AI. You can also compare performance on seen and unseen data. There is no right or wrong answer here, just have fun exploring!",
+      "difficulty": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Hard"
+      }
     },
     "timeExpired": "Time's up!"
   },

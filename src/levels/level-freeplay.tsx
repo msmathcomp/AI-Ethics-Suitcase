@@ -8,6 +8,14 @@ import LevelLayout from "~/components/layout/LevelLayout";
 import TimerBar from "~/components/ui/TimerBar";
 import Dialog from "~/components/ui/Dialog";
 import { cn } from "~/utils/cn";
+import { Button } from "~/components/ui/Button";
+
+const EMPTY_COUNTS = () => ({ TP: 0, TN: 0, FP: 0, FN: 0 });
+const DIFFICULTIES = {
+  easy: 30,
+  medium: 15,
+  hard: 5
+}
 
 export default function LevelFreeplay() {
   const level = 8;
@@ -34,34 +42,19 @@ export default function LevelFreeplay() {
   };
   const resetCount = useMemo(() => dataByLevel.get(level)?.resetCount || 0, [dataByLevel, level]);
 
-  const [results, setResults] = useState<ClassificationCounts>({
-    TP: 0,
-    TN: 0,
-    FP: 0,
-    FN: 0,
-  });
-  const [bestResults, setBestResults] = useState<ClassificationCounts>({
-    TP: 0,
-    TN: 0,
-    FP: 0,
-    FN: 0,
-  });
-  const [unseenResults, setUnseenResults] = useState<ClassificationCounts>({
-    TP: 0,
-    TN: 0,
-    FP: 0,
-    FN: 0,
-  });
-  const [unseenBestResults, setUnseenBestResults] =
-    useState<ClassificationCounts>({
-      TP: 0,
-      TN: 0,
-      FP: 0,
-      FN: 0,
-    });
+  const [results, setResults] = useState<ClassificationCounts>(EMPTY_COUNTS);
+  const [bestResults, setBestResults] = useState<ClassificationCounts>(EMPTY_COUNTS);
+  const [unseenResults, setUnseenResults] = useState<ClassificationCounts>(EMPTY_COUNTS);
+  const [unseenBestResults, setUnseenBestResults] = useState<ClassificationCounts>(EMPTY_COUNTS);
 
   const [isTutorialDialogOpen, setIsTutorialDialogOpen] = useState(true);
   const [showTimerExpired, setShowTimerExpired] = useState(false);
+
+  const [difficulty, setDifficulty] = useState<keyof typeof DIFFICULTIES>("easy");
+  const chooseDifficulty = (d: keyof typeof DIFFICULTIES) => {
+    setDifficulty(d);
+    setIsTutorialDialogOpen(false);
+  }
 
   // Choose a random dataset from the freeplay folder
   const updateLevelJson = () => {
@@ -82,11 +75,12 @@ export default function LevelFreeplay() {
   }, []);
 
   useEffect(() => {
-    setResults({ TP: 0, TN: 0, FP: 0, FN: 0 });
-    setBestResults({ TP: 0, TN: 0, FP: 0, FN: 0 });
-    setUnseenResults({ TP: 0, TN: 0, FP: 0, FN: 0 });
-    setUnseenBestResults({ TP: 0, TN: 0, FP: 0, FN: 0 });
+    setResults(EMPTY_COUNTS);
+    setBestResults(EMPTY_COUNTS);
+    setUnseenResults(EMPTY_COUNTS);
+    setUnseenBestResults(EMPTY_COUNTS);
 
+    setIsTutorialDialogOpen(true);
     setShowTimerExpired(false);
     setStage(0);
   }, [resetCount]);
@@ -123,7 +117,12 @@ export default function LevelFreeplay() {
 
   return (
     <LevelLayout
-      levelName={content.levelName.value}
+      levelName={
+        content.levelName.value +
+        (isTutorialDialogOpen
+          ? ""
+          : ` - ${content.tutorialDialog.difficulty[difficulty].value} (${DIFFICULTIES[difficulty]}s)`)
+      }
       goalElement={content.goal.value}
       classificationVisualizer={
         <ClassificationVisualizer
@@ -133,10 +132,10 @@ export default function LevelFreeplay() {
           visualizerData={getVisualizerData(level)}
           stage={stage}
           setStage={setStage}
-          setResults={(res) => setResults(res)}
-          setBestResults={(res) => setBestResults(res)}
-          setUnseenResults={(res) => setUnseenResults(res)}
-          setUnseenBestResults={(res) => setUnseenBestResults(res)}
+          setResults={setResults}
+          setBestResults={setBestResults}
+          setUnseenResults={setUnseenResults}
+          setUnseenBestResults={setUnseenBestResults}
           modifyVisualizerData={(modifyFn) =>
             modifyVisualizerData(level, modifyFn)
           }
@@ -150,15 +149,14 @@ export default function LevelFreeplay() {
       instruction={
         content.stages[stage.toString() as keyof typeof content.stages].value
       }
-      instructionButton={
-        [3, 5].includes(stage)
-          ? commonContent.buttons.next.value
-          : stage === 4
-          ? commonContent.buttons.compare.value
-          : null
-      }
+      instructionButton={(() => {
+        if (stage === 3) return commonContent.buttons.finish.value;
+        if (stage === 4) return commonContent.buttons.compare.value;
+        return null;
+      })()}
       instructionButtonCallback={() => {
-        if (stage === 3) setStage(6); // skip over stage 4, 5: automatically go to final comparison
+        if (stage === 3)
+          setStage(6); // skip over stage 4, 5: automatically go to final comparison
         else if (stage === 4) setStage(6);
         else if (stage === 5) setStage(6);
       }}
@@ -189,7 +187,7 @@ export default function LevelFreeplay() {
           <div>
             <TimerBar
               key={`timer-${level}`}
-              maximumTime={30}
+              maximumTime={DIFFICULTIES[difficulty]}
               onFinish={() => {
                 if (stage < 6) setStage(6); // skip to final stage
                 setShowTimerExpired(true);
@@ -198,10 +196,10 @@ export default function LevelFreeplay() {
               pause={stage > 3 || isTutorialDialogOpen}
               className="h-2"
             />
-            <div 
+            <div
               className={cn(
                 "text-red-500 font-bold mt-2",
-                !showTimerExpired && "opacity-0"
+                !showTimerExpired && "opacity-0",
               )}
             >
               {content.timeExpired.value}
@@ -212,7 +210,18 @@ export default function LevelFreeplay() {
             choice={false}
             open={isTutorialDialogOpen}
             message={content.tutorialDialog.message.value}
-            onYes={() => setIsTutorialDialogOpen(false)}
+            buttons={(
+              ["easy", "medium", "hard"] as (keyof typeof DIFFICULTIES)[]
+            ).map((d) => (
+              <Button
+                key={d}
+                buttonType="primary"
+                onClick={() => chooseDifficulty(d)}
+              >
+                {content.tutorialDialog.difficulty[d].value +
+                  ` (${DIFFICULTIES[d]}s)`}
+              </Button>
+            ))}
           />
         </>
       }

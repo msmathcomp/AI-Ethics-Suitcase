@@ -8,6 +8,7 @@ interface DialogProps {
   message?: string;
   onYes?: () => void;
   onNo?: () => void;
+  buttons?: React.ReactNode[];
 }
 
 export default function Dialog({
@@ -15,6 +16,7 @@ export default function Dialog({
   choice = true,
   onYes = () => {},
   onNo = () => {},
+  buttons = []
 }: DialogProps) {
   const { common: content } = useIntlayer("app");
 
@@ -26,8 +28,9 @@ export default function Dialog({
         {title && <h2 className="text-lg font-semibold mb-2">{title}</h2>}
         {message && <p className="mb-4">{message}</p>}
         <div className="flex justify-end gap-2">
+          {buttons}
           {choice && <Button buttonType="secondary" onClick={onNo}>{content.buttons.no}</Button>}
-          <Button buttonType="primary" onClick={onYes}>{choice ? content.buttons.yes : content.buttons.ok}</Button>
+          {!buttons && <Button buttonType="primary" onClick={onYes}>{choice ? content.buttons.yes : content.buttons.ok}</Button>}
         </div>
       </div>
     </div>

@@ -190,7 +190,12 @@
     },
     "tutorialDialog": {
       "title": "Welkom bij het Vrij Spelen Niveau!",
-      "message": "In dit niveau kun je vrij experimenteren met de classifier en proberen de beste classifier die door AI is gevonden te verslaan. Je kunt ook prestaties vergelijken op bekeken en onzichtbare data. Er is hier geen goed of fout antwoord, heb gewoon plezier met ontdekken!"
+      "message": "In dit niveau kun je vrij experimenteren met de classifier en proberen de beste classifier die door AI is gevonden te verslaan. Je kunt ook prestaties vergelijken op bekeken en onzichtbare data. Er is hier geen goed of fout antwoord, heb gewoon plezier met ontdekken!",
+      "difficulty": {
+        "easy": "Makkelijk",
+        "medium": "Gemiddeld",
+        "hard": "Moeilijk"
+      }
     },
     "timeExpired": "Tijd is verstreken!"
   },
