@@ -158,8 +158,8 @@ export default function LevelFreeplay() {
           : null
       }
       instructionButtonCallback={() => {
-        if (stage === 3) setStage(4);
-        else if (stage === 4) setStage(5);
+        if (stage === 3) setStage(6); // skip over stage 4, 5: automatically go to final comparison
+        else if (stage === 4) setStage(6);
         else if (stage === 5) setStage(6);
       }}
       classificationResults={
@@ -191,7 +191,7 @@ export default function LevelFreeplay() {
               key={`timer-${level}`}
               maximumTime={30}
               onFinish={() => {
-                if (stage < 4) setStage(4);
+                if (stage < 6) setStage(6); // skip to final stage
                 setShowTimerExpired(true);
               }}
               resetKey={resetCount}
