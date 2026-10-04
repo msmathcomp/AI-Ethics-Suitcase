@@ -3,7 +3,6 @@
   "home": {
     "title": "AI Ethics Suitcase",
     "subtitle": "Interactive application for exploring linear classification",
-    "description": "Interactive game consisting of 9 levels around ethical AI concepts. Progress through different levels by building simple linear classifiers to classify students who pass or fail an exam based on their study and leisure time hours.",
     "menuButtons": {
       "tutorial": "Tutorial",
       "levels": "Levels",
@@ -13,18 +12,17 @@
   },
   "intro": {
     "headerTitle": "Welcome to the AI Ethics Suitcase!",
-    "levelName": "Introduction",
+    "levelName": "Tutorial",
     "goal": "Getting familiar with visualization using charts",
     "tour": {
-      "0": "Welcome to the AI Ethics Suitcase! This is the introduction level where you will learn about the interface and basics of visualization using charts. You may skip this tutorial if you are already familiar with these concepts.",
-      "1": "You are currently on Level -1, which is the introduction level. There are 8 more levels.",
-      "2": "This is the legend that explains the data points and classification.",
-      "3": "This is the chart that visualizes the relationship between study time and leisure time.",
-      "4": "This is the X-axis representing study time in minutes.",
-      "5": "This is the Y-axis representing leisure time in minutes.",
-      "6": "This is a data point for a student who passed, with study time of 150 minutes and leisure time of 300 minutes.",
-      "7": "This is a data point for a student who failed, with study time of 100 minutes and leisure time of 200 minutes.",
-      "8": "Finally, once you are done with a level, click this button to proceed to the next level."
+      "0": "Welcome to the AI Ethics Suitcase! Mr. Turner needs to grade his students' last exam, but his dog tore up the answer sheets! Only a few exams are legible now, so the teacher needs to decide who passed in some other way. You may skip this tutorial if you are already familiar with charts.",
+      "1": "The teacher remembers he had asked the parents to keep track of how his students spent their time before the exam. He will write it down in this chart.",
+      "2": "This is the X-axis, where he writes down the study time in minutes.",
+      "3": "This is the Y-axis, where he writes down the leisure time in minutes.",
+      "4": "The teacher also decides on these symbols for passing and failing students, so he can check back if he gets confused.",
+      "5": "For exampe, this point represents a student who passed, with study time of 150 minutes and leisure time of 300 minutes.",
+      "6": "This point is for a student who failed, with study time of 100 minutes and leisure time of 200 minutes.",
+      "7": "The tutorial consists of three levels. Once you are done with a level, press this button to go to the next one. The teacher already has an idea how to grade the students."
     }
   },
   "legend": {
@@ -53,7 +51,6 @@
     }
   },
   "classificationVisualizer": {
-    "flipButton": "Flip Pass/Fail",
     "toggles": {
       "yourClassifier": "Your Classifier",
       "bestClassifier": "Best Classifier"
@@ -67,8 +64,6 @@
     }
   },
   "levelProgressBar": {
-    "levelLabel": "Level:",
-    "introLabel": "Intro",
     "nextLevelButtonText": "Next Level",
     "skipLevelButtonText": "Skip Level",
     "endTutorial": "End Tutorial",
@@ -94,33 +89,33 @@
     }
   },
   "level0": {
+    "levelName": "Tutorial",
     "goal": "Create your first classifier!",
     "stages": {
-      "0": "We want to classify a simple dataset of 4 students first by drawing a line that separates Pass and Fail students. To start, click to select the first point of the line.",
-      "1": "Now click the second point to draw the classification line",
-      "3": "Adjust your classifier by dragging the black circles or drawing a new line. When satisfied, click 'Next' to continue.",
-      "4": "Complete! You can now see the classification results. In the next level we will introduce the new terms and how to estimate the performance of a classifier."
+      "0": "[1/3] The teacher starts with an example of 4 students. His plan is to classify Pass and Fail students using a straight line. Drag or click to draw the classification line.",
+      "1": "[1/3] Now click the second point to draw the classification line.",
+      "3": "[2/3] This line is called a 'linear classifier'. Adjust your classifier by dragging the black circles or drawing a new line. When done, press 'Next' to continue.",
+      "4": "[3/3] Complete! You can now see the results of your classifier. In the next level we will introduce the new terms and how to estimate the performance of a classifier."
     }
   },
   "level1": {
+    "levelName": "Tutorial",
     "instructions": {
-      "0": "How to measure the accuracy of a linear classifier?",
-      "1": "Click inside the pass region to add a student who has passed",
-      "2": "Now click inside the fail region to add a student who has failed",
-      "3": "Now click inside the pass region to add a student who has failed",
-      "4": "Finally, click inside the fail region to add a student who has passed",
-      "5": "Great! You have classified all types of students. Click next to proceed."
+      "1": "[1/5] Click inside the pass region to add a student who has passed.",
+      "2": "[2/5] Now click inside the fail region to add a student who has failed.",
+      "3": "[3/5] What happens when you place a student who has failed in the pass region?",
+      "4": "[4/5] Finally, place a student who has passed in the fail region.",
+      "5": "[5/5] Great! You have classified all types of students. Press 'End Tutorial' to proceed."
     },
     "goal": "How to calculate the accuracy of a classifier?",
     "tour": {
-      "0": "We will now explain the terms used to measure the accuracy of a linear classifier.",
-      "1": "The classification results show the counts of true positives, true negatives, false positives, and false negatives.",
-      "2": "A linear classifier divides this chart into 2 parts, the left region being classified as Fail and the right being classified as Pass",
-      "3": "This student passed and our classifier classified them as Pass. This is a True Positive.",
-      "4": "This student failed and our classifier classified them as Fail. This is a True Negative.",
-      "5": "This student failed however our classifier classified them as Pass. This is a False Positive.",
-      "6": "This student passed however our classifier classified them as Fail. This is a False Negative.",
-      "7": "The accuracy of a classifier is the ratio of correctly classified over total samples."
+      "0": "The teacher considers different scenarios and compares the possible outcomes if he did know the exam results. He will need a way to measure the accuracy of a linear classifier.",
+      "1": "He draws this linear classifier, dividing the chart into 2 parts. The left region is classified as Fail and the right region as Pass.",
+      "2": "This student passed and the classifier correctly classified them as Pass. This is a True Positive.",
+      "3": "This student failed and the classifier correctly classified them as Fail. This is a True Negative.",
+      "4": "This student failed, but the classifier incorrectly classified them as Pass. This is a False Positive.",
+      "5": "This student passed, but the classifier incorrectly classified them as Fail. This is a False Negative.",
+      "6": "The classification results show the counts of true positives, true negatives, false positives, and false negatives. The accuracy of a classifier is the number of correctly classified samples divided by the total number of samples."
     }
   },
   "level2_5": {
@@ -131,22 +126,22 @@
       "5": "Try to achieve maximum possible accuracy!"
     },
     "stages": {
-      "0": "Click to select the first point of the classifier line to separate the pass from the fail region.",
-      "1": "Now click the second point to draw the classification line",
-      "3": "Adjust your classifier by dragging the black circles or drawing a new line. When satisfied, click 'Next' to continue.",
-      "4": "Complete! You can now see the classification results. You can compare your classifier with the best classifier found by AI.",
-      "5": "Compare your classifier with the best classifier. Both results are shown side by side."
+      "0": "[1/4] The teacher decides to practice drawing classifiers based on old exam data. Drag or click to draw the classifier line to separate the pass from the fail region.",
+      "1": "[1/4] Now click the second point to draw the classification line.",
+      "3": "[2/4] Adjust your classifier by dragging the black circles or drawing a new line. When satisfied, click 'Next' to continue.",
+      "4": "[3/4] Complete! You can now see the classification results. You can compare your classifier with the best classifier found by AI.",
+      "5": "[4/4] Compare your classifier with the best classifier. Both results are shown side by side."
     }
   },
   "level6": {
     "goal": "Test your classifier on unseen data!",
     "stages": {
-      "0": "Click to select the first point of the classifier line to separate the pass from the fail region.",
-      "1": "Now click the second point to draw the classification line",
-      "3": "Adjust your classifier by dragging the black circles or drawing a new line. When satisfied, click 'Next' to continue.",
-      "4": "Complete! You can now see the classification results. You can compare your classifier with the best classifier found by AI.",
-      "5": "Compare your classifier with the best classifier. Both results are shown side by side.",
-      "6": "Now toggle between already seen data and the unseen data. Notice how performance may differ on unseen data!"
+      "0": "[1/5] The teacher will now use all of the data he has to classify the latest students, whose exams were lost. Drag or click to draw the classifier line to separate the pass from the fail region.",
+      "1": "[1/5] Now click the second point to draw the classification line",
+      "3": "[2/5] Adjust your classifier by dragging the black circles or drawing a new line. When satisfied, click 'Next' to continue.",
+      "4": "[3/5] Complete! You can now see the classification results. You can compare your classifier with the best classifier found by AI.",
+      "5": "[4/5] Compare your classifier with the best classifier. Both results are shown side by side.",
+      "6": "[5/5] Now try the classifer on unseen data! Notice how performance may differ on the new students!"
     },
     "titles": {
       "trainingPerformance": "Seen Data Results",
@@ -157,11 +152,10 @@
     "levelName": "Overfitting",
     "goal": "Classifying using a curve!",
     "stages": {
-      "0": "Start drawing a curve starting outside the graph area (the green zone) and ending outside the graph area",
-      "1": "Click an area to classify it as Pass",
-      "2": "You may create a new classifier by drawing again. When satisfied, click 'Next' to continue.",
-      "3": "Complete! You can now see the classification results.",
-      "4": "Now toggle between seen and unseen  data. Notice how performance may differ on unseen data!"
+      "0": "[1/4] Draw a curve starting and ending outside the graph area (within the striped zone).",
+      "2": "[2/4] You may create a new classifier by drawing again. When satisfied, click 'Next' to continue.",
+      "3": "[3/4] Complete! You can now see the classification results.",
+      "4": "[4/4] Now toggle between seen and unseen data. Notice how performance may differ on unseen data!"
     },
     "titles": {
       "trainingPerformance": "Seen Data Results",
@@ -169,20 +163,17 @@
     },
     "tutorialDialog": {
       "title": "Welcome to the Overfitting Level!",
-      "message": "In this level, you can experiment what happens when you use a freeform curve as a classifier, instead of a straight line. You can compare the performance of your curve and the line found by AI, on seen and unseen data."
+      "message": "So far, the teacher has only tried linear classifiers. He wonders what happens if he uses a more complex shape than a straight line. In this level, you can experiment with a freeform curve as a classifier. You can compare the performance of your curve and the line found by AI, on seen and unseen data."
     }
   },
   "levelfreeplay": {
     "levelName": "Free play",
     "goal": "Try to beat the best classifier under a time limit!",
     "stages": {
-      "0": "Click to select the first point of the classifier line to separate the pass from the fail region.",
-      "1": "Now click the second point to draw the classification line",
-      "2": "Drag the black circles to adjust the line, then click one of the regions to classify as Pass",
-      "3": "Adjust your classifier by dragging the black circles or drawing a new line.",
-      "4": "Complete! You can now see the classification results.",
-      "5": "Compare your classifier with the best classifier.",
-      "6": "You can now toggle between already seen data and the unseen data."
+      "0": "[1/3] Drag or click to draw the classifier line to separate the pass from the fail region.",
+      "1": "[1/3] Now click the second point to draw the classification line.",
+      "3": "[2/3] Adjust your classifier by dragging the black circles or drawing a new line. When satisfied, press 'Finish'.",
+      "6": "[3/3] Complete! You can now compare your classifier with the best classifier, and toggle between the seen and unseen data."
     },
     "titles": {
       "trainingPerformance": "Seen Data Results",
@@ -190,7 +181,7 @@
     },
     "tutorialDialog": {
       "title": "Welcome to the Free Play Level!",
-      "message": "In this level, you can freely experiment with the classifier and try to beat the best classifier found by AI. You can also compare performance on seen and unseen data. There is no right or wrong answer here, just have fun exploring!",
+      "message": "In this level, you can freely experiment with the classifier and try to beat the best classifier found by AI. You can also compare performance on seen and unseen data. Keep an eye on the timer, and have fun exploring!",
       "difficulty": {
         "easy": "Easy",
         "medium": "Medium",
@@ -205,7 +196,6 @@
   "finish": {
     "title": "Congratulations!",
     "backToHome": "Back to Home",
-    "restart": "Restart",
     "table": {
       "level": "Level",
       "yourAccuracy": "Your Accuracy",
@@ -224,7 +214,7 @@
       "restart": "Restart",
       "yes": "Yes",
       "no": "No",
-      "ok": "Ok"
+      "ok": "OK"
     },
     "status": {
       "loading": "Loading...",
@@ -238,7 +228,7 @@
   },
   "tour": {
     "skipTutorial": "Skip Tutorial",
-    "nextLevel": "Next level",
+    "endTutorial": "End Tutorial",
     "finish": "Finish"
   }
 }

@@ -1,7 +1,7 @@
 import { ClassificationVisualizer } from "~/components/ClassificationVisualizer";
 import { useState, useMemo, useEffect } from "react";
 import { ClassificationResultsEntry } from "~/components/ui/ClassificationResultsEntry";
-import type { ClassificationCounts, LevelJsonShape, Point } from "~/types";
+import type { LevelJsonShape, Point } from "~/types";
 import { useLevelData } from "~/context/LevelDataContext";
 
 // Static JSON imports for levels 2-5
@@ -11,23 +11,13 @@ import level4Json from "@/data/level4.json";
 import level5Json from "@/data/level5.json";
 import { useIntlayer } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
+import { EMPTY_COUNTS } from "~/utils/classification";
 
 export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
   const { level2_5: content, common: commonContent } = useIntlayer("app");
-  // const [stage, setStage] = useState(0);
 
-  const [results, setResults] = useState<ClassificationCounts>({
-    TP: 0,
-    TN: 0,
-    FP: 0,
-    FN: 0,
-  });
-  const [bestResults, setBestResults] = useState<ClassificationCounts>({
-    TP: 0,
-    TN: 0,
-    FP: 0,
-    FN: 0,
-  });
+  const [results, setResults] = useState(EMPTY_COUNTS);
+  const [bestResults, setBestResults] = useState(EMPTY_COUNTS);
   const {
     getStage,
     setStage: setStageByLevel,
@@ -79,9 +69,7 @@ export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
           setStage={setStage}
           setResults={setResults}
           setBestResults={setBestResults}
-          modifyVisualizerData={(modifyFn) =>
-            modifyVisualizerData(level, modifyFn)
-          }
+          modifyVisualizerData={(modifyFn) => modifyVisualizerData(level, modifyFn)}
           bestClassifier={{
             line: rawJson.best as Point[],
             originIsPass: rawJson.originIsPass,

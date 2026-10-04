@@ -1,11 +1,12 @@
 import { ClassificationVisualizer } from "~/components/ClassificationVisualizer";
 import { useMemo, useState, useEffect } from "react";
 import { ClassificationResultsEntry } from "~/components/ui/ClassificationResultsEntry";
-import type { ClassificationCounts, DataPoint, LevelJsonShape } from "~/types";
+import type { DataPoint, LevelJsonShape } from "~/types";
 import { useLevelData } from "~/context/LevelDataContext";
 import level6Json from "@/data/level6.json";
 import { useIntlayer } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
+import { EMPTY_COUNTS } from "~/utils/classification";
 
 export default function Level6() {
   const level = 6;
@@ -29,31 +30,10 @@ export default function Level6() {
     setStageByLevel(level, typeof newStage === "number" ? newStage : newStage(stage));
   };
 
-  const [results, setResults] = useState<ClassificationCounts>({
-    TP: 0,
-    TN: 0,
-    FP: 0,
-    FN: 0,
-  });
-  const [bestResults, setBestResults] = useState<ClassificationCounts>({
-    TP: 0,
-    TN: 0,
-    FP: 0,
-    FN: 0,
-  });
-  const [unseenResults, setUnseenResults] = useState<ClassificationCounts>({
-    TP: 0,
-    TN: 0,
-    FP: 0,
-    FN: 0,
-  });
-  const [unseenBestResults, setUnseenBestResults] =
-    useState<ClassificationCounts>({
-      TP: 0,
-      TN: 0,
-      FP: 0,
-      FN: 0,
-    });
+  const [results, setResults] = useState(EMPTY_COUNTS())
+  const [bestResults, setBestResults] = useState(EMPTY_COUNTS())
+  const [unseenResults, setUnseenResults] = useState(EMPTY_COUNTS())
+  const [unseenBestResults, setUnseenBestResults] = useState(EMPTY_COUNTS());
 
   const levelJson = useMemo(() => {
     return level6Json as LevelJsonShape & { testData: DataPoint[] };

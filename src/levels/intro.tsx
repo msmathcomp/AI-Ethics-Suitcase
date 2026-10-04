@@ -87,55 +87,48 @@ const stepsFactory = (introContent: IntroContentShape): Step[] => [
     placement: "bottom",
   },
   {
-    target: "#level-progress-bar",
-    content: introContent.tour[1],
-    disableBeacon: true,
-    placement: "right-end",
-    styles: {
-      spotlight: {
-        transform: "translateY(-1px)"
-
-      }
-    }
-  },
-  {
-    target: "#legend",
-    content: introContent.tour[2],
-    disableBeacon: true,
-    placement: "left",
-  },
-  {
     target: ".recharts-wrapper",
-    content: introContent.tour[3],
+    content: introContent.tour[1],
     disableBeacon: true,
     placement: "right",
   },
   {
     target: ".recharts-xAxis",
-    content: introContent.tour[4],
+    content: introContent.tour[2],
     disableBeacon: true,
     placement: "top",
   },
   {
     target: ".recharts-yAxis",
-    content: introContent.tour[5],
+    content: introContent.tour[3],
     disableBeacon: true,
     placement: "right",
   },
   {
+    target: "#legend",
+    content: introContent.tour[4],
+    disableBeacon: true,
+    placement: "left",
+  },
+  {
     target: "#label-pass",
-    content: introContent.tour[6],
+    content: introContent.tour[5],
     placement: "right",
   },
   {
     target: "#label-fail",
-    content: introContent.tour[7],
+    content: introContent.tour[6],
     placement: "right",
   },
   {
     target: "#next-level-button",
-    content: introContent.tour[8],
+    content: introContent.tour[7],
     placement: "top",
+    styles: {
+      spotlight: {
+        transform: "translateY(-1px)"
+      }
+    }
   },
 ];
 

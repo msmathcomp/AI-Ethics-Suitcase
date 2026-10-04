@@ -3,6 +3,9 @@ import { LevelProgressBar } from "~/components/ui/LevelProgressBar";
 import { Legend } from "~/components/ui/Legend";
 import { cn } from "~/utils/cn";
 import { useIntlayer } from "react-intlayer";
+import { useLevelData } from "~/context/LevelDataContext";
+import Toggle from "../ui/Toggle";
+import DataSelector from "../ui/DataSelector";
 
 interface Props {
   levelName: string;
@@ -33,8 +36,12 @@ export default function LevelLayout({
   showNextLevelButton,
   showLegend = false,
 }: Props) {
-  const { classificationResults: classification } = useIntlayer("app");
+  const { classificationResults: classification, classificationVisualizer: visualizer } = useIntlayer("app");
+  const { getVisualizerData, modifyVisualizerData, getStage } = useLevelData();
 
+  const stage = getStage(level);
+  const { showBestLine } = getVisualizerData(level);
+  
   return (
     <main className="h-screen w-screen flex flex-col px-4 pt-2 overflow-hidden dark:bg-stone-900 dark:text-white">
       <div className="w-full flex-col flex-none mb-2 px-4">
@@ -58,6 +65,17 @@ export default function LevelLayout({
           >
             {instruction}
           </h2>
+
+          {[5, 6].includes(stage) && <Toggle
+            leftOption={visualizer.toggles.yourClassifier}
+            rightOption={visualizer.toggles.bestClassifier}
+            value={showBestLine ?? false}
+            onChange={() => modifyVisualizerData(level, (data) => ({ ...data, showBestLine: !showBestLine }))}
+          />}
+
+          {(stage === 6 || (level === 7 && stage === 4)) && (
+            <DataSelector level={level} />
+          )}
 
           <button
             className={cn(

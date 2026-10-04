@@ -1,9 +1,8 @@
 {
-  "title": "AI Ethiek Koffer",
+  "title": "AI-ethiekkoffer",
   "home": {
-    "title": "AI Ethiek Koffer",
+    "title": "AI-ethiekkoffer",
     "subtitle": "Interactieve toepassing om lineaire classificatie te verkennen",
-    "description": "Interactief spel met 9 niveaus over ethische AI-concepten. Ga door de verschillende niveaus door eenvoudige lineaire classificaties te bouwen om studenten die slagen of zakken te onderscheiden op basis van hun studie- en vrije tijd.",
     "menuButtons": {
       "tutorial": "Introductie",
       "levels": "Niveau's",
@@ -12,19 +11,18 @@
     }
   },
   "intro": {
-    "headerTitle": "Welkom bij de AI Ethiek Koffer!",
+    "headerTitle": "Welkom bij de AI-ethiekkoffer!",
     "levelName": "Introductie",
     "goal": "Kennismaken met visualisatie met grafieken",
     "tour": {
-      "0": "Welkom bij de AI Ethiek Koffer! Dit is het introductieniveau waarin je leert over de interface en de basis van visualisatie met grafieken. Je kunt deze uitleg overslaan als je al bekend bent met deze concepten.",
-      "1": "Je bent nu op niveau -1, het introductieniveau. Er zijn nog 8 niveaus meer.",
-      "2": "Dit is de legenda die de datapunten en classificatie uitlegt.",
-      "3": "Dit is de grafiek die de relatie tussen studietijd en vrije tijd weergeeft.",
-      "4": "Dit is de X-as, die de studietijd in minuten laat zien.",
-      "5": "Dit is de Y-as, die de vrije tijd in minuten laat zien.",
-      "6": "Dit is een datapunt van een student die geslaagd is, met 150 minuten studietijd en 300 minuten vrije tijd.",
-      "7": "Dit is een datapunt van een student die gezakt is, met 100 minuten studietijd en 200 minuten vrije tijd.",
-      "8": "Als je klaar bent met een niveau, klik dan op deze knop om door te gaan naar het volgende niveau."
+      "0": "Welkom bij de AI-ethiekkoffer! Meneer Jansen moet de laatste toets van zijn leerlingen nakijken, maar zijn hond heeft de antwoordbladen verscheurd! Maar een paar toetsen zijn nog leesbaar, dus moet de docent op een andere manier bepalen wie overgaat. Je kunt deze uitleg overslaan als je al bekend bent met grafieken.",
+      "1": "De docent herinnert zich dat de ouders hebben bijgehouden hoe zijn leerlingen hun tijd in hebben ingedeeld voor de toets. Hij schrijft alles op in deze grafiek.",
+      "2": "Dit is de X-as, waarop hij de studietijd in minuten neerzet.",
+      "3": "Dit is de Y-as, waarop hij de vrije tijd in minuten neerzet.",
+      "4": "De docent kiest deze symbolen voor gelaagde en gezakte studenten, voor als hij in de war raakt.",
+      "5": "Dit punt stelt bijvoorbeeld een student voor die geslaagd is, met 150 minuten studietijd en 300 minuten vrije tijd.",
+      "6": "Dit punt is voor een student die gezakt is, met 100 minuten studietijd en 200 minuten vrije tijd.",
+      "7": "De introductie bestaat uit drie niveau's. Als je klaar bent met een niveau, druk dan op deze knop om door te gaan. De docent heeft al een eerste idee om de studenten te onderscheiden."
     }
   },
   "legend": {
@@ -43,7 +41,7 @@
   },
   "classificationResults": {
     "title": "Classificatieresultaten",
-    "compareSuffix": "(Jouw resultaat vs Beste)",
+    "compareSuffix": "(Jouw classificatie vs de beste)",
     "accuracyLabel": "Nauwkeurigheid:",
     "counts": {
       "TP": "True Positive (juist geslaagd)",
@@ -53,7 +51,6 @@
     }
   },
   "classificationVisualizer": {
-    "flipButton": "Wissel Geslaagd/Gezakt",
     "toggles": {
       "yourClassifier": "Jouw Classificatie",
       "bestClassifier": "Beste Classificatie"
@@ -67,8 +64,6 @@
     }
   },
   "levelProgressBar": {
-    "levelLabel": "Niveau:",
-    "introLabel": "Intro",
     "nextLevelButtonText": "Volgend niveau",
     "skipLevelButtonText": "Niveau overslaan",
     "endTutorial": "Introductie afronden",
@@ -78,9 +73,9 @@
     "finish": "Voltooien",
     "freeplayAgain": "Opnieuw naar Vrij spel",
     "restartButton": "Opnieuw starten",
-    "restartLevel": "Niveau opnieuw starten",
-    "restartApp": "App opnieuw starten",
-    "restartDialogTitle": "App opnieuw starten",
+    "restartLevel": "Niveau herstarten",
+    "restartApp": "App herstarten",
+    "restartDialogTitle": "Applicatie herstarten",
     "restartDialogMessage": "Weet je zeker dat je de app opnieuw wilt starten? Je voortgang gaat verloren."
   },
   "chart": {
@@ -94,33 +89,33 @@
     }
   },
   "level0": {
+    "levelName": "Introductie",
     "goal": "Maak je eerste classifier!",
     "stages": {
-      "0": "We willen eerst een eenvoudig gegevensset van 4 studenten classificeren door een lijn te tekenen die geslaagde en gezakte studenten scheidt. Klik om het eerste punt van de lijn te selecteren.",
-      "1": "Klik nu op het tweede punt om de classificatielijn te tekenen.",
-      "3": "Pas je classifier aan door de zwarte cirkels te verslepen of een nieuwe lijn te tekenen. Tevreden? Klik dan op ‘Volgende’ om verder te gaan.",
-      "4": "Klaar! Je kunt nu de classificatieresultaten zien. In het volgende niveau leer je nieuwe termen en hoe je de prestaties van een classifier kunt meten."
+      "0": "[1/3] De docent begint met een voorbeeld van 4 studenten. Zijn plan is om geslaagde en gezakte studenten te classificeren met een rechte lijn. Sleep of klik om de classificatielijn te tekenen.",
+      "1": "[1/3] Klik nu op het tweede punt om de classificatielijn te tekenen.",
+      "3": "[2/3] Deze lijn heet een 'lineaire classifier'. Pas je classifier aan door de zwarte cirkels te verslepen of een nieuwe lijn te tekenen. Tevreden? Druk dan op 'Volgende' om verder te gaan.",
+      "4": "[3/3] Klaar! Je kunt nu de resultaten van je classificatie zien. In het volgende niveau leer je de nieuwe termen en hoe je de prestaties van een classifier kunt meten."
     }
   },
   "level1": {
+    "levelName": "Introductie",
     "instructions": {
-      "0": "Hoe meet je de nauwkeurigheid van een lineaire classifier?",
-      "1": "Klik in het geslaagde gebied om een student toe te voegen die geslaagd is.",
-      "2": "Klik nu in het gezakte gebied om een student toe te voegen die gezakt is.",
-      "3": "Klik nu in het geslaagde gebied om een student toe te voegen die gezakt is.",
-      "4": "Klik ten slotte in het gezakte gebied om een student toe te voegen die geslaagd is.",
-      "5": "Goed gedaan! Je hebt alle soorten studenten geclassificeerd. Klik op ‘Volgende’ om verder te gaan."
+      "1": "[1/5] Klik in het geslaagde gebied om een student toe te voegen die geslaagd is.",
+      "2": "[2/5] Klik nu in het gezakte gebied om een student toe te voegen die gezakt is.",
+      "3": "[3/5] Wat gebeurt er als je een student die gezakt is, in het geslaagde gebied zet?",
+      "4": "[4/5] Plaats tenslotte een student die geslaagd is, in het gezakte gebied.",
+      "5": "[5/5] Top! Je hebt alle soorten studenten geclassificeerd. Druk op 'Introductie afronden' om verder te gaan."
     },
     "goal": "Hoe bereken je de nauwkeurigheid van een classifier?",
     "tour": {
-      "0": "We gaan nu uitleggen welke termen worden gebruikt om de nauwkeurigheid van een lineaire classifier te meten.",
-      "1": "De classificatieresultaten tonen de aantallen true positives, true negatives, false positives en false negatives.",
-      "2": "Een lineaire classifier verdeelt de grafiek in 2 delen: links ‘Gezakt’ en rechts ‘Geslaagd’.",
-      "3": "Deze student is geslaagd en onze classifier classificeerde hem als geslaagd. Dat is een True Positive.",
-      "4": "Deze student is gezakt en onze classifier classificeerde hem als gezakt. Dat is een True Negative.",
-      "5": "Deze student is gezakt, maar onze classifier classificeerde hem als geslaagd. Dat is een False Positive.",
-      "6": "Deze student is geslaagd, maar onze classifier classificeerde hem als gezakt. Dat is een False Negative.",
-      "7": "De nauwkeurigheid van een classifier is de verhouding van correct geclassificeerde studenten tot het totaal aantal voorbeelden."
+      "0": "De docent overweegt verschillende scenario's en vergelijkt de mogelijke uitkomsten als hij de toetsuitslagen wél zou weten. Hij zal de nauwkeurigheid van een lineaire classifier op een of andere manier moeten meten meten.",
+      "1": "Hij tekent deze lineaire classifier. De linkerhelft wordt geclassificeert als Gezakt en de rechterhelft als Geslaagd.",
+      "2": "Deze student is geslaagd en de classifier classificeerde hem terecht als geslaagd. Dat is een True Positive.",
+      "3": "Deze student is gezakt en de classifier classificeerde hem terecht als gezakt. Dat is een True Negative.",
+      "4": "Deze student is gezakt, maar de classifier classificeerde hem onterecht als geslaagd. Dat is een False Positive.",
+      "5": "Deze student is geslaagd, maar de classifier classificeerde hem onterecht als gezakt. Dat is een False Negative.",
+      "6": "De classificatieresultaten tonen de aantallen true positives, true negatives, false positives, en false negatives. De nauwkeurigheid van een classifier is het aantal correct geclassificeerde datapunten gedeeld door het totaal aantal datapunten."
     }
   },
   "level2_5": {
@@ -131,22 +126,22 @@
       "5": "Probeer de hoogst mogelijke nauwkeurigheid te behalen!"
     },
     "stages": {
-      "0": "Klik om het eerste punt van de classificatielijn te selecteren om het geslaagde van het gezakte gebied te scheiden.",
-      "1": "Klik nu op het tweede punt om de lijn te tekenen.",
-      "3": "Pas je classifier aan door de zwarte cirkels te verslepen of een nieuwe lijn te tekenen. Tevreden? Klik dan op ‘Volgende’.",
-      "4": "Klaar! Je kunt nu de resultaten zien. Vergelijk jouw classifier met de beste classifier die door AI is gevonden.",
-      "5": "Vergelijk jouw classifier met de beste classifier. Beide resultaten worden naast elkaar getoond."
+      "0": "[1/4] De docent besluit te oefenen met het tekenen van classifiers op basis van vorige toetsen. Sleep of klik om de classificatielijn te teken om het geslaagde van het gezakte gebied te scheiden.",
+      "1": "[1/4] Klik nu op het tweede punt om de lijn te tekenen.",
+      "3": "[2/4] Pas je classifier aan door de zwarte cirkels te verslepen of een nieuwe lijn te tekenen. Tevreden? Druk dan op 'Volgende'.",
+      "4": "[3/4] Klaar! Je kunt nu de resultaten zien. Vergelijk jouw classifier met de beste classifier die door AI is gevonden.",
+      "5": "[4/4] Vergelijk jouw classifier met de beste classifier. Beide resultaten staan naast elkaar."
     }
   },
   "level6": {
     "goal": "Test je classifier op onbekende data!",
     "stages": {
-      "0": "Klik om het eerste punt van de classificatielijn te selecteren om het geslaagde van het gezakte gebied te scheiden.",
-      "1": "Klik nu op het tweede punt om de lijn te tekenen.",
-      "3": "Pas je classifier aan door de zwarte cirkels te verslepen of een nieuwe lijn te tekenen. Tevreden? Klik dan op ‘Volgende’.",
-      "4": "Klaar! Je kunt nu de resultaten zien en jouw classifier vergelijken met de beste AI-classifier.",
-      "5": "Vergelijk jouw classifier met de beste classifier. Beide resultaten worden naast elkaar getoond.",
-      "6": "Schakel nu tussen bekende en onbekende data. Merk op hoe de prestaties kunnen verschillen op onbekende data!"
+      "0": "[1/5] De docent gebruikt nu alle data die hij heeft, om de laatste studenten te classificeren, wiens antwoorden kwijt zijn geraakt. Sleep of klik om de classificatielijn te tekenen om het geslaagde van het gezakte gebied te scheiden.",
+      "1": "[1/5] Klik nu op het tweede punt om de lijn te tekenen.",
+      "3": "[2/5] Pas je classifier aan door de zwarte cirkels te verslepen of een nieuwe lijn te tekenen. Tevreden? Druk dan op 'Volgende'.",
+      "4": "[3/5] Klaar! Je kunt nu de resultaten zien. Vergelijk jouw classifier met de beste classifier die door AI is gevonden.",
+      "5": "[4/5] Vergelijk jouw classifier met de beste classifier. Beide resultaten staan naast elkaar.",
+      "6": "[5/5] Pas de classifier nu toe op onbekende data! Merk op hoe de nauwkeurigheid kan verschillen voor de nieuwe studenten!"
     },
     "titles": {
       "trainingPerformance": "Resultaten op bekende data",
@@ -157,11 +152,10 @@
     "levelName": "Overfitten",
     "goal": "Classificeren met een kromme!",
     "stages": {
-      "0": "Begin met het tekenen van een kromme die begint buiten het grafiekgebied (de groene zone) en eindigt buiten het grafiekgebied",
-      "1": "Klik op een gebied om het als ‘Geslaagd’ te classificeren.",
-      "2": "Je kunt een nieuwe classifier tekenen als je wilt. Tevreden? Klik op ‘Volgende’.",
-      "3": "Klaar! Je kunt nu de resultaten zien.",
-      "4": "Schakel nu tussen bekende en onbekende data. Zie hoe de prestaties veranderen!"
+      "0": "[1/4] Teken een kromme die begint en eindigt buiten het grafiekgebied (binnen de gestreepte zone).",
+      "2": "[2/4] Je kunt een nieuwe classifier tekenen, als je wilt. Tevreden? Druk op 'Volgende'.",
+      "3": "[3/4] Klaar! Je kunt nu de resultaten zien.",
+      "4": "[4/4] Wissel nu tussen bekende en onbekende data. Merk op hoe de nauwkeurigheid kan veranderen op onbekende data!"
     },
     "titles": {
       "trainingPerformance": "Resultaten op bekende data",
@@ -169,24 +163,21 @@
     },
     "tutorialDialog": {
       "title": "Welkom bij het Overfitten-niveau!",
-      "message": "In dit niveau kun je onderzoeken wat er gebeurt als je een vrije kromme als classifier gebruikt, in plaats van slechts een lijn. Je kunt vergelijken hoe je kromme en de lijn die door AI is gevonden, scoren op bekeken en onzichtbare data."
+      "message": "Tot nu toe heeft de docent alleen lineaire classifier gebruikt. Hij vraagt zich af of hij een complexere vorm dan een rechte lijn kan gebruiken. In dit niveau kun je experimenteren met een vrije kromme als classifier. Je kunt je kromme vergelijken met de lijn die door AI is gevonden, en scoren op bekende en onbekende data."
     }
   },
   "levelfreeplay": {
     "levelName": "Vrij spel",
     "goal": "Probeer de beste classifier te verslaan binnen een tijdslimiet!",
     "stages": {
-      "0": "Klik om het eerste punt van de classifierlijn te selecteren om het geslaagde van het gezakte gebied te scheiden.",
-      "1": "Klik nu op het tweede punt om de classificatielijn te tekenen",
-      "2": "Sleep de zwarte cirkels om de lijn aan te passen, klik daarna op een van de gebieden om als Geslaagd te classificeren",
-      "3": "Pas je classifier aan door de zwarte cirkels te verslepen of een nieuwe lijn te tekenen.",
-      "4": "Voltooid! Je kunt nu de classificatieresultaten zien.",
-      "5": "Vergelijk je classifier met de beste classifier.",
-      "6": "Je kunt nu wisselen tussen reeds bekeken data en de onzichtbare data."
+      "0": "[1/3] Sleep of klik om de classifierlijn te tekenen om het geslaagde van het gezakte gebied te scheiden.",
+      "1": "[1/3] Klik nu op het tweede punt om de classificatielijn te tekenen.",
+      "3": "[2/3] Pas je classifier aan door de zwarte cirkels te verslepen of een nieuwe lijn te tekenen. Tevreden? Druk op 'Voltooien'.",
+      "6": "[3/3] Klaar! Je kunt je classifier nu vergelijken met de beste, en wisselen tussen de bekende en onbekende data."
     },
     "titles": {
-      "trainingPerformance": "Resultaten Bekeken Data",
-      "unseenPerformance": "Resultaten Onzichtbare Data"
+      "trainingPerformance": "Resultaten op bekende data",
+      "unseenPerformance": "Resultaten op onbekende data"
     },
     "tutorialDialog": {
       "title": "Welkom bij het Vrij Spelen Niveau!",
@@ -197,7 +188,7 @@
         "hard": "Moeilijk"
       }
     },
-    "timeExpired": "Tijd is verstreken!"
+    "timeExpired": "De tijd is om!"
   },
   "levelPage": {
     "invalidLevel": "Ongeldig niveau"
@@ -205,7 +196,6 @@
   "finish": {
     "title": "Gefeliciteerd!",
     "backToHome": "Terug naar Home",
-    "restart": "Resetten",
     "table": {
       "level": "Niveau",
       "yourAccuracy": "Jouw nauwkeurigheid",
@@ -224,7 +214,7 @@
       "restart": "Opnieuw starten",
       "yes": "Ja",
       "no": "Nee",
-      "ok": "Ok"
+      "ok": "OK"
     },
     "status": {
       "loading": "Laden...",
@@ -237,7 +227,7 @@
     "fail": "GEZAKT"
   },
   "tour": {
-    "skipTutorial": "Sla uitleg over",
+    "skipTutorial": "Overslaan",
     "nextLevel": "Volgend niveau",
     "finish": "Voltooien"
   }

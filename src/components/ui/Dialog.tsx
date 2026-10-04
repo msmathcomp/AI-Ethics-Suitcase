@@ -30,7 +30,7 @@ export default function Dialog({
         <div className="flex justify-end gap-2">
           {buttons}
           {choice && <Button buttonType="secondary" onClick={onNo}>{content.buttons.no}</Button>}
-          {!buttons && <Button buttonType="primary" onClick={onYes}>{choice ? content.buttons.yes : content.buttons.ok}</Button>}
+          {buttons.length === 0 && <Button buttonType="primary" onClick={onYes}>{choice ? content.buttons.yes : content.buttons.ok}</Button>}
         </div>
       </div>
     </div>

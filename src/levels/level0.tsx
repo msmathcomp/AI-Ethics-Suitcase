@@ -1,10 +1,11 @@
 import { ClassificationVisualizer } from "~/components/ClassificationVisualizer";
 import { useEffect, useState } from "react";
 import { ClassificationResultsEntry } from "~/components/ui/ClassificationResultsEntry";
-import type { DataPoint, ClassificationCounts } from "~/types";
+import type { DataPoint } from "~/types";
 import { useIntlayer } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
 import { useLevelData } from "~/context/LevelDataContext";
+import { EMPTY_COUNTS } from "~/utils/classification";
 
 const data: DataPoint[] = [
   { study_time: 100, screen_time: 300, type: "Fail" },
@@ -15,12 +16,7 @@ const data: DataPoint[] = [
 
 export default function Level0() {
   const level = 0;
-  const [results, setResults] = useState<ClassificationCounts>({
-    TP: 0,
-    TN: 0,
-    FP: 0,
-    FN: 0,
-  });
+  const [results, setResults] = useState(EMPTY_COUNTS());
   const { level0: content, common: commonContent } = useIntlayer("app");
 
   const {
@@ -43,7 +39,7 @@ export default function Level0() {
 
   return (
     <LevelLayout
-      levelName={commonContent.level.value + " 0"}
+      levelName={content.levelName.value}
       goalElement={content.goal.value}
       classificationVisualizer={
         <ClassificationVisualizer

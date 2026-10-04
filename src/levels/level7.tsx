@@ -1,12 +1,13 @@
 import { useMemo, useState, useEffect } from "react";
 import { ClassificationResultsEntry } from "~/components/ui/ClassificationResultsEntry";
-import type { ClassificationCounts, DataPoint, LevelJsonShape } from "~/types";
+import type { DataPoint, LevelJsonShape } from "~/types";
 import { CurveVisualizer } from "~/components/CurveVisualizer";
 import { useLevelData } from "~/context/LevelDataContext";
 import level7Json from "@/data/level7.json";
 import { useIntlayer } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
 import Dialog from "~/components/ui/Dialog";
+import { EMPTY_COUNTS } from "~/utils/classification";
 
 export default function Level7() {
   const level = 7;
@@ -15,19 +16,9 @@ export default function Level7() {
     common: commonContent,
   } = useIntlayer("app");
 
-  const [results, setResults] = useState<ClassificationCounts>({
-    TP: 0,
-    TN: 0,
-    FP: 0,
-    FN: 0,
-  });
+  const [results, setResults] = useState(EMPTY_COUNTS());
 
-  const [unseenResults, setUnseenResults] = useState<ClassificationCounts>({
-    TP: 0,
-    TN: 0,
-    FP: 0,
-    FN: 0,
-  });
+  const [unseenResults, setUnseenResults] = useState(EMPTY_COUNTS());
 
   const levelJson = useMemo(() => {
     return level7Json as LevelJsonShape & { testData: DataPoint[] };
@@ -112,6 +103,7 @@ export default function Level7() {
           key={level}
           choice={false}
           open={isTutorialDialogOpen}
+          title={content.tutorialDialog.title.value}
           message={content.tutorialDialog.message.value}
           onYes={() => setIsTutorialDialogOpen(false)}
         />

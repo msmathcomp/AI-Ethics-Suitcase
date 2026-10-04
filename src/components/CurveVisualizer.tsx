@@ -102,21 +102,8 @@ export const CurveVisualizer = ({
 
   // Whether to show seen data points
   const showSeenData = visualizerData.showSeenData;
-  const setShowSeenData = (updateFn: (old: boolean) => boolean) => {
-    modifyVisualizerData((data) => ({
-      ...data,
-      showSeenData: updateFn(data.showSeenData),
-    }));
-  };
-
   // Whether to show unseen data points
   const showUnseenData = visualizerData.showUnseenData;
-  const setShowUnseenData = (updateFn: (old: boolean) => boolean) => {
-    modifyVisualizerData((data) => ({
-      ...data,
-      showUnseenData: updateFn(data.showUnseenData),
-    }));
-  };
 
   const { classificationVisualizer: content } = useIntlayer("app");
 
@@ -445,31 +432,6 @@ export const CurveVisualizer = ({
             />
           </svg>
         )}
-
-        <div className="flex flex-col absolute top-3 left-0 z-20 gap-2 text-xs w-24 xl:text-sm xl:w-32">
-          {stage === 4 && (
-            <div className="border rounded p-1 space-y-2">
-              <div className="flex items-center justify-between">
-                <label>{content.seenData}</label>
-                <input
-                  type="checkbox"
-                  checked={showSeenData}
-                  onChange={() => setShowSeenData((prev) => !prev)}
-                  className="accent-emerald-200 dark:accent-emerald-900"
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <label>{content.unseenData}</label>
-                <input
-                  type="checkbox"
-                  checked={showUnseenData}
-                  onChange={() => setShowUnseenData((prev) => !prev)}
-                  className="accent-emerald-200 dark:accent-emerald-900"
-                />
-              </div>
-            </div>
-          )}
-        </div>
       </div>
 
       <div
