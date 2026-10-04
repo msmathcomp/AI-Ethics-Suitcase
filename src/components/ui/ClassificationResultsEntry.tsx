@@ -50,7 +50,7 @@ export const ClassificationResultsEntry = ({
         {showComparison && content.compareSuffix}
       </h3>
 
-      <div className="grid grid-cols-2 gap-2 text-xs xl:text-sm xl:gap-3">
+      <div className="grid grid-cols-2 gap-2 text-xs xl:text-sm xl:gap-3 w-full">
         <div className="flex items-center space-x-1">
           <div className="w-5 h-5 xl:w-6 xl:h-6 border-1 border-black dark:border-0 rounded-full bg-teal-500 flex items-center justify-center">
             <Smile color="white" />

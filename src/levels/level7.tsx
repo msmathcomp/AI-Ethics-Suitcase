@@ -103,6 +103,7 @@ export default function Level7() {
           key={level}
           choice={false}
           open={isTutorialDialogOpen}
+          title={content.tutorialDialog.title.value}
           message={content.tutorialDialog.message.value}
           onYes={() => setIsTutorialDialogOpen(false)}
         />

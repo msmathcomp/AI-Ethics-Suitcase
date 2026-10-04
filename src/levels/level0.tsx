@@ -39,7 +39,7 @@ export default function Level0() {
 
   return (
     <LevelLayout
-      levelName={commonContent.level.value + " 0"}
+      levelName={content.levelName.value}
       goalElement={content.goal.value}
       classificationVisualizer={
         <ClassificationVisualizer

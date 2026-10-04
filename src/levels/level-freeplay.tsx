@@ -209,6 +209,7 @@ export default function LevelFreeplay() {
             key={level}
             choice={false}
             open={isTutorialDialogOpen}
+            title={content.tutorialDialog.title.value}
             message={content.tutorialDialog.message.value}
             buttons={(
               ["easy", "medium", "hard"] as (keyof typeof DIFFICULTIES)[]

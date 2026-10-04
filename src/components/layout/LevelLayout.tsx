@@ -73,7 +73,9 @@ export default function LevelLayout({
             onChange={() => modifyVisualizerData(level, (data) => ({ ...data, showBestLine: !showBestLine }))}
           />}
 
-          {stage === 6 && <DataSelector level={level} />}
+          {(stage === 6 || (level === 7 && stage === 4)) && (
+            <DataSelector level={level} />
+          )}
 
           <button
             className={cn(

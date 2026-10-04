@@ -16,7 +16,7 @@ export default function DataSelector({ level }: { level: number }) {
   };
 
   return (
-    <div className="rounded p-1 py-2 grid grid-cols-2 gap-2 bg-stone-200 dark:bg-stone-700">
+    <div className="rounded p-1 grid grid-cols-2 gap-2 bg-stone-200 dark:bg-stone-700">
       {(
         [
           ["seenData", "showSeenData"],
@@ -24,6 +24,7 @@ export default function DataSelector({ level }: { level: number }) {
         ] as const
       ).map(([text, property]) => (
         <button
+          key={property}
           className={cn(
             "p-1 rounded border flex items-center justify-center gap-2",
             visualizerData[property]

@@ -110,7 +110,6 @@ export default function Level1() {
     level1: content,
     chart: chartContent,
     tour: tourContent,
-    common: commonContent,
   } = useIntlayer("app");
 
   const { markLevelCompleted } = useLevelData();
@@ -258,7 +257,7 @@ export default function Level1() {
     setDisableClick(true);
     setTimeout(() => {
       setStage(stage + 1);
-      setStepIndex(stage + 3);
+      setStepIndex(stage + 2);
       setRun(true);
       setDisableClick(false);
     }, 700);
@@ -267,26 +266,13 @@ export default function Level1() {
   const handleJoyrideCallback = useCallback(
     (data: CallBackProps) => {
       const { status, index, action } = data;
-      if (
-        action === "next" &&
-        data.lifecycle === "complete" &&
-        [0, 1, 6, 7].includes(index)
-      ) {
-        setStepIndex((prev) => prev + 1);
-        return;
-      } else if (
-        action === "next" &&
-        data.lifecycle === "complete" &&
-        [2, 3, 4, 5].includes(index)
-      ) {
-        setRun(false);
-        return;
-      }
 
-      if (status === "finished" || status === "skipped") {
-        navigate("/level/2");
-        return;
-      }
+      if (status === "finished" || status === "skipped")
+        return navigate("/home");
+
+      if (action !== "next" || data.lifecycle !== "complete") return;
+      if ([0, 5, 6].includes(index)) return setStepIndex((prev) => prev + 1);
+      if ([1, 2, 3, 4].includes(index)) return setRun(false);
     },
     [navigate]
   );
@@ -322,13 +308,8 @@ export default function Level1() {
       disableBeacon: true,
     },
     {
-      target: "#classification-results",
-      content: content.tour[1],
-      disableBeacon: true,
-    },
-    {
       target: ".recharts-wrapper",
-      content: content.tour[2],
+      content: content.tour[1],
       disableBeacon: true,
       placement: "right",
       disableScrollParentFix: true,
@@ -336,26 +317,26 @@ export default function Level1() {
     },
     {
       target: "#TP",
-      content: content.tour[3],
+      content: content.tour[2],
       disableBeacon: true,
       placement: "top",
     },
     {
       target: "#TN",
-      content: content.tour[4],
+      content: content.tour[3],
       disableBeacon: true,
       placement: "top",
     },
     {
       target: "#FP",
-      content: content.tour[5],
+      content: content.tour[4],
       disableBeacon: true,
       placement: "bottom",
     },
-    { target: "#FN", content: content.tour[6], disableBeacon: true },
+    { target: "#FN", content: content.tour[5], disableBeacon: true },
     {
       target: "#classification-results",
-      content: content.tour[7],
+      content: content.tour[6],
       disableBeacon: true,
       placement: "bottom",
     },
@@ -372,7 +353,7 @@ export default function Level1() {
   return (
     <>
       <LevelLayout
-        levelName={commonContent.level.value + " 1"}
+        levelName={content.levelName.value}
         goalElement={content.goal.value}
         classificationVisualizer={
           <>
@@ -528,7 +509,7 @@ export default function Level1() {
         hideCloseButton
         hideBackButton
         locale={{
-          last: tourContent.nextLevel.value,
+          last: tourContent.endTutorial.value,
         }}
       />
     </>
