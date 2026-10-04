@@ -4,7 +4,7 @@ import { useLevelData } from "~/context/LevelDataContext";
 import { LanguageSwitch } from "~/components/ui/LanguageSwitch";
 import { SmileIcon } from "lucide-react";
 import { Button } from "~/components/ui/Button";
-import { calculateAccuracy } from "~/utils/classification";
+import { calculateAccuracy, EMPTY_COUNTS } from "~/utils/classification";
 
 function formatAccuracy(accuracy: number): string {
   return (accuracy * 100).toFixed(1);
@@ -20,7 +20,7 @@ export default function Finish() {
     const result = resultsByLevel.get(level);
     return {
       level,
-      yourAccuracy: result ? calculateAccuracy(result.user || {TP:0,TN:0,FP:0,FN:0}) : 0,
+      yourAccuracy: result ? calculateAccuracy(result.user || EMPTY_COUNTS()) : 0,
       bestAccuracy: result?.best ? calculateAccuracy(result.best) : null,
       unseenAccuracy: result?.unseen ? calculateAccuracy(result.unseen) : null,
     };

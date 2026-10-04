@@ -16,36 +16,31 @@ export default function Toggle({
   onChange,
   className,
 }: ToggleProps) {
+  const ToggleButton = ({ isLeft }: { isLeft: boolean }) => (
+    <button
+      className={cn(
+        "px-1 py-1 rounded border flex-grow",
+        isLeft !== value
+          ? "bg-emerald-200 dark:bg-emerald-900 text-black dark:text-white dark:border-transparent"
+          : "text-black dark:text-stone-100 dark:border-stone-100",
+      )}
+      onClick={() => onChange(!isLeft)}
+      type="button"
+    >
+      {isLeft ? leftOption : rightOption}
+    </button>
+  );
+
   return (
     <div
       className={cn(
-        "relative flex flex-col rounded bg-stone-200 dark:bg-stone-700 overflow-hidden p-1 justify-center gap-2",
+        "relative flex rounded bg-stone-200 dark:bg-stone-700 p-1 justify-center gap-2",
         className
       )}
     >
-      <button
-        className={cn(
-          "px-1 py-1 rounded",
-          !value ? "bg-emerald-200 dark:bg-emerald-900 text-black dark:text-white" : "text-black dark:text-stone-100",
-          value ? "border dark:border-stone-100" : ""
-        )}
-        onClick={() => onChange(false)}
-        type="button"
-      >
-        {leftOption}
-      </button>
-      <hr className="h-[1px] w-full bg-black dark:bg-stone-100" />
-      <button
-        className={cn(
-          "px-1 py-1 rounded",
-          value ? "bg-emerald-200 dark:bg-emerald-900 text-black dark:text-white" : "text-black dark:text-stone-100",
-          value ? "" : "border dark:border-stone-100"
-        )}
-        onClick={() => onChange(true)}
-        type="button"
-      >
-        {rightOption}
-      </button>
+      <ToggleButton isLeft={true} />
+      <hr className="w-[1px] h-full bg-black dark:bg-stone-100" />
+      <ToggleButton isLeft={false} />
     </div>
   );
 }

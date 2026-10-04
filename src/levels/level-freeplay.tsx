@@ -9,8 +9,8 @@ import TimerBar from "~/components/ui/TimerBar";
 import Dialog from "~/components/ui/Dialog";
 import { cn } from "~/utils/cn";
 import { Button } from "~/components/ui/Button";
+import { EMPTY_COUNTS } from "~/utils/classification";
 
-const EMPTY_COUNTS = () => ({ TP: 0, TN: 0, FP: 0, FN: 0 });
 const DIFFICULTIES = {
   easy: 30,
   medium: 15,

@@ -5,6 +5,7 @@ import type {
   AreaPolygons,
 } from "~/types";
 import { isPointInPolygon } from "./geometry_curve";
+import { EMPTY_COUNTS } from "./classification";
 
 export const getPointClassification_Curve = (
   point: DataPoint,
@@ -42,7 +43,7 @@ export const getClassificationCounts_Curve = (
   areaPolygons: AreaPolygons,
   area1IsRed: boolean | null
 ): ClassificationCounts => {
-  const counts = { TP: 0, TN: 0, FP: 0, FN: 0 };
+  const counts = EMPTY_COUNTS();
 
 
   data.forEach((point) => {

@@ -22,7 +22,7 @@ import Joyride, { type CallBackProps, type Step } from "react-joyride";
 import { Frown, Smile } from "lucide-react";
 import { useIntlayer } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
-import { getPointClassification } from "~/utils/classification";
+import { EMPTY_COUNTS, getPointClassification } from "~/utils/classification";
 import { cn } from "~/utils/cn";
 import { useLevelData } from "~/context/LevelDataContext";
 
@@ -132,7 +132,7 @@ export default function Level1() {
             acc[curr!] += 1;
             return acc;
           },
-          { TP: 0, TN: 0, FP: 0, FN: 0 } as ClassificationCounts
+          EMPTY_COUNTS()
         ),
     [data]
   );

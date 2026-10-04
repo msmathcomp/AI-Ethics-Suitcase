@@ -36,6 +36,8 @@ export const getPointClassification = (
   return null;
 };
 
+export const EMPTY_COUNTS = (): ClassificationCounts => ({ TP: 0, TN: 0, FP: 0, FN: 0 });
+
 // Aggregates classification counts (TP, TN, FP, FN) for a dataset using getPointClassification.
 export const getClassificationCounts = (
   data: DataPoint[],
@@ -43,7 +45,7 @@ export const getClassificationCounts = (
   originIsPass: boolean | null,
   areaColorsAssigned: boolean
 ): ClassificationCounts => {
-  const counts = { TP: 0, TN: 0, FP: 0, FN: 0 };
+  const counts = EMPTY_COUNTS();
 
   data.forEach((point) => {
     const classification = getPointClassification(

@@ -10,7 +10,7 @@ import type {
   ClassificationCounts,
   PositionEvent,
 } from "~/types";
-import { calculateAccuracy, getClassificationCounts } from "~/utils/classification";
+import { calculateAccuracy, EMPTY_COUNTS, getClassificationCounts } from "~/utils/classification";
 import {
   getAreaPolygons,
   getExtendedLinePoints,
@@ -22,8 +22,6 @@ import {
 import { Chart } from "./chart/Chart";
 import { ClassificationAreas } from "./chart/ClassificationAreas";
 import { ExtendedLinePoints } from "./chart/ExtendedLinePoints";
-import Toggle from "./ui/Toggle";
-import { useIntlayer } from "react-intlayer";
 import { cn } from "~/utils/cn";
 import { type VisualizerData } from "~/context/LevelDataContext";
 
@@ -148,35 +146,12 @@ export const ClassificationVisualizer = ({
   };
 
   // Whether to show best classifier line or user's line
-  const showBestLine = useMemo(() => {
-    return visualizerData.showBestLine || false;
-  }, [visualizerData.showBestLine]);
-
-  const setShowBestLine = (newValue: boolean) => {
-    modifyVisualizerData((data) => ({
-      ...data,
-      showBestLine: newValue,
-    }));
-  };
-
-  // const [showSeenData, setShowSeenData] = useState(true);
+  const showBestLine = visualizerData.showBestLine ?? false;
   // Whether to show seen data points
   const showSeenData = visualizerData.showSeenData;
-  const setShowSeenData = (updateFn: (old: boolean) => boolean) => {
-    modifyVisualizerData((data) => ({
-      ...data,
-      showSeenData: updateFn(data.showSeenData),
-    }));
-  };
-  // const [showUnseenData, setShowUnseenData] = useState(false);
   // Whether to show unseen data points
   const showUnseenData = visualizerData.showUnseenData;
-  const setShowUnseenData = (updateFn: (old: boolean) => boolean) => {
-    modifyVisualizerData((data) => ({
-      ...data,
-      showUnseenData: updateFn(data.showUnseenData),
-    }));
-  };
+
 
   // Dragging state for moving line endpoints
   const [isDragging, setIsDragging] = useState(false);
@@ -234,11 +209,6 @@ export const ClassificationVisualizer = ({
     return data;
   }, [showSeenData, stage, showUnseenData, unseenData, seenData]);
 
-  // Intlayer content
-
-  // UI content from intlayer (localization)
-  const { classificationVisualizer: content } = useIntlayer("app");
-
   // Memoized classification counts for current classifier
   const classificationCounts = useMemo(() => {
     return getClassificationCounts(
@@ -251,9 +221,7 @@ export const ClassificationVisualizer = ({
 
   // Memoized classification counts for unseen data
   const unseenClassificationCounts = useMemo(() => {
-    if (!unseenData) {
-      return { TP: 0, TN: 0, FP: 0, FN: 0 };
-    }
+    if (!unseenData) return EMPTY_COUNTS();
     return getClassificationCounts(
       unseenData,
       lineCoords,
@@ -707,12 +675,8 @@ export const ClassificationVisualizer = ({
     else if (stage < 5 && bestLineCoords.length >= 2) {
       // Clear best classifier line and results when going back to stage 4 or earlier
       setBestLineCoords([]);
-      if (setBestResults) {
-        setBestResults({ TP: 0, TN: 0, FP: 0, FN: 0 });
-      }
-      if (setUnseenBestResults) {
-        setUnseenBestResults({ TP: 0, TN: 0, FP: 0, FN: 0 });
-      }
+      if (setBestResults) setBestResults(EMPTY_COUNTS());
+      if (setUnseenBestResults) setUnseenBestResults(EMPTY_COUNTS());
     }
   }, [
     stage,
@@ -806,38 +770,6 @@ export const ClassificationVisualizer = ({
           }}
         />
       )}
-
-      <div className="flex flex-col absolute top-3 left-0 z-20 gap-2 text-xs w-24 xl:text-sm xl:w-32">
-        <Toggle
-          leftOption={content.toggles.yourClassifier}
-          rightOption={content.toggles.bestClassifier}
-          value={showBestLine}
-          onChange={setShowBestLine}
-          className={cn([5, 6].includes(stage) ? "visible" : "invisible")}
-        />
-        {stage === 6 && (
-          <div className="border rounded p-1 space-y-2">
-            <div className="flex items-center justify-between">
-              <label>{content.seenData}</label>
-              <input
-                type="checkbox"
-                checked={showSeenData}
-                onChange={() => setShowSeenData((prev) => !prev)}
-                className="accent-emerald-200 dark:accent-emerald-800"
-              />
-            </div>
-            <div className="flex items-center justify-between">
-              <label>{content.unseenData}</label>
-              <input
-                type="checkbox"
-                checked={showUnseenData}
-                onChange={() => setShowUnseenData((prev) => !prev)}
-                className="accent-emerald-200 dark:accent-emerald-800"
-              />
-            </div>
-          </div>
-        )}
-      </div>
 
       <div
         className="absolute inset-0"
