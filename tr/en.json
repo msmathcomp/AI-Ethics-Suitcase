@@ -153,6 +153,7 @@
     "goal": "Classifying using a curve!",
     "stages": {
       "0": "[1/4] Draw a curve starting and ending outside the graph area (within the striped zone).",
+      "1": "[1/4] Draw a curve starting and ending outside the graph area (within the striped zone).",
       "2": "[2/4] You may create a new classifier by drawing again. When satisfied, click 'Next' to continue.",
       "3": "[3/4] Complete! You can now see the classification results.",
       "4": "[4/4] Now toggle between seen and unseen data. Notice how performance may differ on unseen data!"

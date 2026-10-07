@@ -153,6 +153,7 @@
     "goal": "Classificeren met een kromme!",
     "stages": {
       "0": "[1/4] Teken een kromme die begint en eindigt buiten het grafiekgebied (binnen de gestreepte zone).",
+      "1": "[1/4] Teken een kromme die begint en eindigt buiten het grafiekgebied (binnen de gestreepte zone).",
       "2": "[2/4] Je kunt een nieuwe classifier tekenen, als je wilt. Tevreden? Druk op 'Volgende'.",
       "3": "[3/4] Klaar! Je kunt nu de resultaten zien.",
       "4": "[4/4] Wissel nu tussen bekende en onbekende data. Merk op hoe de nauwkeurigheid kan veranderen op onbekende data!"
