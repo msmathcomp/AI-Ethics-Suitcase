@@ -26,10 +26,8 @@ export default function Level0() {
     modifyVisualizerData
   } = useLevelData();
 
-  const stage = getStage(1);
-  const setStage = (newStage: number) => {
-    setLevelStage(1, newStage);
-  }
+  const stage = getStage(level);
+  const setStage = (newStage: number) => setLevelStage(level, newStage);
 
   useEffect(() => {
     if (stage === 4) {

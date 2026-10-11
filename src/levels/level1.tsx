@@ -110,6 +110,12 @@ const CustomDotLevel1 = ({
 const DOT_SHAPE = <CustomDotLevel1 />
 
 export default function Level1() {
+  const { getResetCount } = useLevelData();
+  const resetCount = getResetCount(1);
+  return <Level1Body key={resetCount} />
+}
+
+function Level1Body() {
   const navigate = useNavigate();
   const {
     level1: content,
@@ -117,15 +123,18 @@ export default function Level1() {
     tour: tourContent,
   } = useIntlayer("app");
 
-  const { markLevelCompleted } = useLevelData();
+  const { getStage, setStage: setLevelStage, markLevelCompleted } = useLevelData();
 
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const graphRef = useRef<HTMLDivElement>(null);
-  const [stage, setStage] = useState(0);
   const [data, setData] = useState<DataPoint[]>([]);
   const [stepIndex, setStepIndex] = useState(0);
   const [disableClick, setDisableClick] = useState(false);
+
+  const level = 1;
+  const stage = getStage(level);
+  const setStage = (newStage: number) => setLevelStage(level, newStage);
 
   const results: ClassificationCounts = useMemo(
     () =>

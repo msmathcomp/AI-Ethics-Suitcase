@@ -133,6 +133,12 @@ const stepsFactory = (introContent: IntroContentShape): Step[] => [
 ];
 
 export default function IntroLevel() {
+  const { getResetCount } = useLevelData();
+  const resetCount = getResetCount(-1);
+  return <IntroLevelBody key={resetCount} />
+}
+
+function IntroLevelBody() {
   const {
     intro: introContent,
     chart: chartContent,
