@@ -99,7 +99,7 @@
       "0": "[1/3] The teacher starts with an example of 4 students. His plan is to classify Pass and Fail students using a straight line. Drag or click in the chart to draw a line to separate the passing and failing students.",
       "1": "[1/3] Now click the second point to draw the classification line.",
       "3": "[2/3] This line is called a 'linear classifier'. Adjust your classifier by dragging the black circles or drawing a new line. When done, press 'Next' to continue.",
-      "4": "[3/3] Complete! You can now see the results of your classifier. In the next level we will introduce the new terms and how to estimate the performance of a classifier."
+      "4": "[3/3] Complete! You can now see which students your line classified correctly and incorrectly. In the next level we will introduce how to estimate the performance of a classifier."
     }
   },
   "level1": {

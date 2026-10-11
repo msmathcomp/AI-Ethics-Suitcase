@@ -99,7 +99,7 @@
       "0": "[1/3] De docent begint met een voorbeeld van 4 studenten. Zijn plan is om geslaagde en gezakte studenten te classificeren met een rechte lijn. Sleep of klik in de grafiek om een lijn te tekenen om de geslaagde en gezakte studenten te onderscheiden.",
       "1": "[1/3] Klik nu op het tweede punt om de classificatielijn te tekenen.",
       "3": "[2/3] Deze lijn heet een 'lineaire classifier'. Pas je classifier aan door de zwarte cirkels te verslepen of een nieuwe lijn te tekenen. Tevreden? Druk dan op 'Volgende' om verder te gaan.",
-      "4": "[3/3] Klaar! Je kunt nu de resultaten van je classificatie zien. In het volgende niveau leer je de nieuwe termen en hoe je de prestaties van een classifier kunt meten."
+      "4": "[3/3] Klaar! Je kunt nu zien welke studenten je lijn correct en incorrect heeft ingedeeld. In het volgende niveau leer je hoe je de prestaties van een classifier kunt meten."
     }
   },
   "level1": {

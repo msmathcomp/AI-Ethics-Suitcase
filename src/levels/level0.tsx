@@ -1,11 +1,9 @@
 import { ClassificationVisualizer } from "~/components/ClassificationVisualizer";
-import { useEffect, useState } from "react";
-import { ClassificationResultsEntry } from "~/components/ui/ClassificationResultsEntry";
+import { useEffect } from "react";
 import type { DataPoint } from "~/types";
 import { useIntlayer } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
 import { useLevelData } from "~/context/LevelDataContext";
-import { EMPTY_COUNTS } from "~/utils/classification";
 
 const data: DataPoint[] = [
   { study_time: 100, screen_time: 300, type: "Fail" },
@@ -16,7 +14,6 @@ const data: DataPoint[] = [
 
 export default function Level0() {
   const level = 0;
-  const [results, setResults] = useState(EMPTY_COUNTS());
   const { level0: content, common: commonContent } = useIntlayer("app");
 
   const {
@@ -46,7 +43,7 @@ export default function Level0() {
           visualizerData={getVisualizerData(level)}
           stage={stage}
           setStage={setStage}
-          setResults={setResults}
+          setResults={() => {}}
           modifyVisualizerData={(modifyFn) =>
             modifyVisualizerData(level, modifyFn)
           }
@@ -60,12 +57,8 @@ export default function Level0() {
       }
       instructionButton={stage === 3 ? commonContent.buttons.next.value : null}
       instructionButtonCallback={() => setStage(4)}
-      classificationResults={
-        stage === 4 ? (
-          <ClassificationResultsEntry classificationCounts={results} />
-        ) : null
-      }
-      showResults={stage >= 4}
+      classificationResults={null}
+      showResults={false}
       level={level}
       showNextLevelButton={stage === 4}
       showLegend={true}
