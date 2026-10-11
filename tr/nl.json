@@ -114,7 +114,7 @@
     "goal": "Hoe bereken je de nauwkeurigheid van een classifier?",
     "tour": {
       "0": "De docent overweegt verschillende scenario's en vergelijkt de mogelijke uitkomsten als hij de toetsuitslagen wél zou weten. Hij zal de nauwkeurigheid van een lineaire classifier op een of andere manier moeten meten meten.",
-      "1": "Hij tekent deze lineaire classifier. De linkerhelft wordt geclassificeert als Gezakt en de rechterhelft als Geslaagd.",
+      "1": "Hij tekent deze lineaire classifier. De linkerhelft wordt geclassificeerd als Gezakt en de rechterhelft als Geslaagd.",
       "2": "Deze student is geslaagd en de classifier classificeerde hem terecht als geslaagd. Dat is een True Positive.",
       "3": "Deze student is gezakt en de classifier classificeerde hem terecht als gezakt. Dat is een True Negative.",
       "4": "Deze student is gezakt, maar de classifier classificeerde hem onterecht als geslaagd. Dat is een False Positive.",
