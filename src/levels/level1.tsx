@@ -30,6 +30,10 @@ const LINE_COORDS = [
   { graph: { x: 250, y: 0 }, overlay: { x: 250, y: 0 } },
   { graph: { x: 250, y: 500 }, overlay: { x: 250, y: 500 } },
 ];
+const LINE = [
+  { screen_time: 0, study_time: 250 },
+  { screen_time: 500, study_time: 250 },
+];
 
 const classifyPoint = (point: DataPoint) => {
   return getPointClassification(point, LINE_COORDS, false, true);
@@ -103,8 +107,15 @@ const CustomDotLevel1 = ({
     );
   }
 };
+const DOT_SHAPE = <CustomDotLevel1 />
 
 export default function Level1() {
+  const { getResetCount } = useLevelData();
+  const resetCount = getResetCount(1);
+  return <Level1Body key={resetCount} />
+}
+
+function Level1Body() {
   const navigate = useNavigate();
   const {
     level1: content,
@@ -112,15 +123,18 @@ export default function Level1() {
     tour: tourContent,
   } = useIntlayer("app");
 
-  const { markLevelCompleted } = useLevelData();
+  const { getStage, setStage: setLevelStage, markLevelCompleted } = useLevelData();
 
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const graphRef = useRef<HTMLDivElement>(null);
-  const [stage, setStage] = useState(0);
   const [data, setData] = useState<DataPoint[]>([]);
   const [stepIndex, setStepIndex] = useState(0);
   const [disableClick, setDisableClick] = useState(false);
+
+  const level = 1;
+  const stage = getStage(level);
+  const setStage = (newStage: number) => setLevelStage(level, newStage);
 
   const results: ClassificationCounts = useMemo(
     () =>
@@ -254,13 +268,11 @@ export default function Level1() {
     if (stage < 0 || stage > 3) return;
 
     if (!stageConditions[stage]) return;
-    setDisableClick(true);
-    setTimeout(() => {
-      setStage(stage + 1);
-      setStepIndex(stage + 2);
-      setRun(true);
-      setDisableClick(false);
-    }, 700);
+    
+    setStage(stage + 1);
+    setStepIndex(stage + 2);
+    setRun(true);
+    setDisableClick(false);
   }, [data, stage]);
 
   const handleJoyrideCallback = useCallback(
@@ -301,11 +313,14 @@ export default function Level1() {
     [stage]
   );
 
-  const steps: Step[] = [
+  const steps: Step[] = useMemo(() => [
     {
-      target: "#instruction",
+      target: ".recharts-wrapper",
       content: content.tour[0],
       disableBeacon: true,
+      placement: "right",
+      disableScrollParentFix: true,
+      disableScrolling: true,
     },
     {
       target: ".recharts-wrapper",
@@ -340,7 +355,7 @@ export default function Level1() {
       disableBeacon: true,
       placement: "bottom",
     },
-  ];
+  ], [content]);
 
   const instructions = [
     content.instructions["1"].value,
@@ -402,15 +417,13 @@ export default function Level1() {
                     dataKey="screen_time"
                     data={data}
                     fill="#8884d8"
-                    shape={<CustomDotLevel1 />}
+                    shape={DOT_SHAPE}
                     name={chartContent.seriesNames.dataPoints.value}
+                    isAnimationActive={false}
                   />
                   <Line
                     dataKey="screen_time"
-                    data={[
-                      { screen_time: 0, study_time: 250 },
-                      { screen_time: 500, study_time: 250 },
-                    ]}
+                    data={LINE}
                     stroke="var(--chart-stroke)"
                     strokeWidth={3}
                     dot={false}

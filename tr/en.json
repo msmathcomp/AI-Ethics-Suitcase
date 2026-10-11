@@ -48,6 +48,10 @@
       "TN": "True Negative",
       "FP": "False Positive",
       "FN": "False Negative"
+    },
+    "entryTitles": {
+      "seenPerformance": "Seen Data Results",
+      "unseenPerformance": "Unseen Data Results"
     }
   },
   "classificationVisualizer": {
@@ -92,10 +96,10 @@
     "levelName": "Tutorial",
     "goal": "Create your first classifier!",
     "stages": {
-      "0": "[1/3] The teacher starts with an example of 4 students. His plan is to classify Pass and Fail students using a straight line. Drag or click to draw the classification line.",
+      "0": "[1/3] The teacher starts with an example of 4 students. His plan is to classify Pass and Fail students using a straight line. Drag or click in the chart to draw a line to separate the passing and failing students.",
       "1": "[1/3] Now click the second point to draw the classification line.",
       "3": "[2/3] This line is called a 'linear classifier'. Adjust your classifier by dragging the black circles or drawing a new line. When done, press 'Next' to continue.",
-      "4": "[3/3] Complete! You can now see the results of your classifier. In the next level we will introduce the new terms and how to estimate the performance of a classifier."
+      "4": "[3/3] Complete! You can now see which students your line classified correctly and incorrectly. In the next level we will introduce how to estimate the performance of a classifier."
     }
   },
   "level1": {
@@ -118,57 +122,48 @@
       "6": "The classification results show the counts of true positives, true negatives, false positives, and false negatives. The accuracy of a classifier is the number of correctly classified samples divided by the total number of samples."
     }
   },
-  "level2_5": {
+  "level2": {
+    "stages": {
+      "0": "[1/4] The teacher decides to practice drawing classifiers based on old exam data. Drag or click to draw the classifier line to separate the pass from the fail region.",
+      "1": "[1/4] Now click the second point to draw the classification line.",
+      "3": "[2/4] Adjust your classifier by dragging the black circles or drawing a new line. When satisfied, click 'Next' to continue.",
+      "4": "[3/4] Complete! You can now see the classification results. Ms. Swinton, the computer science teacher, notices Mr. Turner practicing. She suggests using AI to find the line with the highest accuracy! You can compare your classifier with the best classifier found by AI.",
+      "5": "[4/4] Compare your classifier with the best classifier. Both results are shown side by side."
+    }
+  },
+  "level2_6": {
     "goals": {
       "2": "Can you achieve 100% accuracy?",
       "3": "Can you still achieve 100% accuracy?",
       "4": "Try to achieve maximum possible accuracy!",
-      "5": "Try to achieve maximum possible accuracy!"
+      "5": "Try to achieve maximum possible accuracy!",
+      "6": "Try to achieve maximum possible accuracy!"
     },
     "stages": {
-      "0": "[1/4] The teacher decides to practice drawing classifiers based on old exam data. Drag or click to draw the classifier line to separate the pass from the fail region.",
+      "0": "[1/4] The teacher challenges himself with more data from past exams! Drag or click to draw the classifier line to separate the pass from the fail region.",
       "1": "[1/4] Now click the second point to draw the classification line.",
       "3": "[2/4] Adjust your classifier by dragging the black circles or drawing a new line. When satisfied, click 'Next' to continue.",
       "4": "[3/4] Complete! You can now see the classification results. You can compare your classifier with the best classifier found by AI.",
       "5": "[4/4] Compare your classifier with the best classifier. Both results are shown side by side."
     }
   },
-  "level6": {
-    "goal": "Test your classifier on unseen data!",
-    "stages": {
-      "0": "[1/5] The teacher will now use all of the data he has to classify the latest students, whose exams were lost. Drag or click to draw the classifier line to separate the pass from the fail region.",
-      "1": "[1/5] Now click the second point to draw the classification line",
-      "3": "[2/5] Adjust your classifier by dragging the black circles or drawing a new line. When satisfied, click 'Next' to continue.",
-      "4": "[3/5] Complete! You can now see the classification results. You can compare your classifier with the best classifier found by AI.",
-      "5": "[4/5] Compare your classifier with the best classifier. Both results are shown side by side.",
-      "6": "[5/5] Now try the classifer on unseen data! Notice how performance may differ on the new students!"
-    },
-    "titles": {
-      "trainingPerformance": "Seen Data Results",
-      "unseenPerformance": "Unseen Data Results"
-    }
-  },
   "level7": {
     "levelName": "Overfitting",
     "goal": "Classifying using a curve!",
     "stages": {
-      "0": "[1/4] Draw a curve starting and ending outside the graph area (within the striped zone).",
-      "1": "[1/4] Draw a curve starting and ending outside the graph area (within the striped zone).",
+      "0": "[1/4] The teacher wants to try separating the students using a curve. Draw a curve starting and ending outside the graph area (within the striped zone).",
+      "1": "[1/4] The teacher wants to try separating the students using a curve. Draw a curve starting and ending outside the graph area (within the striped zone).",
       "2": "[2/4] You may create a new classifier by drawing again. When satisfied, click 'Next' to continue.",
-      "3": "[3/4] Complete! You can now see the classification results.",
-      "4": "[4/4] Now toggle between seen and unseen data. Notice how performance may differ on unseen data!"
-    },
-    "titles": {
-      "trainingPerformance": "Seen Data Results",
-      "unseenPerformance": "Unseen Data Results"
+      "3": "[3/4] Complete! You can now see the classification results. The teacher's curve is perfect! Excited to be done with grading forever, he grabs more exams to see if his curve always works.",
+      "4": "[4/4] Now toggle between seen and unseen data. Notice how performance may differ on unseen data! The teacher sighs and gets back to reading his students' work."
     },
     "tutorialDialog": {
-      "title": "Welcome to the Overfitting Level!",
-      "message": "So far, the teacher has only tried linear classifiers. He wonders what happens if he uses a more complex shape than a straight line. In this level, you can experiment with a freeform curve as a classifier. You can compare the performance of your curve and the line found by AI, on seen and unseen data."
+      "title": "Welcome to the Overfitting level!",
+      "message": "So far, the teacher has only tried linear classifiers. He wonders what happens if he uses a more complex shape than a straight line. In this level, you can experiment with a freeform curve as a classifier. Afterwards, you can check how the classifier performs on students it has never seen before."
     }
   },
   "levelfreeplay": {
-    "levelName": "Free play",
+    "levelName": "Free Play",
     "goal": "Try to beat the best classifier under a time limit!",
     "stages": {
       "0": "[1/3] Drag or click to draw the classifier line to separate the pass from the fail region.",
@@ -176,12 +171,8 @@
       "3": "[2/3] Adjust your classifier by dragging the black circles or drawing a new line. When satisfied, press 'Finish'.",
       "6": "[3/3] Complete! You can now compare your classifier with the best classifier, and toggle between the seen and unseen data."
     },
-    "titles": {
-      "trainingPerformance": "Seen Data Results",
-      "unseenPerformance": "Unseen Data Results"
-    },
     "tutorialDialog": {
-      "title": "Welcome to the Free Play Level!",
+      "title": "Welcome to the Free Play level!",
       "message": "In this level, you can freely experiment with the classifier and try to beat the best classifier found by AI. You can also compare performance on seen and unseen data. Keep an eye on the timer, and have fun exploring!",
       "difficulty": {
         "easy": "Easy",
@@ -201,11 +192,11 @@
       "level": "Level",
       "yourAccuracy": "Your Accuracy",
       "bestAccuracy": "Best Accuracy",
-      "unseenAccuracy": "Unseen Accuracy",
-      "NA": "N/A"
+      "incomplete": "Level not finished!"
     },
     "outOf": "out of",
-    "totalScore": "Total Score"
+    "totalScore": "Total Score",
+    "moral": "Unfortunately for Mr. Turner, even Ms. Swinton's best classifier makes mistakes. He realizes this method of grading is not fair to the students. Defeated, he grabs a roll of sticky tape to piece the exams back together, and promises to bring a box of chocolates to the next class."
   },
   "common": {
     "buttons": {

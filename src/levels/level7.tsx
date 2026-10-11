@@ -13,6 +13,7 @@ export default function Level7() {
   const level = 7;
   const {
     level7: content,
+    classificationResults,
     common: commonContent,
   } = useIntlayer("app");
 
@@ -86,13 +87,13 @@ export default function Level7() {
         <>
           {stage >= 3 && (
             <ClassificationResultsEntry
-              title={content.titles.trainingPerformance.value}
+              title={classificationResults.entryTitles.seenPerformance.value}
               classificationCounts={results}
             />
           )}
           {stage === 4 && (
             <ClassificationResultsEntry
-              title={content.titles.unseenPerformance.value}
+              title={classificationResults.entryTitles.unseenPerformance.value}
               classificationCounts={unseenResults}
             />
           )}

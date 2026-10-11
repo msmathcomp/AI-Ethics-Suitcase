@@ -166,7 +166,7 @@ export default function LevelFreeplay() {
             <ClassificationResultsEntry
               title={
                 stage === 6
-                  ? content.titles.trainingPerformance.value
+                  ? classifcationResultsContent.entryTitles.seenPerformance.value
                   : classifcationResultsContent.title.value
               }
               classificationCounts={results}
@@ -175,7 +175,7 @@ export default function LevelFreeplay() {
           )}
           {stage === 6 && (
             <ClassificationResultsEntry
-              title={content.titles.unseenPerformance.value}
+              title={classifcationResultsContent.entryTitles.unseenPerformance.value}
               classificationCounts={unseenResults}
               bestClassificationCounts={unseenBestResults}
             />

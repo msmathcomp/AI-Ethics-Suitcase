@@ -55,7 +55,7 @@ export default function LevelLayout({
         </div>
       )}
       <div className="flex flex-1 min-h-0 overflow-auto pt-5">
-        <div className="w-full flex-1 relative flex items-center justify-center">
+        <div className="w-full flex-1 relative flex items-center justify-center select-none">
           {classificationVisualizer}
         </div>
         <div className="h-full w-[320px] xl:w-[400px] flex flex-col py-3 justify-start space-y-2 overflow-hidden">
@@ -70,7 +70,7 @@ export default function LevelLayout({
             leftOption={visualizer.toggles.yourClassifier}
             rightOption={visualizer.toggles.bestClassifier}
             value={showBestLine ?? false}
-            onChange={() => modifyVisualizerData(level, (data) => ({ ...data, showBestLine: !showBestLine }))}
+            onChange={(show) => modifyVisualizerData(level, (data) => ({ ...data, showBestLine: show }))}
           />}
 
           {(stage === 6 || (level === 7 && stage === 4)) && (

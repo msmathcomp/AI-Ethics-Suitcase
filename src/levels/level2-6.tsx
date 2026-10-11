@@ -4,17 +4,18 @@ import { ClassificationResultsEntry } from "~/components/ui/ClassificationResult
 import type { LevelJsonShape, Point } from "~/types";
 import { useLevelData } from "~/context/LevelDataContext";
 
-// Static JSON imports for levels 2-5
+// Static JSON imports for levels 2-6
 import level2Json from "@/data/level2.json";
 import level3Json from "@/data/level3.json";
 import level4Json from "@/data/level4.json";
 import level5Json from "@/data/level5.json";
+import level6Json from "@/data/level6.json";
 import { useIntlayer } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
 import { EMPTY_COUNTS } from "~/utils/classification";
 
-export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
-  const { level2_5: content, common: commonContent } = useIntlayer("app");
+export default function Level2_6({ level }: { level: 2 | 3 | 4 | 5 | 6 }) {
+  const { level2, level2_6: content, common: commonContent } = useIntlayer("app");
 
   const [results, setResults] = useState(EMPTY_COUNTS);
   const [bestResults, setBestResults] = useState(EMPTY_COUNTS);
@@ -38,6 +39,7 @@ export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
       3: level3Json as LevelJsonShape,
       4: level4Json as LevelJsonShape,
       5: level5Json as LevelJsonShape,
+      6: level6Json as LevelJsonShape,
     };
     return mapping[level] ?? (level2Json as LevelJsonShape);
   }, [level]);
@@ -56,7 +58,7 @@ export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
 
   return (
     <LevelLayout
-      levelName={`${commonContent.level.value} ${level}`}
+      levelName={`${commonContent.level.value} ${level - 1}`}
       goalElement={
         content.goals[level.toString() as keyof typeof content.goals].value
       }
@@ -77,7 +79,7 @@ export default function Level2_5({ level }: { level: 2 | 3 | 4 | 5 }) {
         />
       }
       instruction={
-        content.stages[stage.toString() as keyof typeof content.stages].value
+        (level === 2 ? level2 : content).stages[stage.toString() as keyof typeof content.stages].value
       }
       instructionButton={
         stage === 3

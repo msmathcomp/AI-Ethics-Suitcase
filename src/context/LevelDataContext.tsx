@@ -45,6 +45,7 @@ interface LevelDataContextValue {
     counts: ClassificationCounts,
     overwrite?: boolean
   ) => void;
+  getResetCount: (level: number) => number;
   getStage: (level: number) => number;
   setStage: (level: number, stage: number) => void;
   isLevelCompleted: (level: number) => boolean;
@@ -102,6 +103,11 @@ export function LevelDataProvider({
       return new Map(prev).set(level, updated);
     });
   }, []);
+
+  const getResetCount = useCallback((level: number) => {
+    const levelData = dataByLevel.get(level);
+    return levelData ? levelData.resetCount : 0;
+  }, [dataByLevel]);
 
   const getStage = useCallback((level: number) => {
     const levelData = dataByLevel.get(level);
@@ -174,6 +180,7 @@ export function LevelDataProvider({
     () => ({ 
       dataByLevel,
       recordLevelResult,
+      getResetCount,
       getStage, setStage,
       isLevelCompleted,
       markLevelCompleted,
@@ -183,7 +190,7 @@ export function LevelDataProvider({
       resetLevelData,
       reset
     }),
-    [dataByLevel, recordLevelResult, getStage, setStage, isLevelCompleted, markLevelCompleted, getVisualizerData, setVisualizerData, modifyVisualizerData, reset]
+    [dataByLevel, recordLevelResult, getResetCount, getStage, setStage, isLevelCompleted, markLevelCompleted, getVisualizerData, setVisualizerData, modifyVisualizerData, reset]
   );
 
   return (
