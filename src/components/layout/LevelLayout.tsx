@@ -70,7 +70,7 @@ export default function LevelLayout({
             leftOption={visualizer.toggles.yourClassifier}
             rightOption={visualizer.toggles.bestClassifier}
             value={showBestLine ?? false}
-            onChange={() => modifyVisualizerData(level, (data) => ({ ...data, showBestLine: !showBestLine }))}
+            onChange={(show) => modifyVisualizerData(level, (data) => ({ ...data, showBestLine: show }))}
           />}
 
           {(stage === 6 || (level === 7 && stage === 4)) && (
