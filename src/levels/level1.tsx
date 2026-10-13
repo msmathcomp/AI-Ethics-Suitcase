@@ -124,18 +124,16 @@ function Level1Body() {
     tour: tourContent,
   } = useIntlayer("app");
 
-  const { getStage, setStage: setLevelStage, markLevelCompleted } = useLevelData();
+  const { markLevelCompleted } = useLevelData();
 
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const graphRef = useRef<HTMLDivElement>(null);
   const [data, setData] = useState<DataPoint[]>([]);
+  const [stage, setStage] = useState(0);
   const [stepIndex, setStepIndex] = useState(0);
   const [disableClick, setDisableClick] = useState(false);
 
-  const level = 1;
-  const stage = getStage(level);
-  const setStage = (newStage: number) => setLevelStage(level, newStage);
 
   const results: ClassificationCounts = useMemo(
     () =>
@@ -332,24 +330,32 @@ function Level1Body() {
       content: content.tour[2],
       disableBeacon: true,
       placement: "top",
+      disableOverlay: true,
+      offset: 0,
     },
     {
       target: "#TN",
       content: content.tour[3],
       disableBeacon: true,
       placement: "top",
+      disableOverlay: true,
+      offset: 0,
     },
     {
       target: "#FP",
       content: content.tour[4],
       disableBeacon: true,
       placement: "bottom",
+      disableOverlay: true,
+      offset: 0,
     },
     {
       target: "#FN",
       content: content.tour[5],
       disableBeacon: true,
       placement: "bottom",
+      disableOverlay: true,
+      offset: 0,
     },
     {
       target: "#classification-results",

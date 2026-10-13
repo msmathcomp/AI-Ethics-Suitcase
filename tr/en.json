@@ -15,13 +15,13 @@
     "levelName": "Tutorial",
     "goal": "Getting familiar with visualization using charts",
     "tour": {
-      "0": "Welcome to the AI Ethics Suitcase! Mr. Turner needs to grade his students' last exam, but his dog tore up the answer sheets! Only a few exams are legible now, so the teacher needs to decide who passed in some other way. You may skip this tutorial if you are already familiar with charts.",
+      "0": "Welcome to the AI Ethics Suitcase! Mr. Turner needs to grade his students' last exam, but his dog tore up the answer sheets! Only a few exams are legible now, so the teacher needs to decide who passed in some other way. You may skip this explanation if you are already familiar with charts.",
       "1": "The teacher remembers he had asked the parents to keep track of how his students spent their time before the exam. He will write it down in this chart.",
       "2": "This is the X-axis, where he writes down the study time in minutes.",
       "3": "This is the Y-axis, where he writes down the leisure time in minutes.",
       "4": "The teacher also decides on these symbols for passing and failing students, so he can check back if he gets confused.",
-      "5": "For exampe, this point represents a student who passed, with study time of 150 minutes and leisure time of 300 minutes.",
-      "6": "This point is for a student who failed, with study time of 100 minutes and leisure time of 200 minutes.",
+      "5": "For exampe, this circle represents a student who passed, with study time of 150 minutes and leisure time of 300 minutes.",
+      "6": "This square is for a student who failed, with study time of 100 minutes and leisure time of 200 minutes.",
       "7": "The tutorial consists of three levels. Once you are done with a level, press this button to go to the next one. The teacher already has an idea how to grade the students."
     }
   },
