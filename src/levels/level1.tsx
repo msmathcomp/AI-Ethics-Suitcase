@@ -34,6 +34,7 @@ const LINE = [
   { screen_time: 0, study_time: 250 },
   { screen_time: 500, study_time: 250 },
 ];
+const POINT_ORDER = ["TP", "TN", "FP", "FN"] as const;
 
 const classifyPoint = (point: DataPoint) => {
   return getPointClassification(point, LINE_COORDS, false, true);
@@ -123,18 +124,16 @@ function Level1Body() {
     tour: tourContent,
   } = useIntlayer("app");
 
-  const { getStage, setStage: setLevelStage, markLevelCompleted } = useLevelData();
+  const { markLevelCompleted } = useLevelData();
 
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const graphRef = useRef<HTMLDivElement>(null);
   const [data, setData] = useState<DataPoint[]>([]);
+  const [stage, setStage] = useState(0);
   const [stepIndex, setStepIndex] = useState(0);
   const [disableClick, setDisableClick] = useState(false);
 
-  const level = 1;
-  const stage = getStage(level);
-  const setStage = (newStage: number) => setLevelStage(level, newStage);
 
   const results: ClassificationCounts = useMemo(
     () =>
@@ -151,6 +150,7 @@ function Level1Body() {
   );
   const [areaPolygons, setAreaPolygons] = useState<AreaPolygons | null>(null);
   const [run, setRun] = useState(false);
+  const [tourDone, setTourDone] = useState(false);
 
   const graphToOverlayCoords = (graphCoords: Point): Point => {
     if (!overlayRef.current || !chartContainerRef.current)
@@ -178,10 +178,8 @@ function Level1Body() {
   };
 
   useEffect(() => {
-    if (stage === 4) {
-      markLevelCompleted(1);
-    }
-  }, [stage, markLevelCompleted]);
+    if (tourDone) markLevelCompleted(1);
+  }, [tourDone, markLevelCompleted]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -256,34 +254,31 @@ function Level1Body() {
   }, [graphRef, chartContainerRef]);
 
   useEffect(() => {
-    const classificationResults = data.map(classifyPoint);
-    
-    const stageConditions = [
-      classificationResults.includes("TP"),
-      classificationResults.includes("TN"),
-      classificationResults.includes("FP"),
-      classificationResults.includes("FN")
-    ];
-
     if (stage < 0 || stage > 3) return;
-
-    if (!stageConditions[stage]) return;
+    if (run) return; // don't skip over points, only allow advancing step when joyride is closed
+    
+    const results = data.map(classifyPoint);
+    if (!results.includes(POINT_ORDER[stage])) return;
     
     setStage(stage + 1);
-    setStepIndex(stage + 2);
-    setRun(true);
     setDisableClick(false);
-  }, [data, stage]);
+    requestAnimationFrame(() => setRun(true));
+  }, [data, stage, run]);
 
   const handleJoyrideCallback = useCallback(
     (data: CallBackProps) => {
       const { status, index, action } = data;
 
-      if (status === "finished" || status === "skipped")
+      if (status === "finished" || status === "skipped") {
+        setTourDone(true)
         return navigate("/home");
+      }
 
       if (action !== "next" || data.lifecycle !== "complete") return;
-      if ([0, 5, 6].includes(index)) return setStepIndex((prev) => prev + 1);
+
+      // always advance joyride (for next point)
+      setStepIndex((prev) => prev + 1);
+      // when placing students, also hide the joyride until next correct point is placed
       if ([1, 2, 3, 4].includes(index)) return setRun(false);
     },
     [navigate]
@@ -335,20 +330,33 @@ function Level1Body() {
       content: content.tour[2],
       disableBeacon: true,
       placement: "top",
+      disableOverlay: true,
+      offset: 0,
     },
     {
       target: "#TN",
       content: content.tour[3],
       disableBeacon: true,
       placement: "top",
+      disableOverlay: true,
+      offset: 0,
     },
     {
       target: "#FP",
       content: content.tour[4],
       disableBeacon: true,
       placement: "bottom",
+      disableOverlay: true,
+      offset: 0,
     },
-    { target: "#FN", content: content.tour[5], disableBeacon: true },
+    {
+      target: "#FN",
+      content: content.tour[5],
+      disableBeacon: true,
+      placement: "bottom",
+      disableOverlay: true,
+      offset: 0,
+    },
     {
       target: "#classification-results",
       content: content.tour[6],
@@ -462,7 +470,7 @@ function Level1Body() {
           <ClassificationResultsEntry classificationCounts={results} />
         }
         level={1}
-        showNextLevelButton={stage === 4}
+        showNextLevelButton={tourDone}
         showLegend={true}
         instructionButton={null}
       />

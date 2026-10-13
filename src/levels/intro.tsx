@@ -7,7 +7,7 @@ import {
   YAxis,
 } from "recharts";
 import Joyride, { type Step, type CallBackProps } from "react-joyride";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { useIntlayer, type IntlayerNode } from "react-intlayer";
 import LevelLayout from "~/components/layout/LevelLayout";
@@ -114,11 +114,15 @@ const stepsFactory = (introContent: IntroContentShape): Step[] => [
     target: "#label-pass",
     content: introContent.tour[5],
     placement: "right",
+    disableOverlay: true,
+    offset: 0,
   },
   {
     target: "#label-fail",
     content: introContent.tour[6],
     placement: "right",
+    disableOverlay: true,
+    offset: 0,
   },
   {
     target: "#next-level-button",
@@ -151,15 +155,20 @@ function IntroLevelBody() {
   const { markLevelCompleted } = useLevelData();
 
   useEffect(() => setRun(true), []);
-  const steps = stepsFactory(introContent);
+  const steps = useMemo(() => stepsFactory(introContent), [introContent]);
 
   const handleJoyrideCallback = useCallback(
     (data: CallBackProps) => {
-      const { status, index } = data;
+      const { status, index, type } = data;
       if (status === "skipped") {
         navigate("/level/0");
         markLevelCompleted(-1);
-      } else if (index === steps.length - 1) {
+        return;
+      }
+
+      // show next level button when on last step
+      // the "step:before" event triggers just before showing the final step
+      if (type === "step:before" && index === steps.length - 1) {
         setShowNextLevelButton(true);
         markLevelCompleted(-1);
       }
