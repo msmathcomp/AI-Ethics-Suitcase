@@ -256,16 +256,16 @@ function Level1Body() {
   }, [graphRef, chartContainerRef]);
 
   useEffect(() => {
-    const classificationResults = data.map(classifyPoint);
-
     if (stage < 0 || stage > 3) return;
-    if (!classificationResults.includes(POINT_ORDER[stage])) return;
+    if (run) return; // don't skip over points, only allow advancing step when joyride is closed
+    
+    const results = data.map(classifyPoint);
+    if (!results.includes(POINT_ORDER[stage])) return;
     
     setStage(stage + 1);
-    setStepIndex(stage + 2);
     setDisableClick(false);
     requestAnimationFrame(() => setRun(true));
-  }, [data, stage]);
+  }, [data, stage, run]);
 
   const handleJoyrideCallback = useCallback(
     (data: CallBackProps) => {
@@ -277,7 +277,10 @@ function Level1Body() {
       }
 
       if (action !== "next" || data.lifecycle !== "complete") return;
-      if ([0, 5, 6].includes(index)) return setStepIndex((prev) => prev + 1);
+
+      // always advance joyride (for next point)
+      setStepIndex((prev) => prev + 1);
+      // when placing students, also hide the joyride until next correct point is placed
       if ([1, 2, 3, 4].includes(index)) return setRun(false);
     },
     [navigate]
