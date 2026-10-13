@@ -34,6 +34,7 @@ const LINE = [
   { screen_time: 0, study_time: 250 },
   { screen_time: 500, study_time: 250 },
 ];
+const POINT_ORDER = ["TP", "TN", "FP", "FN"] as const;
 
 const classifyPoint = (point: DataPoint) => {
   return getPointClassification(point, LINE_COORDS, false, true);
@@ -151,6 +152,7 @@ function Level1Body() {
   );
   const [areaPolygons, setAreaPolygons] = useState<AreaPolygons | null>(null);
   const [run, setRun] = useState(false);
+  const [tourDone, setTourDone] = useState(false);
 
   const graphToOverlayCoords = (graphCoords: Point): Point => {
     if (!overlayRef.current || !chartContainerRef.current)
@@ -178,10 +180,8 @@ function Level1Body() {
   };
 
   useEffect(() => {
-    if (stage === 4) {
-      markLevelCompleted(1);
-    }
-  }, [stage, markLevelCompleted]);
+    if (tourDone) markLevelCompleted(1);
+  }, [tourDone, markLevelCompleted]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -257,30 +257,24 @@ function Level1Body() {
 
   useEffect(() => {
     const classificationResults = data.map(classifyPoint);
-    
-    const stageConditions = [
-      classificationResults.includes("TP"),
-      classificationResults.includes("TN"),
-      classificationResults.includes("FP"),
-      classificationResults.includes("FN")
-    ];
 
     if (stage < 0 || stage > 3) return;
-
-    if (!stageConditions[stage]) return;
+    if (!classificationResults.includes(POINT_ORDER[stage])) return;
     
     setStage(stage + 1);
     setStepIndex(stage + 2);
-    setRun(true);
     setDisableClick(false);
+    requestAnimationFrame(() => setRun(true));
   }, [data, stage]);
 
   const handleJoyrideCallback = useCallback(
     (data: CallBackProps) => {
       const { status, index, action } = data;
 
-      if (status === "finished" || status === "skipped")
+      if (status === "finished" || status === "skipped") {
+        setTourDone(true)
         return navigate("/home");
+      }
 
       if (action !== "next" || data.lifecycle !== "complete") return;
       if ([0, 5, 6].includes(index)) return setStepIndex((prev) => prev + 1);
@@ -348,7 +342,12 @@ function Level1Body() {
       disableBeacon: true,
       placement: "bottom",
     },
-    { target: "#FN", content: content.tour[5], disableBeacon: true },
+    {
+      target: "#FN",
+      content: content.tour[5],
+      disableBeacon: true,
+      placement: "bottom",
+    },
     {
       target: "#classification-results",
       content: content.tour[6],
@@ -462,7 +461,7 @@ function Level1Body() {
           <ClassificationResultsEntry classificationCounts={results} />
         }
         level={1}
-        showNextLevelButton={stage === 4}
+        showNextLevelButton={tourDone}
         showLegend={true}
         instructionButton={null}
       />
