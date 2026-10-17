@@ -96,7 +96,7 @@ export default function LevelLayout({
               >
                 <h3 className="text-lg font-semibold text-start">{classification.title}</h3>
               </div>
-              <div className="overflow-auto flex flex-col space-y-2 p-1 bg-stone-100 dark:bg-stone-800 rounded-b-md divide-stone-900 dark:divide-stone-500 divide-y">
+              <div className="overflow-auto always-scrollbar flex flex-col space-y-2 p-1 bg-stone-100 dark:bg-stone-800 rounded-b-md divide-stone-900 dark:divide-stone-500 divide-y">
                 {classificationResults}
               </div>
             </div>

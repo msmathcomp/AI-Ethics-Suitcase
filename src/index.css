@@ -36,3 +36,16 @@ button:disabled {
 body {
   overflow: hidden;
 }
+
+
+.always-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.always-scrollbar::-webkit-scrollbar-track {
+  background: rgb(0 0 0 / 0.08);
+  border-radius: 9999px;
+}
+.always-scrollbar::-webkit-scrollbar-thumb {
+  background: rgb(120 113 108); /* stone-500 */
+  border-radius: 9999px;
+}
