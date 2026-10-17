@@ -119,7 +119,7 @@
       "3": "This student failed, and the classifier put them in the Fail group. This is right! This is a 'True Negative'.",
       "4": "This student failed, but the classifier put them in the Pass group. This is wrong! This is a 'False Positive'.",
       "5": "The student passed, but the classifier put them in the Fail group. This is wrong! This is a 'False Negative'.",
-      "6": "The results show the number of true positives, true negatives, false positives, and false negatives. The 'accuracy' tells you how good the classifier is. Count the students it got right. Then divide by all the students."
+      "6": "The results show the number of true positives, true negatives, false positives, and false negatives. The 'accuracy' tells you how good the classifier is: count the students it got right, and divide that by the total number of students."
     }
   },
   "level2": {

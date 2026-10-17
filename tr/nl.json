@@ -2,7 +2,7 @@
   "title": "AI-ethiekkoffer",
   "home": {
     "title": "AI-ethiekkoffer",
-    "subtitle": "Interactieve toepassing om lineaire classificatie te verkennen",
+    "subtitle": "Mijn hond heeft de toetsen van mijn leerlingen opgegeten!",
     "menuButtons": {
       "tutorial": "Introductie",
       "levels": "Niveau's",
@@ -13,16 +13,16 @@
   "intro": {
     "headerTitle": "Welkom bij de AI-ethiekkoffer!",
     "levelName": "Introductie",
-    "goal": "Kennismaken met visualisatie met grafieken",
+    "goal": "Kennismaken met grafieken",
     "tour": {
-      "0": "Welkom bij de AI-ethiekkoffer! Meneer Jansen moet de laatste toets van zijn leerlingen nakijken, maar zijn hond heeft de antwoordbladen verscheurd! Maar een paar toetsen zijn nog leesbaar, dus moet de docent op een andere manier bepalen wie overgaat. Je kunt deze uitleg overslaan als je al bekend bent met grafieken.",
+      "0": "Welkom bij de AI-ethiekkoffer! Meneer Jansen moet de toets van zijn leerlingen nakijken, maar zijn hond heeft de antwoordbladen verscheurd! Hij kan nu maar een paar toetsen lezen. Dus moet hij op een andere manier bepalen wie overgaat. Je kunt deze uitleg overslaan als je grafieken al kent.",
       "1": "De docent herinnert zich dat de ouders hebben bijgehouden hoe zijn leerlingen hun tijd in hebben ingedeeld voor de toets. Hij schrijft alles op in deze grafiek.",
       "2": "Dit is de X-as, waarop hij de studietijd in minuten neerzet.",
       "3": "Dit is de Y-as, waarop hij de vrije tijd in minuten neerzet.",
-      "4": "De docent kiest deze symbolen voor gelaagde en gezakte studenten, voor als hij in de war raakt.",
-      "5": "Deze cirkel staat bijvoorbeeld voor een student die geslaagd is, met 150 minuten studietijd en 300 minuten vrije tijd.",
-      "6": "Dit vierkant is voor een student die gezakt is, met 100 minuten studietijd en 200 minuten vrije tijd.",
-      "7": "De introductie bestaat uit drie niveau's. Als je klaar bent met een niveau, druk dan op deze knop om door te gaan. De docent heeft al een eerste idee om de studenten te onderscheiden."
+      "4": "De docent kiest deze symbolen voor geslaagde en gezakte studenten. Ze staan hier, voor als hij in de war raakt.",
+      "5": "Deze cirkel staat bijvoorbeeld voor een student die geslaagd is. De student heeft 150 minuten gestudeerd en had 300 minuten vrije tijd.",
+      "6": "Dit vierkant is voor een student die gezakt is. De student heeft 100 minuten gestudeerd en had 200 minuten vrije tijd.",
+      "7": "De introductie heeft drie niveau's. Als je klaar bent met een niveau, druk dan op deze knop om door te gaan. De docent heeft al een eerste idee om de studenten te onderscheiden."
     }
   },
   "legend": {
@@ -44,10 +44,10 @@
     "compareSuffix": "(Jouw classificatie vs de beste)",
     "accuracyLabel": "Nauwkeurigheid:",
     "counts": {
-      "TP": "True Positive (juist geslaagd)",
-      "TN": "True Negative (juist gezakt)",
-      "FP": "False Positive (onterecht geslaagd)",
-      "FN": "False Negative (onterecht gezakt)"
+      "TP": "Echt positieven",
+      "TN": "Echt negatieven",
+      "FP": "Foutpositieven",
+      "FN": "Foutnegatieven"
     },
     "entryTitles": {
       "seenPerformance": "Resultaten op bekende data",
@@ -64,7 +64,7 @@
     "alerts": {
       "invalidBounds": "Begin en eindig buiten het grafiekgebied.",
       "selfIntersection": "De kromme mag zichzelf niet snijden.",
-      "invalidIntersections": "De kromme moet buiten het grafiekgebied beginnen en eindigen. Probeer het opnieuw."
+      "invalidIntersections": "De kromme moet buiten de grafiek in het gestreepte gebied beginnen en eindigen. Probeer het opnieuw."
     }
   },
   "levelProgressBar": {
@@ -89,17 +89,17 @@
     },
     "seriesNames": {
       "dataPoints": "Datapunten",
-      "separatorLine": "Scheidingslijn"
+      "separatorLine": "Classificatielijn"
     }
   },
   "level0": {
     "levelName": "Introductie",
-    "goal": "Maak je eerste classifier!",
+    "goal": "Kijk je eerste toetsen na!",
     "stages": {
       "0": "[1/3] De docent begint met een voorbeeld van 4 studenten. Zijn plan is om geslaagde en gezakte studenten te classificeren met een rechte lijn. Sleep of klik in de grafiek om een lijn te tekenen om de geslaagde en gezakte studenten te onderscheiden.",
-      "1": "[1/3] Klik nu op het tweede punt om de classificatielijn te tekenen.",
-      "3": "[2/3] Deze lijn heet een 'lineaire classifier'. Pas je classifier aan door de zwarte cirkels te verslepen of een nieuwe lijn te tekenen. Tevreden? Druk dan op 'Volgende' om verder te gaan.",
-      "4": "[3/3] Klaar! Je kunt nu zien welke studenten je lijn correct en incorrect heeft ingedeeld. In het volgende niveau leer je hoe je de prestaties van een classifier kunt meten."
+      "1": "[1/3] Klik nu om een tweede punt te maken voor de lijn.",
+      "3": "[2/3] Deze lijn heet een 'lineaire classifier' (lineair komt van lijn, classificeren betekent groeperen). Verander je classifier door de zwarte cirkels te verslepen of een nieuwe lijn te tekenen. Tevreden? Druk dan op 'Volgende' om verder te gaan.",
+      "4": "[3/3] Klaar! Je kunt nu zien welke studenten je lijn correct en incorrect heeft ingedeeld. In het volgende niveau leer je hoe je een classifier beoordeelt."
     }
   },
   "level1": {
@@ -111,37 +111,37 @@
       "4": "[4/5] Plaats tenslotte een student die geslaagd is, in het gezakte gebied.",
       "5": "[5/5] Top! Je hebt alle soorten studenten geclassificeerd. Druk op 'Introductie afronden' om verder te gaan."
     },
-    "goal": "Hoe bereken je de nauwkeurigheid van een classifier?",
+    "goal": "Hoe beoordeel je een classifier?",
     "tour": {
-      "0": "De docent overweegt verschillende scenario's en vergelijkt de mogelijke uitkomsten als hij de toetsuitslagen wél zou weten. Hij zal de nauwkeurigheid van een lineaire classifier op een of andere manier moeten meten meten.",
-      "1": "Hij tekent deze lineaire classifier. De linkerhelft wordt geclassificeerd als Gezakt en de rechterhelft als Geslaagd.",
-      "2": "Deze student is geslaagd en de classifier classificeerde hem terecht als geslaagd. Dat is een True Positive.",
-      "3": "Deze student is gezakt en de classifier classificeerde hem terecht als gezakt. Dat is een True Negative.",
-      "4": "Deze student is gezakt, maar de classifier classificeerde hem onterecht als geslaagd. Dat is een False Positive.",
-      "5": "Deze student is geslaagd, maar de classifier classificeerde hem onterecht als gezakt. Dat is een False Negative.",
-      "6": "De classificatieresultaten tonen de aantallen true positives, true negatives, false positives, en false negatives. De nauwkeurigheid van een classifier is het aantal correct geclassificeerde datapunten gedeeld door het totaal aantal datapunten."
+      "0": "De docent kijkt wat er gebeurt voor een paar van zijn studenten. Gelukkig heeft hij een paar nagekeken toetsen die hij nog kan lezen. Hij moet op een of andere manier bekijken hoe goed de lineaire classifier werkt op deze studenten.",
+      "1": "Hij tekent deze lineaire classifier, die de grafiek in twee delen splitst. De linkerhelft heeft de Gezakte studenten en de rechterhelft de Geslaagde studenten.",
+      "2": "Deze student is geslaagd, en de classifier plaatste die in de Geslaagd-groep. Dit is juist! Dit is een 'echt positieve' uitslag.",
+      "3": "Deze student is gezakt, en de classifier plaatste die in de Gezakt-groep. Dit is juist! Dit is een 'echt negatieve' uitslag.",
+      "4": "Deze student is gezakt, maar de classifier plaatste die in de Geslaagd-groep. Dit is fout! Dit is een 'foutpositieve' uitslag.",
+      "5": "Deze student is geslaagd, maar de classifier plaatste die in de Gezakt-groep. Dit is fout! Dit is een 'foutnegatieve' uitslag.",
+      "6": "De resultaten tonen de aantallen echt positieve, foutpositieve, echt negatieve, en foutnegatieve uitslagen. De 'nauwkeurigheid' zegt hoe goed de classifier is: tel hoeveel studenten hij goed had, en deel dat door het totale aantal studenten."
     }
   },
   "level2": {
     "stages": {
       "0": "[1/4] De docent besluit te oefenen met het tekenen van classifiers op basis van vorige toetsen. Sleep of klik om de classificatielijn te teken om het geslaagde van het gezakte gebied te scheiden.",
-      "1": "[1/4] Klik nu op het tweede punt om de lijn te tekenen.",
+      "1": "[1/4] Klik nu op het tweede punt om de classificatielijn te tekenen.",
       "3": "[2/4] Pas je classifier aan door de zwarte cirkels te verslepen of een nieuwe lijn te tekenen. Tevreden? Druk dan op 'Volgende'.",
-      "4": "[3/4] Klaar! Je kunt nu de resultaten zien. Mevrouw De Jong, de docent informatica, ziet meneer Jansen oefenen. Ze stelt voor om met behulp van AI de lijn te vinden met de hoogste nauwkeurigheid! Vergelijk jouw classifier met de beste classifier die door AI is gevonden.",
+      "4": "[3/4] Klaar! Je kunt nu de resultaten zien. Mevrouw De Jong, de docent informatica, ziet meneer Jansen oefenen. Ze stelt voor om met behulp van AI de lijn te vinden met de beste prestaties! Vergelijk nu jouw classifier met de beste classifier die door AI is gevonden.",
       "5": "[4/4] Vergelijk jouw classifier met de beste classifier. Beide resultaten staan naast elkaar."
     }
   },
   "level2_6": {
     "goals": {
-      "2": "Kun je 100% nauwkeurigheid bereiken?",
-      "3": "Kun je nog steeds 100% nauwkeurigheid bereiken?",
-      "4": "Probeer de hoogst mogelijke nauwkeurigheid te behalen!",
-      "5": "Probeer de hoogst mogelijke nauwkeurigheid te behalen!",
-      "6": "Probeer de hoogst mogelijke nauwkeurigheid te behalen!"
+      "2": "Kun je 100% nauwkeurigheid halen?",
+      "3": "Kun je nog steeds 100% nauwkeurigheid halen?",
+      "4": "Probeer de hoogst mogelijke nauwkeurigheid te halen!",
+      "5": "Probeer de hoogst mogelijke nauwkeurigheid te halen!",
+      "6": "Probeer de hoogst mogelijke nauwkeurigheid te halen!"
     },
     "stages": {
       "0": "[1/4] De docent daagt zichzelf uit met meer data van eerdere toetsen! Sleep of klik om de classificatielijn te teken om het geslaagde van het gezakte gebied te scheiden.",
-      "1": "[1/4] Klik nu op het tweede punt om de lijn te tekenen.",
+      "1": "[1/4] Klik nu op het tweede punt om de classificatielijn te tekenen.",
       "3": "[2/4] Pas je classifier aan door de zwarte cirkels te verslepen of een nieuwe lijn te tekenen. Tevreden? Druk dan op 'Volgende'.",
       "4": "[3/4] Klaar! Je kunt nu de resultaten zien. Vergelijk jouw classifier met de beste classifier die door AI is gevonden.",
       "5": "[4/4] Vergelijk jouw classifier met de beste classifier. Beide resultaten staan naast elkaar."
@@ -151,15 +151,15 @@
     "levelName": "Overfitten",
     "goal": "Classificeren met een kromme!",
     "stages": {
-      "0": "[1/4] De docent wil de studenten nu onderscheiden met een kromme. Teken een kromme die begint en eindigt buiten het grafiekgebied (binnen de gestreepte zone).",
+      "0": "[1/4] De docent wil de studenten nu onderscheiden met een kromme, in plaats van een lijn. Teken een kromme die begint en eindigt buiten het grafiekgebied (binnen de gestreepte zone).",
       "1": "[1/4] De docent wil de studenten nu onderscheiden met een kromme. Teken een kromme die begint en eindigt buiten het grafiekgebied (binnen de gestreepte zone).",
       "2": "[2/4] Je kunt een nieuwe classifier tekenen, als je wilt. Tevreden? Druk op 'Volgende'.",
-      "3": "[3/4] Klaar! Je kunt nu de resultaten zien. De kromme van de docent is foutloos! Enthousiast dat hij nooit meer hoeft na te kijken, controleert hij op meer toetsen of zijn kromme altijd werkt.",
-      "4": "[4/4] Wissel nu tussen bekende en onbekende data. Merk op hoe de nauwkeurigheid kan veranderen op onbekende data! De docent zucht en pakt het werk van zijn leerlingen er weer bij."
+      "3": "[3/4] Klaar! Je kunt nu de resultaten zien. De kromme is zoveel beter dan een lijn! De docent is enthousiast. Misschien hoeft hij nooit meer na te kijken! Hij pakt meer toetsen om zijn kromme te testen.",
+      "4": "[4/4] Wissel nu tussen bekende en onbekende data (de net gepakte toetsen). Merk op hoe de nauwkeurigheid anders kan zijn op nieuwe data! De docent zucht en pakt het werk van zijn leerlingen er weer bij."
     },
     "tutorialDialog": {
       "title": "Welkom bij het Overfitten-niveau!",
-      "message": "Tot nu toe heeft de docent alleen lineaire classifiers gebruikt. Hij vraagt zich af of hij een complexere vorm dan een rechte lijn kan gebruiken. In dit niveau kun je experimenteren met een vrije kromme als classifier. Daarna kun je kijken hoe je classifier het doet op studenten die hij nog nooit heeft gezien."
+      "message": "Tot nu toe heeft de docent alleen lineaire classifiers gebruikt. Hij vraagt zich af of hij een complexere vorm dan een rechte lijn kan gebruiken. In dit niveau kun je een kromme uitproberen, in plaats van een lijn. Daarna kun je kijken hoe je classifier het doet op studenten die hij nog nooit heeft gezien."
     }
   },
   "levelfreeplay": {
@@ -173,7 +173,7 @@
     },
     "tutorialDialog": {
       "title": "Welkom bij Vrij spel!",
-      "message": "In dit niveau kun je vrij experimenteren met de classifier en proberen de beste classifier die door AI is gevonden te verslaan. Je kunt ook prestaties vergelijken op bekeken en onzichtbare data. Er is hier geen goed of fout antwoord, heb gewoon plezier met ontdekken!",
+      "message": "In dit niveau moet je de classifier zo snel mogelijk tekenen. Probeer de oplossing die door AI is gevonden, te verslaan! Je kunt ook de prestaties vergelijken op bekende en onbekende data. Let op de klok, en heb plezier met ontdekken!",
       "difficulty": {
         "easy": "Makkelijk",
         "medium": "Gemiddeld",
@@ -196,7 +196,7 @@
     },
     "outOf": "van de",
     "totalScore": "Totaalscore",
-    "moral": "Helaas voor meneer Jansen maakt zelfs de beste classifier van mevrouw de Jong fouten. Hij ziet in dat het oneerlijk is om de studenten op deze manier te beoordelen. Verslagen pakt hij een rol plakband om de toetsen weer aan elkaar te plakken, en belooft hij de volgende les een doos chocolaatjes mee te nemen."
+    "moral": "Helaas voor meneer Jansen maakt zelfs de beste classifier van mevrouw de Jong fouten. Hij ziet in dat het oneerlijk is om de studenten op deze manier te beoordelen. Meneer Jansen is verdrietig dat zijn idee niet werkte. Hij pakt hij een rol plakband en plakt de verscheurde toetsen langzaam weer aan elkaar. Ook belooft hij de volgende les een doos chocolaatjes mee te nemen, omdat de studenten zo lang op hun cijfers moesten wachten."
   },
   "common": {
     "buttons": {
@@ -210,7 +210,7 @@
     },
     "status": {
       "loading": "Laden...",
-      "unexpectedError": "Er is een onverwachte fout opgetreden."
+      "unexpectedError": "Er is iets misgegaan."
     },
     "level": "Niveau"
   },
