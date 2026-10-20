@@ -46,8 +46,8 @@
     "counts": {
       "TP": "Echt positieven",
       "TN": "Echt negatieven",
-      "FP": "Fout positieven",
-      "FN": "Fout negatieven"
+      "FP": "Foutpositieven",
+      "FN": "Foutnegatieven"
     },
     "entryTitles": {
       "seenPerformance": "Resultaten op bekende data",
