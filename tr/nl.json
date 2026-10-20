@@ -15,11 +15,11 @@
     "levelName": "Introductie",
     "goal": "Kennismaken met grafieken",
     "tour": {
-      "0": "Welkom bij de AI-ethiekkoffer! Meneer Jansen moet de toets van zijn leerlingen nakijken, maar zijn hond heeft de antwoordbladen verscheurd! Hij kan nu maar een paar toetsen lezen. Dus moet hij op een andere manier bepalen wie overgaat. Je kunt deze uitleg overslaan als je grafieken al kent.",
+      "0": "Welkom bij de AI-ethiekkoffer! Meneer Jansen moet de toetsen van zijn leerlingen nakijken, maar zijn hond heeft de antwoordbladen verscheurd! Hij kan nu maar een paar toetsen lezen. Dus moet hij op een andere manier bepalen wie geslaagd is. Je kunt deze uitleg overslaan als je grafieken al kent.",
       "1": "De docent herinnert zich dat de ouders hebben bijgehouden hoe zijn leerlingen hun tijd in hebben ingedeeld voor de toets. Hij schrijft alles op in deze grafiek.",
       "2": "Dit is de X-as, waarop hij de studietijd in minuten neerzet.",
       "3": "Dit is de Y-as, waarop hij de vrije tijd in minuten neerzet.",
-      "4": "De docent kiest deze symbolen voor geslaagde en gezakte studenten. Ze staan hier, voor als hij in de war raakt.",
+      "4": "De docent kiest deze symbolen voor geslaagde en gezakte leerlingen. Ze staan hier, voor als hij in de war raakt.",
       "5": "Deze cirkel staat bijvoorbeeld voor een student die geslaagd is. De student heeft 150 minuten gestudeerd en had 300 minuten vrije tijd.",
       "6": "Dit vierkant is voor een student die gezakt is. De student heeft 100 minuten gestudeerd en had 200 minuten vrije tijd.",
       "7": "De introductie heeft drie niveau's. Als je klaar bent met een niveau, druk dan op deze knop om door te gaan. De docent heeft al een eerste idee om de studenten te onderscheiden."
@@ -46,8 +46,8 @@
     "counts": {
       "TP": "Echt positieven",
       "TN": "Echt negatieven",
-      "FP": "Foutpositieven",
-      "FN": "Foutnegatieven"
+      "FP": "Fout positieven",
+      "FN": "Fout negatieven"
     },
     "entryTitles": {
       "seenPerformance": "Resultaten op bekende data",
@@ -85,7 +85,7 @@
   "chart": {
     "axisLabels": {
       "x": "Studietijd (min)",
-      "y": "Vrije Tijd (min)"
+      "y": "Vrije tijd (min)"
     },
     "seriesNames": {
       "dataPoints": "Datapunten",
@@ -108,7 +108,7 @@
       "1": "[1/5] Klik in het geslaagde gebied om een student toe te voegen die geslaagd is.",
       "2": "[2/5] Klik nu in het gezakte gebied om een student toe te voegen die gezakt is.",
       "3": "[3/5] Wat gebeurt er als je een student die gezakt is, in het geslaagde gebied zet?",
-      "4": "[4/5] Plaats tenslotte een student die geslaagd is, in het gezakte gebied.",
+      "4": "[4/5] Plaats ten slotte een student die geslaagd is, in het gezakte gebied.",
       "5": "[5/5] Top! Je hebt alle soorten studenten geclassificeerd. Druk op 'Introductie afronden' om verder te gaan."
     },
     "goal": "Hoe beoordeel je een classifier?",
@@ -119,12 +119,12 @@
       "3": "Deze student is gezakt, en de classifier plaatste die in de Gezakt-groep. Dit is juist! Dit is een 'echt negatieve' uitslag.",
       "4": "Deze student is gezakt, maar de classifier plaatste die in de Geslaagd-groep. Dit is fout! Dit is een 'foutpositieve' uitslag.",
       "5": "Deze student is geslaagd, maar de classifier plaatste die in de Gezakt-groep. Dit is fout! Dit is een 'foutnegatieve' uitslag.",
-      "6": "De resultaten tonen de aantallen echt positieve, foutpositieve, echt negatieve, en foutnegatieve uitslagen. De 'nauwkeurigheid' zegt hoe goed de classifier is: tel hoeveel studenten hij goed had, en deel dat door het totale aantal studenten."
+      "6": "De resultaten tonen de aantallen echt positieve, foutpositieve, echt negatieve en foutnegatieve uitslagen. De 'nauwkeurigheid' zegt hoe goed de classifier is: tel hoeveel studenten hij goed had, en deel dat door het totale aantal studenten."
     }
   },
   "level2": {
     "stages": {
-      "0": "[1/4] De docent besluit te oefenen met het tekenen van classifiers op basis van vorige toetsen. Sleep of klik om de classificatielijn te teken om het geslaagde van het gezakte gebied te scheiden.",
+      "0": "[1/4] De docent besluit te oefenen met het tekenen van classifiers op basis van vorige toetsen. Sleep of klik om de classificatielijn te tekenen om het geslaagde van het gezakte gebied te scheiden.",
       "1": "[1/4] Klik nu op het tweede punt om de classificatielijn te tekenen.",
       "3": "[2/4] Pas je classifier aan door de zwarte cirkels te verslepen of een nieuwe lijn te tekenen. Tevreden? Druk dan op 'Volgende'.",
       "4": "[3/4] Klaar! Je kunt nu de resultaten zien. Mevrouw De Jong, de docent informatica, ziet meneer Jansen oefenen. Ze stelt voor om met behulp van AI de lijn te vinden met de beste prestaties! Vergelijk nu jouw classifier met de beste classifier die door AI is gevonden.",
@@ -192,11 +192,11 @@
       "level": "Niveau",
       "yourAccuracy": "Jouw nauwkeurigheid",
       "bestAccuracy": "Beste nauwkeurigheid",
-      "incomplete": "Level niet voltooid!"
+      "incomplete": "Niveau niet voltooid!"
     },
     "outOf": "van de",
     "totalScore": "Totaalscore",
-    "moral": "Helaas voor meneer Jansen maakt zelfs de beste classifier van mevrouw de Jong fouten. Hij ziet in dat het oneerlijk is om de studenten op deze manier te beoordelen. Meneer Jansen is verdrietig dat zijn idee niet werkte. Hij pakt hij een rol plakband en plakt de verscheurde toetsen langzaam weer aan elkaar. Ook belooft hij de volgende les een doos chocolaatjes mee te nemen, omdat de studenten zo lang op hun cijfers moesten wachten."
+    "moral": "Helaas voor meneer Jansen maakt zelfs de beste classifier van mevrouw de Jong fouten. Hij ziet in dat het oneerlijk is om de studenten op deze manier te beoordelen. Meneer Jansen is verdrietig dat zijn idee niet werkte. Hij pakt een rol plakband en plakt de verscheurde toetsen langzaam weer aan elkaar. Ook belooft hij de volgende les een doos chocolaatjes mee te nemen, omdat de studenten zo lang op hun cijfers moesten wachten."
   },
   "common": {
     "buttons": {

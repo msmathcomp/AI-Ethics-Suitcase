@@ -15,7 +15,7 @@
     "levelName": "Tutorial",
     "goal": "Getting to know charts",
     "tour": {
-      "0": "Welcome to the AI Ethics Suitcase! Mr. Turner needs to grade his students' exam, but his dog tore up the answer sheets! He can only read a few exams now. So he needs to decide in some other way who passed. You may skip this explanation if you already know charts.",
+      "0": "Welcome to the AI Ethics Suitcase! Mr. Turner needs to grade his students' exams, but his dog tore up the answer sheets! He can only read a few exams now. So he needs to decide in some other way who passed. You may skip this explanation if you already know charts.",
       "1": "The teacher remembers that he asked the parents to keep track of how his students spent their time before the exam. He will write it down in this chart.",
       "2": "This is the X-axis, where he writes down the study time in minutes.",
       "3": "This is the Y-axis, where he writes down the leisure time in minutes.",
@@ -113,7 +113,7 @@
     },
     "goal": "How do you grade a classifier?",
     "tour": {
-      "0": "The teacher looks at what happens for some of his students. Luckily, he has some exams that he graded and that he can still read. He will need a way to see how well the linear classifier works for these students.",
+      "0": "The teacher looks at what happens for some of his students. Luckily, he has some exams that he has already graded and can still read. He will need a way to see how well the linear classifier works for these students.",
       "1": "He draws this linear classifier, splitting the chart into 2 parts. The left area has the students who Fail and the right area has those who Pass.",
       "2": "This student passed, and the classifier put them in the Pass group. This is right! This is a 'True Positive'.",
       "3": "This student failed, and the classifier put them in the Fail group. This is right! This is a 'True Negative'.",
