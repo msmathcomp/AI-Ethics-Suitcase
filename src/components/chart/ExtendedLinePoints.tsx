@@ -48,7 +48,7 @@ export const ExtendedLinePoints = ({
       {extendedLinePoints.map((coords, index) => (
         <div
           key={`extended-${index}`}
-          className="absolute bg-black dark:bg-stone-900 border-2 cursor-move flex items-center justify-center z-50 touch-none cursor-pointer"
+          className="absolute bg-black dark:bg-stone-900 border-2 cursor-move flex items-center justify-center z-50 touch-none"
           style={{
             top: coords.overlay.y - 17,
             left: coords.overlay.x - 17,

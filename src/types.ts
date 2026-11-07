@@ -31,7 +31,7 @@ export type ClassificationCounts = {
   FN: number;
 };
 
-export type PositionEvent = Pick<React.MouseEvent, "clientX" | "clientY">;
+export type PositionEvent = Pick<React.MouseEvent, "clientX" | "clientY" | "preventDefault">;
 
 export interface CustomDotProps {
   cx?: number;
