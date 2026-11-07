@@ -1,6 +1,8 @@
 import { Move } from "lucide-react";
 import type { ClickCoordinates } from "~/types";
 
+const HANDLE_PADDING = 20; // pixels
+
 interface Props {
   elementRef: React.LegacyRef<HTMLDivElement>;
   extendedLinePoints: ClickCoordinates[];
@@ -47,18 +49,24 @@ export const ExtendedLinePoints = ({
 
       {extendedLinePoints.map((coords, index) => (
         <div
-          key={`extended-${index}`}
-          className="absolute bg-black dark:bg-stone-900 border-2 cursor-move flex items-center justify-center z-50 touch-none"
+          key={index}
+          className="absolute cursor-move"
           style={{
-            top: coords.overlay.y - 17,
-            left: coords.overlay.x - 17,
-            width: 34,
-            height: 34,
-            borderRadius: "50%",
+            top: coords.overlay.y - 17 - HANDLE_PADDING,
+            left: coords.overlay.x - 17 - HANDLE_PADDING,
+            padding: HANDLE_PADDING + "px",
           }}
           onPointerDown={(e) => onExtendedPointMouseDown(e, index)}
         >
-          <Move size={22} color="white" />
+          <div
+            className=" bg-black dark:bg-stone-900 border-2 flex items-center justify-center z-50 touch-none rounded-full"
+            style={{
+              width: 34,
+              height: 34,
+            }}
+          >
+            <Move size={22} color="white" />
+          </div>
         </div>
       ))}
     </div>
