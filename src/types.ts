@@ -21,6 +21,14 @@ export type AreaPolygons = {
     overlay: Point[];
   }
 };
+export interface BoxInfo {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+  width: number;
+  height: number;
+}
 
 export type ClassificationResult = "TP" | "TN" | "FP" | "FN";
 
@@ -31,7 +39,7 @@ export type ClassificationCounts = {
   FN: number;
 };
 
-export type PositionEvent = Pick<React.MouseEvent, "clientX" | "clientY">;
+export type PositionEvent = Pick<React.MouseEvent, "clientX" | "clientY" | "preventDefault">;
 
 export interface CustomDotProps {
   cx?: number;

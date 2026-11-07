@@ -272,7 +272,6 @@ export const ClassificationVisualizer = ({
     setAreaColorsAssigned(true);
   }, [lineCoords]);
 
-  // TODO: FIX this
   // Handles user click on overlay to set line endpoints
   const handleOverlayClick = (event: PositionEvent) => {
     if (isDragging || dragJustEnded || stage >= 5 || !canModify) {
@@ -449,7 +448,8 @@ export const ClassificationVisualizer = ({
 
   // Handles mouse up event to finish dragging
   // both on extension handles, and within the graph
-  const handleOverlayMouseUp = (event: PositionEvent) => {
+  const handleOverlayMouseUp = (event: React.PointerEvent<HTMLDivElement>) => {
+    overlayRef.current?.releasePointerCapture(event.pointerId);
     if (isDragging) endDrag();
     
     // for dragging to draw a line:
@@ -458,11 +458,11 @@ export const ClassificationVisualizer = ({
     handleOverlayClick(event);
   };
   
-  const [mouseDownPosition, setMouseDownPosition] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
+  const mouseDownPosition = useRef<{ x: number, y: number }>({ x: 0, y: 0 });
   function awayFromMouseDown({ clientX, clientY }: PositionEvent): boolean {
     // compare current position with start position
-    const dx = clientX - mouseDownPosition.x;
-    const dy = clientY - mouseDownPosition.y;
+    const dx = clientX - mouseDownPosition.current.x;
+    const dy = clientY - mouseDownPosition.current.y;
     const distance = Math.hypot(dx, dy);
     // drag smaller than 5px means it was probably a normal click
     // and thus the mouseDown handler already placed a point
@@ -470,22 +470,21 @@ export const ClassificationVisualizer = ({
   }
 
   // Handles mouse down event to start dragging
-  const handleOverlayMouseDown = (event: PositionEvent) => {
+  const handleOverlayMouseDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    overlayRef.current?.setPointerCapture(event.pointerId);
     // simulate a "click", so that the first point gets placed where drag starts
     // this also handles normal clicking behaviour.
     handleOverlayClick(event);
 
     // store mouse down position to distinguish between click and drag on pointerup
-    setMouseDownPosition({ x: event.clientX, y: event.clientY });
+    mouseDownPosition.current = ({ x: event.clientX, y: event.clientY });
   }
 
-  // Handles touch end for dragging on mobile
-  const handleOverlayTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
-    const positionEvent: PositionEvent = event.changedTouches[0];
-
-    if (!awayFromMouseDown(positionEvent)) return; // it was a click, point was already placed
-    handleOverlayClick(positionEvent); // otherwise simulate click with touch position
-  }
+  // Handles pointer cancel to avoid capturing the pointer forever
+  const handleOverlayPointerCancel = (event: React.PointerEvent<HTMLDivElement>) => {
+    overlayRef.current?.releasePointerCapture?.(event.pointerId);
+    if (isDragging) endDrag();
+  };
 
   // Handles area selection (pass/fail) by user
   const handleAreaSelection = (
@@ -736,22 +735,18 @@ export const ClassificationVisualizer = ({
       />
 
       <div
-        className="w-full h-full absolute top-0 left-0 cursor-crosshair bg-transparent z-10"
+        className="w-full h-full absolute top-0 left-0 cursor-crosshair bg-transparent z-10 touch-none"
         ref={overlayRef}
         onPointerMove={handleOverlayMouseMove}
         onPointerDown={handleOverlayMouseDown} // place point immediately on click or start of drag 
         onPointerUp={handleOverlayMouseUp} // place point at end of drag
-        onTouchEnd={handleOverlayTouchEnd} // place point at end of drag on mobile
+        onPointerCancel={handleOverlayPointerCancel}
       >
         {areaColorsAssigned && (
           <ExtendedLinePoints
             elementRef={extendedLinePointsRef}
-            extendedLinePoints={
-              stage >= 5 && showBestLine ? [] : extendedLinePoints
-            }
-            lineCoords={
-              stage >= 5 && showBestLine ? bestLineCoords : lineCoords
-            }
+            extendedLinePoints={stage >= 5 && showBestLine ? [] : extendedLinePoints}
+            lineCoords={stage >= 5 && showBestLine ? bestLineCoords : lineCoords}
             onExtendedPointMouseDown={
               stage < 5 || !showBestLine
                 ? handleExtendedPointMouseDown
@@ -771,26 +766,11 @@ export const ClassificationVisualizer = ({
         />
       )}
 
-      <div
-        className="absolute inset-0"
-        ref={areaPolygonsRef}
-        onPointerMove={handleOverlayMouseMove}
-        onPointerUp={handleOverlayMouseUp}
-      >
-        <ExtendedLinePoints
-          elementRef={extendedLinePointsRef}
-          extendedLinePoints={
-            stage >= 5 && showBestLine ? [] : extendedLinePoints
-          }
-          lineCoords={stage >= 5 && showBestLine ? bestLineCoords : lineCoords}
-          onExtendedPointMouseDown={
-            stage < 5 || !showBestLine ? handleExtendedPointMouseDown : () => {}
-          }
-        />
+      <div className="absolute inset-0" ref={areaPolygonsRef}>
         {lineCoords.length === 2 &&
           areaPolygons.area1.overlay.length > 0 &&
           areaPolygons.area2.overlay.length > 0 &&
-          stage < 5 && (
+          (stage < 5 || (stage >= 5 && !showBestLine)) && (
             <ClassificationAreas
               areaPolygons={areaPolygons}
               area1Selected={area1Selected}
@@ -809,19 +789,6 @@ export const ClassificationVisualizer = ({
               area1Selected={bestArea1Selected ?? null}
               areaColorsAssigned={true}
               onAreaSelection={() => {}}
-            />
-          )}
-
-        {stage >= 5 &&
-          !showBestLine &&
-          lineCoords.length === 2 &&
-          areaPolygons.area1.overlay.length > 0 &&
-          areaPolygons.area2.overlay.length > 0 && (
-            <ClassificationAreas
-              areaPolygons={areaPolygons}
-              area1Selected={area1Selected}
-              areaColorsAssigned={areaColorsAssigned}
-              onAreaSelection={() => {}} // No area selection in stage 5+
             />
           )}
       </div>
