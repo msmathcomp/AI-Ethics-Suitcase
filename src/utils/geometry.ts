@@ -1,4 +1,4 @@
-import type { Point, ClickCoordinates, AreaPolygons } from "~/types";
+import type { Point, ClickCoordinates, AreaPolygons, BoxInfo } from "~/types";
 
 // Returns polygons for two areas split by a line, including both graph and overlay coordinates.
 export const getAreaPolygons = (
@@ -244,6 +244,41 @@ export const findIntersectionsWithSquare = (
     })
     .sort((a, b) => paramT(a) - paramT(b));
 };
+
+/**
+ * Finds the point on the edge of a box closest to a given point
+ * @param point the given point to "project" onto the edges of the box
+ * @param box the box to project the point on
+ * @returns the projected point, lying on an edge of the box
+ */
+export function closestEdgePoint(point: Point, box: BoxInfo): Point {
+  const candidates = [
+    { distance: point.x - box.left, point: { x: box.left, y: point.y } },
+    { distance: box.right - point.x, point: { x: box.right, y: point.y } },
+    { distance: point.y - box.top, point: { x: point.x, y: box.top } },
+    { distance: box.bottom - point.y, point: { x: point.x, y: box.bottom } },
+  ];
+  return candidates.reduce((best, c) => (c.distance < best.distance ? c : best))
+    .point;
+};
+
+/**
+ * Grows a box by some amount in all directions
+ * @param box the input box 
+ * @param amount the amount to grow the box by
+ * @returns the grown box
+ */
+export function growBox(box: BoxInfo, amount: number): BoxInfo {
+  return {
+    ...box,
+    top: box.top - amount,
+    left: box.left - amount,
+    bottom: box.bottom + amount,
+    right: box.right + amount,
+    height: box.height + 2 * amount,
+    width: box.width + 2 * amount
+  }
+}
 
 export function cross(lineA: Point, lineB: Point, p: Point): number {
   return (lineB.x - lineA.x) * (p.y - lineA.y) -

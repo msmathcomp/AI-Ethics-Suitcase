@@ -21,6 +21,14 @@ export type AreaPolygons = {
     overlay: Point[];
   }
 };
+export interface BoxInfo {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+  width: number;
+  height: number;
+}
 
 export type ClassificationResult = "TP" | "TN" | "FP" | "FN";
 

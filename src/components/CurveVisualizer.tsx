@@ -5,6 +5,7 @@ import type {
   AreaPolygons,
   ClassificationCounts,
   PositionEvent,
+  BoxInfo,
 } from "~/types";
 import {
   checkSelfIntersection,
@@ -20,6 +21,7 @@ import { useIntlayer } from "react-intlayer";
 import type { VisualizerData } from "~/context/LevelDataContext";
 import Dialog from "./ui/Dialog";
 import { calculateAccuracy } from "~/utils/classification";
+import { closestEdgePoint, growBox } from "~/utils/geometry";
 
 interface Props {
   seenData: DataPoint[];
@@ -30,15 +32,6 @@ interface Props {
   setResults: (results: ClassificationCounts) => void;
   setUnseenResults?: (results: ClassificationCounts) => void;
   modifyVisualizerData: (modifyFn: (data: VisualizerData) => VisualizerData) => void;
-}
-
-interface BoxInfo {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
-  width: number;
-  height: number;
 }
 
 export const CurveVisualizer = ({
@@ -207,25 +200,47 @@ export const CurveVisualizer = ({
     event.preventDefault();
     if (isDrawing || !overlayRef.current || stage === 4) return;
 
-    // prevent starting to draw outside of bounds
     const overlayCoords = eventToOverlayCoords(event);
-    if (isPointInBounds(overlayCoords, graphInOverlay))
-      return showDrawingAlert(content.alerts.invalidBounds.value);
+    const curvePoints = [overlayCoords]
 
+    // if drawing started within the graph, automatically
+    // connect the curve to the closest edge of the graph
+    if (isPointInBounds(overlayCoords, graphInOverlay))
+      curvePoints.unshift(closestEdgePoint(overlayCoords, growBox(graphInOverlay, 1)));
+    
     // begin curve at point
     reset();
     setIsDrawing(true);
-    setOverlayCurve([overlayCoords]);
+    setOverlayCurve(curvePoints);
   };
 
   const handleMouseMove = (event: React.PointerEvent<HTMLDivElement>) => {
     if (!overlayRef.current || overlayCurve.length === 0 || !isDrawing) return;
+
+    // automatically stop drawing the curve when pointer exits the graph
     const overlayCoords = eventToOverlayCoords(event);
+    const intersections = getCurveIntersections([...overlayCurve, overlayCoords], graphInOverlay).length;
+    if (intersections >= 2 && !isPointInBounds(overlayCoords, graphInOverlay)) {
+      setIsDrawing(false);
+      setStage(1);
+    }
+
     setOverlayCurve((prev) => [...prev, overlayCoords]);
   };
 
   const handleMouseUp = () => {
     if (!isDrawing) return;
+
+    // if the end point is inside the graph area, automatically
+    // connect the curve to the closest edge of the graph
+    const endPoint = overlayCurve[overlayCurve.length - 1];
+    if (isPointInBounds(endPoint, graphInOverlay)) {
+      setOverlayCurve((prev) => [
+        ...prev,
+        closestEdgePoint(prev[prev.length - 1], growBox(graphInOverlay, 1)),
+      ]);
+    }
+
     setIsDrawing(false);
     setStage(1);
   };
@@ -281,15 +296,7 @@ export const CurveVisualizer = ({
 
     if (!overlayRef.current || !chartContainerRef.current) return;
 
-    // Validate start and end points
-    const startPoint = overlayCurve[0];
-    const endPoint = overlayCurve[overlayCurve.length - 1];
-    if (
-      isPointInBounds(startPoint, graphInOverlay) ||
-      isPointInBounds(endPoint, graphInOverlay)
-    )
-      return showDrawingAlert(content.alerts.invalidBounds.value);
-
+    // Start and end points are always outside the graph area.
     // Validate self-intersection
     if (checkSelfIntersection(overlayCurve))
       return showDrawingAlert(content.alerts.selfIntersection.value);
